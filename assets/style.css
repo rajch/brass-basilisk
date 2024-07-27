@@ -44,6 +44,12 @@ section.content {
     overflow-y: scroll;
 }
 
+section.content p {
+    font-size: x-large;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+}
+
 section.content a.link, section.content a.link:visited {
     font-weight: bold;
     text-decoration: none;

@@ -110,6 +110,17 @@ function Story () {
 
     // Start
     this.Start = function () {
+        // Set up story styles
+        const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
+        storyStyleElement.removeAttribute('role')
+        storyStyleElement.removeAttribute('type')
+        if(storyStyleElement) {
+            const styleElement = document.querySelector('head style')
+            if(styleElement) {
+                styleElement.insertAdjacentElement('afterend', storyStyleElement)
+            }
+        }
+        
         // Show the title
         const titleElement = document.getElementById('storyTitle')
         if (titleElement) {
