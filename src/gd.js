@@ -10,45 +10,126 @@ function Story () {
         return
     }
 
-    this.storyName = storyElement.getAttribute('name')
-    this.startNodePid = storyElement.getAttribute('startnode')
-    this.tags = storyElement.getAttribute('tags')?.split(' ')
-
-    this.storyElement = storyElement
-    this.contentElement = document.querySelector('section.content')
-
-}
-
-Story.prototype.getPassageByPid = function (id) {
-    const passageElement = this.storyElement?.querySelector(`tw-passagedata[pid="${id}"]`)
-    if (!passageElement) {
+    const contentElement = document.querySelector('section.content')
+    if (!contentElement) {
         return
     }
 
-    return getPassageFromElement(passageElement)
-}
+    const storyName = storyElement.getAttribute('name')
+    const startNodePid = storyElement.getAttribute('startnode')
+    const tags = storyElement.getAttribute('tags')?.split(' ')
 
-Story.prototype.getPassageByName = function (name) {
-    const passageElement = this.storyElement?.querySelector(`tw-passagedata[name="${name}"]`)
-    if (!passageElement) {
-        return
+    // Passage management
+    function getPassageByName (name) {
+        const passageElement = storyElement?.querySelector(`tw-passagedata[name="${name}"]`)
+        if (!passageElement) {
+            return
+        }
+
+        return getPassageFromElement(passageElement)
     }
 
-    return getPassageFromElement(passageElement)
-}
 
-Story.prototype.navigateToPid = function (pid) {
-    const passage = this.getPassageByPid(pid)
-    passage?.renderHTMLTo(this.contentElement)
-}
+    function renderPassage (passage) {
+        contentElement.innerHTML = transformPassageBody(passage.body)
 
-Story.prototype.navigateToName = function (name) {
-    const passage = this.getPassageByName(name)
-    passage?.renderHTMLTo(this.contentElement)
-}
+        contentElement.querySelectorAll('a[class="link"]')
+            .forEach((element) => {
+                element.addEventListener('click', linkClickedToNavigate)
+            });
+    }
 
-Story.prototype.Start = function () {
-    this.navigateToPid(this.startNodePid)
+    // Navigation
+    const navStack = []
+    let stackPosition = -1
+    const backButton = document.getElementById('backButton')
+    const forwardButton = document.getElementById('forwardButton')
+
+    function linkClickedToNavigate (e) {
+        const linkElement = e.target;
+        const destPassageName = linkElement.getAttribute('data-destination');
+        if (destPassageName) {
+            pushToStack(destPassageName);
+        }
+    }
+
+    function navigateToPassage (name) {
+        const passage = getPassageByName(name)
+        if (passage) {
+            renderPassage(passage)
+        }
+    }
+
+    function manageNavigationButtons () {
+        // Back button
+        if (stackPosition > 0) {
+            backButton?.classList.remove('hidden')
+        } else {
+            backButton?.classList.add('hidden')
+        }
+        // Forward button
+        if (stackPosition === (navStack.length - 1)) {
+            forwardButton?.classList.add('hidden')
+        } else {
+            forwardButton?.classList.remove('hidden')
+        }
+    }
+
+    function pushToStack (passageName) {
+        // If current position is not at end, and we are
+        // pushing, then the elements after the current
+        // position are no longer required.
+        if (stackPosition < (navStack.length - 1)) {
+            navStack.splice(stackPosition + 1)
+        }
+
+        navStack.push(passageName)
+        stackPosition = navStack.length - 1
+
+        manageNavigationButtons()
+        navigateToPassage(passageName)
+    }
+
+    function navigateBack () {
+        if (stackPosition > 0) {
+            stackPosition--
+        }
+
+        manageNavigationButtons()
+        navigateToPassage(navStack[stackPosition])
+    }
+
+    function navigateForward () {
+        if (stackPosition < (navStack.length - 1)) {
+            stackPosition++
+        }
+
+        manageNavigationButtons()
+        navigateToPassage(navStack[stackPosition])
+    }
+
+    // Start
+    this.Start = function () {
+        // Show the title
+        const titleElement = document.getElementById('storyTitle')
+        if (titleElement) {
+            titleElement.innerHTML = storyName
+        }
+
+        // Hook up forward and backward buttons
+        backButton?.addEventListener('click', navigateBack)
+        forwardButton?.addEventListener('click', navigateForward)
+
+        // Navigate to first passage
+        const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
+        if (!passageElement) {
+            return
+        }
+        const passage = getPassageFromElement(passageElement)
+        if (passage?.name) {
+            pushToStack(passage.name)
+        }
+    }
 }
 
 function Passage (id, name, body) {
@@ -59,16 +140,6 @@ function Passage (id, name, body) {
     this.pid = id
     this.name = name
     this.body = body
-
-}
-
-Passage.prototype.renderHTMLTo = function (parentElement) {
-    parentElement.innerHTML = transformPassageBody(this.body)
-
-    parentElement.querySelectorAll('a[class="link"]')
-        .forEach((element) => {
-            element.addEventListener('click', linkClickedToNavigate)
-        });
 }
 
 const getPassageFromElement = (passageElement) => {
@@ -97,15 +168,5 @@ const transformPassageBody = (body) => {
     return bodystr
 }
 
-
 const story = new Story()
-
-function linkClickedToNavigate(e) {
-    const linkElement = e.target;
-    const destPassageName = linkElement.getAttribute('data-destination');
-    if(destPassageName) {
-        story.navigateToName(destPassageName);
-    }
-}
-
 story?.Start()

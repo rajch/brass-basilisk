@@ -25,6 +25,8 @@ section.sidebar-1 {
     min-width: 18rem;
     max-width: 18rem;
     background-color: grey;
+    color: white;
+    padding: 2.5rem;
 }
 
 section.sidebar-2 {
@@ -47,4 +49,12 @@ section.content a.link, section.content a.link:visited {
     text-decoration: none;
     cursor: pointer;
     color: blueviolet;
+}
+
+h1.storyTitle {
+    word-break: break-all;
+}
+
+.hidden {
+    visibility: hidden;
 }
