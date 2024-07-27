@@ -20,3 +20,18 @@ compiledStr = compiledStr
 
 // Write Output 
 fs.writeFileSync('out/output.html', compiledStr);
+
+// Create format.js
+const storyFile = fs.readFileSync("assets/formatManifest.json", 'utf8');
+// Parse the string into an object
+const story = JSON.parse(storyFile);
+
+const indexFile = fs.readFileSync('out/output.html', 'utf8');
+story.source = indexFile;
+
+// Build a "format.js" file contents
+// Convert the 'story' back into a string
+let format = "window.storyFormat(" + JSON.stringify(story) + ");";
+
+fs.writeFileSync('out/format.js', format);
+

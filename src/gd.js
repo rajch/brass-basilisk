@@ -49,7 +49,7 @@ function Story () {
         const linkElement = e.target;
         const destPassageName = linkElement.getAttribute('data-destination');
         if (destPassageName) {
-            pushToStack(destPassageName);
+            navigateNew(destPassageName);
         }
     }
 
@@ -75,7 +75,7 @@ function Story () {
         }
     }
 
-    function pushToStack (passageName) {
+    function navigateNew (passageName) {
         // If current position is not at end, and we are
         // pushing, then the elements after the current
         // position are no longer required.
@@ -127,7 +127,7 @@ function Story () {
         }
         const passage = getPassageFromElement(passageElement)
         if (passage?.name) {
-            pushToStack(passage.name)
+            navigateNew(passage.name)
         }
     }
 }
@@ -151,13 +151,13 @@ const getPassageFromElement = (passageElement) => {
 }
 
 const transformPassageBody = (body) => {
-    let bodystr = body
+    let bodystr = htmlDecode(body)
 
     // Process links
     bodystr = bodystr
-        .replace(/\[\[(.*)?-(>|&gt;)(.*)?\]\]/, '<a class="link" data-destination="$3">$1</a>')
-        .replace(/\[\[(.*)?(<|&lt;)-(.*)?\]\]/, '<a class="link" data-destination="$1">$3</a>')
-        .replace(/\[\[(.*)?\]\]/, '<a class="link" data-destination="$1">$1</a>')
+        .replaceAll(/\[\[(.*?)-(>|&gt;)(.*?)\]\]/g, '<a class="link" data-destination="$3">$1</a>')
+        .replaceAll(/\[\[(.*?)(<|&lt;)-(.*?)\]\]/g, '<a class="link" data-destination="$1">$3</a>')
+        .replaceAll(/\[\[(.*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
 
     // Add paragraph tags
     bodystr = bodystr
@@ -166,6 +166,12 @@ const transformPassageBody = (body) => {
         .join('')
 
     return bodystr
+}
+
+const htmlDecode = (input) => {
+    const element = document.createElement('div');
+    element.innerHTML = input;
+    return element.textContent;
 }
 
 const story = new Story()
