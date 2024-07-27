@@ -1,0 +1,12 @@
+{
+  "name": "twine-formatter-gd",
+  "version": "0.1.0",
+  "description": "A Twine Story Format for nostalgia",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run build && node scripts/compiletest.js",
+    "build": "node scripts/compile.js"
+  },
+  "author": "Raj Chaudhuri",
+  "license": "MIT"
+}
