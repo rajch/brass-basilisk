@@ -253,11 +253,11 @@ function DiceBoard (element) {
 
     const diceRotationMap = {
         1: 'rotateX(0deg) rotateY(0deg)',
-        2: 'rotateX(-90deg) rotateY(0deg)',
-        3: 'rotateX(0deg) rotateY(90deg)',
-        4: 'rotateX(0deg) rotateY(-90deg)',
-        5: 'rotateX(90deg) rotateY(0deg)',
-        6: 'rotateX(180deg) rotateY(0deg)'
+        2: 'rotateX(0deg) rotateY(-90deg)',
+        3: 'rotateX(180deg) rotateY(0deg)',
+        4: 'rotateX(0deg) rotateY(90deg)',
+        5: 'rotateX(-90deg) rotateY(0deg)',
+        6: 'rotateX(90deg) rotateY(0deg)'
     }
 
     /**
@@ -276,8 +276,8 @@ function DiceBoard (element) {
             dice.style.transform = diceRotationMap[result]
         }
 
-        if(rollResultLabel) {
-            const resultsStr = results.reduce((finalValue,currentValue) =>{
+        if (rollResultLabel) {
+            const resultsStr = results.reduce((finalValue, currentValue) => {
                 finalValue = finalValue ? finalValue + "+" + currentValue : "" + currentValue
                 return finalValue
             })
@@ -316,7 +316,7 @@ function DiceBoard (element) {
 
     function hide () {
         clear()
-        
+
         element.classList.add('hidden')
     }
 
