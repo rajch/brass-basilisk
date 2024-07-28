@@ -92,9 +92,9 @@ h1.storyTitle {
     width: 50px;
     height: 50px;
     position: absolute;
-    background: red;
+    background: orangered;
     color: white;
-    border: 2px solid red;
+    border: 2px solid orangered;
     border-radius: 5px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -102,6 +102,16 @@ h1.storyTitle {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+}
+
+.dice-1 .side {
+    background-color: orange;
+    border-color: orange;
+}
+
+.dice-2 .side {
+    background-color: blue;
+    border-color: blue;
 }
 
 .one {
