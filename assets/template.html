@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{STORY_NAME}}</title>
-    <link rel="stylesheet" href="style.css" >
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     {{STORY_DATA}}
     <main>
         <section class="sidebar-1">
             <h1 id="storyTitle"></h1>
-            <div>
-                <button class="hidden" id="backButton">&LeftTeeArrow;</button>
-                <button class="hidden" id="forwardButton">&RightTeeArrow;</button>
+            <div class="content">
+
+            </div>
+            <div class="toolbar">
+                <button id="backButton" disabled="true">&LeftTeeArrow;</button>
+                <button id="forwardButton" disabled="true">&RightTeeArrow;</button>
+                <button id="restartButton">&olarr;</button>
             </div>
         </section>
         <section class="content">
@@ -25,4 +31,5 @@
     </main>
     <script src="../src/gd.js"></script>
 </body>
+
 </html>

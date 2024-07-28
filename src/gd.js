@@ -29,7 +29,6 @@ function Story () {
         return getPassageFromElement(passageElement)
     }
 
-
     function renderPassage (passage) {
         contentElement.innerHTML = transformPassageBody(passage.body)
 
@@ -44,6 +43,7 @@ function Story () {
     let stackPosition = -1
     const backButton = document.getElementById('backButton')
     const forwardButton = document.getElementById('forwardButton')
+    const restartButton = document.getElementById('restartButton')
 
     function linkClickedToNavigate (e) {
         const linkElement = e.target;
@@ -63,15 +63,19 @@ function Story () {
     function manageNavigationButtons () {
         // Back button
         if (stackPosition > 0) {
-            backButton?.classList.remove('hidden')
+            // backButton?.classList.remove('hidden')
+            backButton?.removeAttribute('disabled')
         } else {
-            backButton?.classList.add('hidden')
+            // backButton?.classList.add('hidden')
+            backButton?.setAttribute('disabled', 'true')
         }
         // Forward button
         if (stackPosition === (navStack.length - 1)) {
-            forwardButton?.classList.add('hidden')
+            // forwardButton?.classList.add('hidden')
+            forwardButton?.setAttribute('disabled', 'true')
         } else {
-            forwardButton?.classList.remove('hidden')
+            //forwardButton?.classList.remove('hidden')
+            forwardButton?.removeAttribute('disabled')
         }
     }
 
@@ -108,30 +112,10 @@ function Story () {
         navigateToPassage(navStack[stackPosition])
     }
 
-    // Start
-    this.Start = function () {
-        // Set up story styles
-        const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
-        storyStyleElement.removeAttribute('role')
-        storyStyleElement.removeAttribute('type')
-        if(storyStyleElement) {
-            const styleElement = document.querySelector('head style')
-            if(styleElement) {
-                styleElement.insertAdjacentElement('afterend', storyStyleElement)
-            }
-        }
-        
-        // Show the title
-        const titleElement = document.getElementById('storyTitle')
-        if (titleElement) {
-            titleElement.innerHTML = storyName
-        }
+    function restartNavigation () {
+        navStack.splice(0)
+        stackPosition = -1
 
-        // Hook up forward and backward buttons
-        backButton?.addEventListener('click', navigateBack)
-        forwardButton?.addEventListener('click', navigateForward)
-
-        // Navigate to first passage
         const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
         if (!passageElement) {
             return
@@ -140,6 +124,34 @@ function Story () {
         if (passage?.name) {
             navigateNew(passage.name)
         }
+    }
+
+    // Start
+    this.Start = function () {
+        // Set up story styles
+        const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
+        storyStyleElement.removeAttribute('role')
+        storyStyleElement.removeAttribute('type')
+        if (storyStyleElement) {
+            const styleElement = document.querySelector('head style')
+            if (styleElement) {
+                styleElement.insertAdjacentElement('afterend', storyStyleElement)
+            }
+        }
+
+        // Show the title
+        const titleElement = document.getElementById('storyTitle')
+        if (titleElement) {
+            titleElement.innerHTML = storyName
+        }
+
+        // Hook up forward, backward and restart buttons
+        backButton?.addEventListener('click', navigateBack)
+        forwardButton?.addEventListener('click', navigateForward)
+        restartButton?.addEventListener('click', restartNavigation)
+
+        // Navigate to first passage
+        restartNavigation()
     }
 }
 
@@ -161,29 +173,42 @@ const getPassageFromElement = (passageElement) => {
     return new Passage(pid, name, body)
 }
 
+// Passage to HTML transformation
 const transformPassageBody = (body) => {
-    let bodystr = htmlDecode(body)
+    // Process HTML in passage body
+    let bodystr = processHTML(body)
 
     // Process links
-    bodystr = bodystr
-        .replaceAll(/\[\[(.*?)-(>|&gt;)(.*?)\]\]/g, '<a class="link" data-destination="$3">$1</a>')
-        .replaceAll(/\[\[(.*?)(<|&lt;)-(.*?)\]\]/g, '<a class="link" data-destination="$1">$3</a>')
-        .replaceAll(/\[\[(.*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
+    bodystr = processTwineLinks(bodystr)
 
     // Add paragraph tags
-    bodystr = bodystr
-        .split('\n')
-        .map((row) => `<p>${row}</p>`)
-        .join('')
+    bodystr = addParagraphTags(bodystr)
 
     return bodystr
 }
 
-const htmlDecode = (input) => {
+const processHTML = (input) => {
+    // The following will decode HTML-encoded content
     const element = document.createElement('div');
     element.innerHTML = input;
+    // TODO: strip unwated tags here
     return element.textContent;
 }
 
+const processTwineLinks = (input) => {
+    return input
+        .replaceAll(/\[\[(.*?)-(>|&gt;)(.*?)\]\]/g, '<a class="link" data-destination="$3">$1</a>')
+        .replaceAll(/\[\[(.*?)(<|&lt;)-(.*?)\]\]/g, '<a class="link" data-destination="$1">$3</a>')
+        .replaceAll(/\[\[(.*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
+}
+
+const addParagraphTags = (input) => {
+    return input
+        .split('\n')
+        .map((row) => `<p>${row}</p>`)
+        .join('')
+}
+
+// FINALLY, start the story
 const story = new Story()
 story?.Start()

@@ -11,7 +11,7 @@ const cssFile = fs.readFileSync('assets/style.css', 'utf8');
 const jsFile = fs.readFileSync("src/gd.js", 'utf8');
 compiledStr = compiledStr
     .replace(
-        '<link rel="stylesheet" href="style.css" >',
+        '<link rel="stylesheet" href="style.css">',
         '<style>\n' + cssFile + '\n</style>'
     ).replace(
         '<script src="../src/gd.js"></script>',
