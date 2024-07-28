@@ -14,7 +14,13 @@
         Or [[Next-3<-Go on]]
         Or [[Re-start->Start]]?
     </tw-passagedata>
-    <tw-passagedata pid="4" name="Next-3" tags="tag1 tag2 tag3">
+    <tw-passagedata pid="4" name="Next-3">
+        You are confused.
+        You should try to roll three dice.
+        If your score is 3 or less, you should [[go back to optimism->Next-1]].
+        If your score is more, you should [[proceed->Next-4]].
+    </tw-passagedata>
+    <tw-passagedata pid="5" name="Next-4" tags="tag1 tag2 tag3">
         You have, finally, reached the end.
     </tw-passagedata>
     <style>

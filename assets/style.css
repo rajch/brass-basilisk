@@ -62,7 +62,8 @@ section.content p {
     margin-bottom: 1rem;
 }
 
-section.content a.link, section.content a.link:visited {
+section.content a.link,
+section.content a.link:visited {
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
@@ -75,4 +76,74 @@ h1.storyTitle {
 
 .hidden {
     visibility: hidden;
+}
+
+/* Dice */
+.dice {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 2s;
+}
+
+.side {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: red;
+    color: white;
+    border: 2px solid red;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.one {
+    transform: rotateY(0deg) translateZ(25px);
+}
+
+.two {
+    transform: rotateY(90deg) translateZ(25px);
+}
+
+.three {
+    transform: rotateY(180deg) translateZ(25px);
+}
+
+.four {
+    transform: rotateY(-90deg) translateZ(25px);
+}
+
+.five {
+    transform: rotateX(90deg) translateZ(25px);
+}
+
+.six {
+    transform: rotateX(-90deg) translateZ(25px);
+}
+
+.rollarea {
+    perspective: 300px;
+    margin: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    column-gap: 16px;
+}
+
+.diceboard {
+    margin: 1rem 0;
+}
+
+.dicerollbutton {
+    padding: 0.5rem;
+    background-color: green;
+    border-radius: 5px;
+    color: white;
+    margin: 0.25rem;
 }
