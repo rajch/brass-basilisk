@@ -1,4 +1,27 @@
-var liveServer = require("alive-server");
+'use strict';
+
+import { watch } from 'chokidar';
+
+const watcher = watch(
+	[
+		'src/gd.js',
+		'assets/template.html',
+		'assets/style.css',
+		'assets/sampledata.html'
+	],
+	{
+		disableGlobbing: true,
+		awaitWriteFinish: true
+	}
+);
+
+import bt from './buildtools.mjs';
+
+watcher.on('change', (path, stats) => {
+	bt.buildSample();
+});
+
+import server from 'alive-server';
 
 var params = {
 	port: 8181, // Set the server port. Defaults to 8080.
@@ -15,4 +38,4 @@ var params = {
 	index: 'sample.html' // By default send supports "index.html" files, to disable this set false or to supply a new index pass a string or an array in preferred order 
 };
 
-liveServer.start(params);
+server.start(params);

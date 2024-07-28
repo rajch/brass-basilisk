@@ -2,15 +2,16 @@
   "name": "twine-formatter-gd",
   "version": "0.1.0",
   "description": "A Twine Story Format for nostalgia",
-  "main": "index.js",
   "scripts": {
-    "test": "npm run build && node scripts/compiletest.js",
-    "build": "node scripts/compile.js",
-    "dev": "node scripts/dev-server.js"
+    "build-sample": "node scripts/build.mjs --sample",
+    "build-debug": "node scripts/build.mjs --formatjs",
+    "build-release": "node scripts/build.mjs --formatjs --release",
+    "dev": "node scripts/dev-server.mjs"
   },
   "author": "Raj Chaudhuri",
   "license": "MIT",
   "devDependencies": {
-    "alive-server": "^1.3.0"
+    "alive-server": "^1.3.0",
+    "chokidar": "^3.6.0"
   }
 }
