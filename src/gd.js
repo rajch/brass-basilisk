@@ -228,9 +228,9 @@ const processTwineLinks = (input) => {
 
 const addParagraphTags = (input) => {
     return input
-        .split('\n')
+        .split(/\r?\n|\r|\n/g)
         .map((row) => `<p>${row}</p>`)
-        .join('')
+        .join('');
 }
 
 // Dice
@@ -343,7 +343,12 @@ function DiceBoard (element) {
      */
     this.Scan = (passageBody) => {
         const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e/
-        const match = passageBody.match(phrase1)
+        let match = passageBody.match(phrase1)
+
+        if(!match) {
+            const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e/
+            match = passageBody.match(phrase2)
+        }
 
         if (match) {
             const numdice = match[1].trim().toLowerCase()
