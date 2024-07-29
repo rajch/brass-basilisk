@@ -1,9 +1,22 @@
 'use strict';
 
 import { readFileSync, writeFileSync } from 'fs';
+import minifyHTML from '@minify-html/node';
+
 
 const htmlOutputFileName = (minimize) => {
     return minimize ? 'out/combined.html' : 'out/combined-debug.html';
+}
+
+const minify = (source) => {
+    return minifyHTML.minify(
+        Buffer.from(source),
+        {
+            minify_css: true,
+            minify_js: true,
+            keep_closing_tags: true
+        }
+    ).toString('utf-8')
 }
 
 const buildCombinedHTML = (minimize) => {
@@ -26,6 +39,9 @@ const buildCombinedHTML = (minimize) => {
             '<script>\n' + jsFile + '\n</script>'
         );
 
+    if (minimize) {
+        compiledStr = minify(compiledStr)
+    }
     // Write Output 
     writeFileSync(outputFileName, compiledStr);
     console.log('Combined HTML file built.')
@@ -52,12 +68,11 @@ const buildFormatJS = (minimize) => {
     console.log('format.js built.')
 }
 
-const buildSample = () => {
+const buildSample = (minimize) => {
     console.log('Building sample.html...')
 
-    // The sample should never be minimized
-    buildCombinedHTML(false);
-    const htmlInputFileName = htmlOutputFileName(false);
+    buildCombinedHTML(minimize);
+    const htmlInputFileName = htmlOutputFileName(minimize);
 
     // The sample combines the combined HTML file with the sample 
     // data.
