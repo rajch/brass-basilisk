@@ -22,9 +22,12 @@ watcher.on('change', async () => {
 	await bt.buildSample(false);
 });
 
+const es5OptPos = process.argv.findIndex((value) => value.toLowerCase() === '--es5');
+const transpileToES5 = es5OptPos > -1 ? true : false;
+
 console.log('Building sample.html...')
 await async function() {
-	await bt.buildSample(false);
+	await bt.buildSample(false, transpileToES5);
 }();
 
 var params = {

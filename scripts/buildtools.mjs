@@ -3,7 +3,8 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'fs';
 import minifyHTML from '@minify-html/node';
 import { rollup } from 'rollup';
-
+import resolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
 
 const ensureOutDirectory = () => {
     const dirPath = 'out/'
@@ -37,13 +38,18 @@ const minify = (source) => {
     ).toString('utf-8');
 }
 
-const buildCombinedJS = async () => {
+const buildCombinedJS = async (transpileToES5) => {
     const outputFileName = 'out/gd.js';
     console.log(`Building combined JS file:${outputFileName}`);
 
+    const pluginarr = transpileToES5
+        ? [resolve(), babel({ babelHelpers: 'bundled' })]
+        : [];
+
     console.log('Rolling up...');
     let bundle = await rollup({
-        input: 'src/gd.js'
+        input: 'src/gd.js',
+        plugins: pluginarr
     });
 
     console.log(bundle.watchFiles);
@@ -57,14 +63,14 @@ const buildCombinedJS = async () => {
     await bundle.close();
 }
 
-const buildCombinedHTML = async (minimize) => {
+const buildCombinedHTML = async (minimize, transpileToES5) => {
     const outputFileName = htmlOutputFileName(minimize);
     console.log(`Building combined HTML file:${outputFileName}`);
 
     ensureOutDirectory();
 
     // Combine Javascript
-    await buildCombinedJS();
+    await buildCombinedJS(transpileToES5);
 
     // Begin with HTML
     const templateFile = readFileSync('assets/template.html', 'utf8');
@@ -100,10 +106,10 @@ const cleanCombinedHTML = (release) => {
     deleteOutputFile(outputFileName)
 }
 
-const buildFormatJS = async (minimize) => {
+const buildFormatJS = async (minimize, transpileToES5) => {
     console.log('Building format.js...')
 
-    await buildCombinedHTML(minimize);
+    await buildCombinedHTML(minimize, transpileToES5);
 
     // Read manifest from template file
     const manifestFile = readFileSync("assets/formatManifest.json", 'utf8');
@@ -127,10 +133,10 @@ const cleanFormatJs = (release) => {
     deleteOutputFile('out/format.js');
 }
 
-const buildSample = async (minimize) => {
+const buildSample = async (minimize, transpileToES5) => {
     console.log('Building sample.html...')
 
-    await buildCombinedHTML(minimize);
+    await buildCombinedHTML(minimize, transpileToES5);
     const htmlInputFileName = htmlOutputFileName(minimize);
 
     // The sample combines the combined HTML file with the sample 
