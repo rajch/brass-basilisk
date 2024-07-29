@@ -18,7 +18,7 @@ const watcher = watch(
 import bt from './buildtools.mjs';
 
 watcher.on('change', (path, stats) => {
-	bt.buildSample();
+	bt.buildSample(false);
 });
 
 import server from 'alive-server';

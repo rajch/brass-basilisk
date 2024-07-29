@@ -1,8 +1,25 @@
 'use strict';
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'fs';
 import minifyHTML from '@minify-html/node';
 
+
+const ensureOutDirectory = () => {
+    const dirPath = 'out/'
+    if (!existsSync(dirPath)) {
+        mkdirSync(dirPath);
+        console.log('out/ directory created.')
+    }
+}
+
+const deleteOutputFile = (outputFileName) => {
+    if (existsSync(outputFileName)) {
+        unlinkSync(outputFileName)
+        console.log(`File:${outputFileName} deleted.`);
+    } else {
+        console.log(`File:${outputFileName} does not exist.`);
+    }
+}
 
 const htmlOutputFileName = (minimize) => {
     return minimize ? 'out/combined.html' : 'out/combined-debug.html';
@@ -22,6 +39,8 @@ const minify = (source) => {
 const buildCombinedHTML = (minimize) => {
     const outputFileName = htmlOutputFileName(minimize);
     console.log(`Building combined HTML file:${outputFileName}`);
+
+    ensureOutDirectory();
 
     // Begin with HTML
     const templateFile = readFileSync('assets/template.html', 'utf8');
@@ -47,6 +66,12 @@ const buildCombinedHTML = (minimize) => {
     console.log('Combined HTML file built.')
 }
 
+const cleanCombinedHTML = (release) => {
+    const outputFileName = htmlOutputFileName(release);
+    console.log(`Deleting combined HTML file:${outputFileName}`);
+    deleteOutputFile(outputFileName)
+}
+
 const buildFormatJS = (minimize) => {
     console.log('Building format.js...')
 
@@ -56,7 +81,7 @@ const buildFormatJS = (minimize) => {
     const manifestFile = readFileSync("assets/formatManifest.json", 'utf8');
     const manifest = JSON.parse(manifestFile);
 
-    // Insert combined html template (debug or release) into manifest
+    // Insert combined html file (debug or release) into manifest
     const inputFileName = htmlOutputFileName(minimize);
     const inputFile = readFileSync(inputFileName, 'utf8');
     manifest.source = inputFile;
@@ -65,7 +90,13 @@ const buildFormatJS = (minimize) => {
     let format = "window.storyFormat(" + JSON.stringify(manifest) + ");";
     writeFileSync('out/format.js', format);
 
-    console.log('format.js built.')
+    console.log('format.js built.');
+    // Delete combined html file generated for this build
+    cleanCombinedHTML(minimize);
+}
+
+const cleanFormatJs = (release) => {
+    deleteOutputFile('out/format.js');
 }
 
 const buildSample = (minimize) => {
@@ -84,6 +115,23 @@ const buildSample = (minimize) => {
 
     writeFileSync('out/sample.html', compiledStr);
     console.log('sample.html built.')
+    // Delete combined html file generated for this build
+    cleanCombinedHTML(minimize);
 }
 
-export default { buildCombinedHTML, buildFormatJS, buildSample };
+const cleanSample = (release) => {
+    deleteOutputFile('out/sample.html');
+}
+
+const cleanAll = (release) => {
+    cleanFormatJs(release);
+    cleanSample(release);
+    cleanCombinedHTML(release);
+}
+
+export default {
+    buildCombinedHTML, cleanCombinedHTML,
+    buildFormatJS, cleanFormatJs,
+    buildSample, cleanSample,
+    cleanAll
+};
