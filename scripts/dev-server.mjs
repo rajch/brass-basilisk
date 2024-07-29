@@ -1,27 +1,31 @@
 'use strict';
 
 import { watch } from 'chokidar';
+import server from 'alive-server';
 
-const watcher = watch(
-	[
-		'src/gd.js',
+const watcher = watch(	[
+		'src/*.js',
 		'assets/template.html',
 		'assets/style.css',
 		'assets/sampledata.html'
 	],
 	{
-		disableGlobbing: true,
+		disableGlobbing: false,
 		awaitWriteFinish: true
 	}
 );
 
 import bt from './buildtools.mjs';
 
-watcher.on('change', (path, stats) => {
-	bt.buildSample(false);
+console.log('Setting up watcher...')
+watcher.on('change', async () => {
+	await bt.buildSample(false);
 });
 
-import server from 'alive-server';
+console.log('Building sample.html...')
+await async function() {
+	await bt.buildSample(false);
+}();
 
 var params = {
 	port: 8181, // Set the server port. Defaults to 8080.
@@ -38,4 +42,5 @@ var params = {
 	index: 'sample.html' // By default send supports "index.html" files, to disable this set false or to supply a new index pass a string or an array in preferred order 
 };
 
+console.log('Development server ready.')
 server.start(params);

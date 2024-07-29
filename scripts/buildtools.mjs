@@ -2,6 +2,7 @@
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'fs';
 import minifyHTML from '@minify-html/node';
+import { rollup } from 'rollup';
 
 
 const ensureOutDirectory = () => {
@@ -33,22 +34,46 @@ const minify = (source) => {
             minify_js: true,
             keep_closing_tags: true
         }
-    ).toString('utf-8')
+    ).toString('utf-8');
 }
 
-const buildCombinedHTML = (minimize) => {
+const buildCombinedJS = async () => {
+    const outputFileName = 'out/gd.js';
+    console.log(`Building combined JS file:${outputFileName}`);
+
+    console.log('Rolling up...');
+    let bundle = await rollup({
+        input: 'src/gd.js'
+    });
+
+    console.log(bundle.watchFiles);
+
+    console.log(`Writing ${outputFileName}...`);
+    await bundle.write({
+        file: 'out/gd.js',
+        format: 'cjs'
+    });
+
+    await bundle.close();
+}
+
+const buildCombinedHTML = async (minimize) => {
     const outputFileName = htmlOutputFileName(minimize);
     console.log(`Building combined HTML file:${outputFileName}`);
 
     ensureOutDirectory();
 
+    // Combine Javascript
+    await buildCombinedJS();
+
     // Begin with HTML
     const templateFile = readFileSync('assets/template.html', 'utf8');
     let compiledStr = templateFile + "";
 
-    // Add CSS and JS
+    // Add CSS
     const cssFile = readFileSync('assets/style.css', 'utf8');
-    const jsFile = readFileSync("src/gd.js", 'utf8');
+    // Add combined JS
+    const jsFile = readFileSync("out/gd.js", 'utf8');
     compiledStr = compiledStr
         .replace(
             '<link rel="stylesheet" href="style.css">',
@@ -67,15 +92,18 @@ const buildCombinedHTML = (minimize) => {
 }
 
 const cleanCombinedHTML = (release) => {
-    const outputFileName = htmlOutputFileName(release);
+    let outputFileName = htmlOutputFileName(release);
     console.log(`Deleting combined HTML file:${outputFileName}`);
+    deleteOutputFile(outputFileName)
+    outputFileName = 'out/gd.js';
+    console.log(`Deleting combined JS file:${outputFileName}`);
     deleteOutputFile(outputFileName)
 }
 
-const buildFormatJS = (minimize) => {
+const buildFormatJS = async (minimize) => {
     console.log('Building format.js...')
 
-    buildCombinedHTML(minimize);
+    await buildCombinedHTML(minimize);
 
     // Read manifest from template file
     const manifestFile = readFileSync("assets/formatManifest.json", 'utf8');
@@ -99,10 +127,10 @@ const cleanFormatJs = (release) => {
     deleteOutputFile('out/format.js');
 }
 
-const buildSample = (minimize) => {
+const buildSample = async (minimize) => {
     console.log('Building sample.html...')
 
-    buildCombinedHTML(minimize);
+    await buildCombinedHTML(minimize);
     const htmlInputFileName = htmlOutputFileName(minimize);
 
     // The sample combines the combined HTML file with the sample 

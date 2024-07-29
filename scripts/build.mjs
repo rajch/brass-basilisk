@@ -21,7 +21,7 @@ if (args.match(combineonlyRegExp)) {
     if (args.match(cleanRegExp)) {
         bt.cleanCombinedHTML(release);
     } else {
-        bt.buildCombinedHTML(release);
+        await bt.buildCombinedHTML(release);
     }
     process.exit(0);
 }
@@ -31,7 +31,7 @@ if (args.match(sampleRegExp)) {
     if (args.match(cleanRegExp)) {
         bt.cleanSample(release);
     } else {
-        bt.buildSample(release);
+        await bt.buildSample(release);
     }
     process.exit(0);
 }
@@ -39,5 +39,5 @@ if (args.match(sampleRegExp)) {
 if (args.match(cleanRegExp)) {
     bt.cleanFormatJs(release);
 } else {
-    bt.buildFormatJS(release);
+    await bt.buildFormatJS(release);
 }
