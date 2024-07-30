@@ -1,8 +1,9 @@
 {
-	"name": "GD",
+	"name": "Brass Basilisk",
 	"version": "0.1.0",
     "author": "Raj Chaudhuri",
     "description": "Gamebook-style stories.",
-	"image": "",
+    "license": "MIT",
+	"image": "logo.png",
     "source":""
 }

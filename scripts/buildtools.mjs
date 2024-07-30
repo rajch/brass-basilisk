@@ -48,7 +48,7 @@ const buildCombinedJS = async (transpileToES5) => {
 
     console.log('Rolling up...');
     let bundle = await rollup({
-        input: 'src/gd.js',
+        input: 'src/brass-basilisk.js',
         plugins: pluginarr
     });
 
@@ -85,7 +85,7 @@ const buildCombinedHTML = async (minimize, transpileToES5) => {
             '<link rel="stylesheet" href="style.css">',
             '<style>\n' + cssFile + '\n</style>'
         ).replace(
-            '<script src="../src/gd.js"></script>',
+            '<script src="../src/brass-basilisk.js"></script>',
             '<script>\n' + jsFile + '\n</script>'
         );
 
