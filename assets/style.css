@@ -104,9 +104,18 @@ h1.storyTitle {
     font-weight: bold;
 }
 
+.side svg {
+    width: 50px;
+    height: 50px;
+}
+
+.side svg circle {
+    fill: black;
+}
+
 .dice-1 .side {
-    background-color: orange;
-    border-color: orange;
+    background-color: white;
+    border-color: white;
 }
 
 .dice-2 .side {
@@ -151,9 +160,10 @@ h1.storyTitle {
 }
 
 .dicerollbutton {
-    padding: 0.5rem;
-    background-color: green;
-    border-radius: 5px;
-    color: white;
     margin: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    cursor: pointer;
 }

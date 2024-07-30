@@ -4,14 +4,62 @@ class DiceBoard {
     constructor(element) {
         const buttonsArea = element.querySelector('div.buttonsarea')
         const rollArea = element.querySelector('div.rollarea')
+//         const dieTemplate = `
+// <div class="dice dice-{{n}}">
+//     <div class="side one">1</div>
+//     <div class="side two">2</div>
+//     <div class="side three">3</div>
+//     <div class="side four">4</div>
+//     <div class="side five">5</div>
+//     <div class="side six">6</div>
+// </div>`
         const dieTemplate = `
 <div class="dice dice-{{n}}">
-    <div class="side one">1</div>
-    <div class="side two">2</div>
-    <div class="side three">3</div>
-    <div class="side four">4</div>
-    <div class="side five">5</div>
-    <div class="side six">6</div>
+    <div class="side one">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="10" fill="black" />
+    </svg>
+    </div>
+    <div class="side two">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side three">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="50" r="10" fill="black" />
+        <circle cx="50" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side four">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>
+    </div>
+    <div class="side five">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="50" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side six">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="25" cy="50" r="10" fill="black" />
+        <circle cx="75" cy="50" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
 </div>`
 
         const diceRotationMap = {
@@ -60,6 +108,7 @@ class DiceBoard {
             rollArea.append(...result)
 
             const rollButton = document.createElement('button')
+            rollButton.type = 'button'
             rollButton.classList.add('dicerollbutton')
             rollButton.innerText = 'Roll'
 
