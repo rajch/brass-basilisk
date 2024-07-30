@@ -1,9 +1,18 @@
 'use strict';
 
-import DiceBoard from './diceboard'
 import Passage from './passage'
+import { processHTML, processTwineLinks, addParagraphTags } from './transformers'
 
 class Story {
+    #addscanner
+    #addtransformer
+    #stateset
+    #stateget
+    #addplugin
+    #getplugin
+    #start
+
+
     constructor() {
         const storyElement = document.querySelector('tw-storydata')
         if (!storyElement) {
@@ -21,8 +30,14 @@ class Story {
 
         // Scan management
         // A scanner is a function which takes a single string, and returns
-        // nothing.
+        // nothing. It is called when a new passage is about to be rendered
+        // after successful navigation. Scanners are called in the order of
+        // registration. They are usually implemented by Plugins.
         const scanners = []
+
+        this.#addscanner = (scannerFunc) => {
+            scanners.push(scannerFunc)
+        }
 
         function scanPassageBody (body) {
             for (let i = 0; i < scanners.length; i++) {
@@ -30,6 +45,48 @@ class Story {
                     scanners[i](body)
                 }
             }
+        }
+
+        // Transformation
+        // A transformer is a function which takes a string and returns a
+        // string. The assumption is that it will translate something in 
+        // the input into enencoded HTML. There are a few in-built ones,
+        // and more can be registered. Just as a passage is about to be
+        // rendered, the passage body is piped through all transformers.
+        // After the last one, a final sanitisation is done (TODO:), and 
+        // the results are rendered.
+        const transformers = []
+
+        function transformPassageBody (body) {
+            let bodystr = body
+
+            // Run the in-built HTML transformer first
+            // This will read and sanitise any HTML in
+            // the passage body. From this point, it's
+            // all unencoded HTML.
+            bodystr = processHTML(bodystr)
+
+            // Run the in-build links transformer next
+            bodystr = processTwineLinks(bodystr)
+
+            // Run all registered transformers. In all
+            // of them, the string should contain text
+            // and unencoded HTML.
+            for (let i = 0; i < transformers.length; i++) {
+                if (typeof transformers[i] === 'function') {
+                    bodystr = transformers[i](bodystr)
+                }
+            }
+
+            // Run the in-built transformer to change
+            // newlines into <p> tags last.
+            bodystr = addParagraphTags(bodystr)
+
+            return bodystr
+        }
+
+        this.#addtransformer = (transformerFunc) => {
+            transformers.push(transformerFunc)
         }
 
         // Passage management
@@ -60,17 +117,17 @@ class Story {
         // Navigation
         const navStack = []
         let stackPosition = -1
+
+        function clearAfterCurrent () {
+            if (stackPosition < (navStack.length - 1)) {
+                navStack.splice(stackPosition + 1)
+            }
+        }
+
+        /// Navigation UI
         const backButton = document.getElementById('backButton')
         const forwardButton = document.getElementById('forwardButton')
         const restartButton = document.getElementById('restartButton')
-
-        function linkClickedToNavigate (e) {
-            const linkElement = e.target
-            const destPassageName = linkElement.getAttribute('data-destination')
-            if (destPassageName) {
-                navigateNew(destPassageName)
-            }
-        }
 
         function navigateToPassage (name) {
             const passage = getPassageByName(name)
@@ -98,6 +155,34 @@ class Story {
             }
         }
 
+        /// Navigation state
+        let currentState = {}
+
+        this.#stateset = (key, value) => {
+            currentState[key] = value
+            navStack[stackPosition].state[key] = value
+
+            // Setting current state invalidates any navigation
+            // after the current position
+            clearAfterCurrent()
+            manageNavigationButtons()
+        }
+
+        this.#stateget = (key) => {
+            // Navigation has already set the current state
+            return currentState[key]
+        }
+
+        function finishNavigation () {
+            manageNavigationButtons()
+
+            const stackFrame = navStack[stackPosition]
+            // console.log(`You have come to ${stackFrame.passageName}. The state is ${JSON.stringify(stackFrame)}`)
+            // console.log(`The whole stack is ${JSON.stringify(navStack)}`)
+            currentState = stackFrame.state
+            navigateToPassage(stackFrame.passageName)
+        }
+
         function navigateNew (passageName) {
             // If current position is not at end, and we are
             // pushing, then the elements after the current
@@ -106,11 +191,15 @@ class Story {
                 navStack.splice(stackPosition + 1)
             }
 
-            navStack.push(passageName)
+            // navigateNew is the only operation that can
+            // push state on the stack
+            navStack.push({
+                passageName,
+                state: structuredClone(currentState)
+            })
             stackPosition = navStack.length - 1
 
-            manageNavigationButtons()
-            navigateToPassage(passageName)
+            finishNavigation()
         }
 
         function navigateBack () {
@@ -118,8 +207,7 @@ class Story {
                 stackPosition--
             }
 
-            manageNavigationButtons()
-            navigateToPassage(navStack[stackPosition])
+            finishNavigation()
         }
 
         function navigateForward () {
@@ -127,13 +215,13 @@ class Story {
                 stackPosition++
             }
 
-            manageNavigationButtons()
-            navigateToPassage(navStack[stackPosition])
+            finishNavigation()
         }
 
         function restartNavigation () {
             navStack.splice(0)
             stackPosition = -1
+            currentState = {}
 
             const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
             if (!passageElement) {
@@ -145,13 +233,35 @@ class Story {
             }
         }
 
-        // Dice
-        const diceBoardElement = document.querySelector('div.diceboard')
-        const diceBoard = new DiceBoard(diceBoardElement)
-        scanners.push(diceBoard.Scan)
+        /// This can be attached to link click events
+        function linkClickedToNavigate (e) {
+            const linkElement = e.target
+            const destPassageName = linkElement.getAttribute('data-destination')
+            if (destPassageName) {
+                navigateNew(destPassageName)
+            }
+        }
+
+        // Plugin management
+        const plugins = {}
+
+        this.#addplugin = (pluginname, plugin) => {
+            // Check for validity of plugin
+            // TODO: Do this better
+            if(typeof plugin?.init !== 'function') {
+                throw new Error(`${pluginname} is not a valid plugin`)
+            }
+
+            plugins[pluginname] = plugin
+            plugin.init(this)
+        }
+
+        this.#getplugin = (pluginname) => {
+            return plugins[pluginname]
+        }
 
         // Start
-        this.Start = function () {
+        this.#start = function () {
             // Set up story styles
             const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
             storyStyleElement.removeAttribute('role')
@@ -178,42 +288,38 @@ class Story {
             restartNavigation()
         }
     }
-}
 
-// Passage to HTML transformation
-const transformPassageBody = (body) => {
-    // Process HTML in passage body
-    let bodystr = processHTML(body)
+    addScanner (scannerFunc) {
+        this.#addscanner(scannerFunc)
+    }
 
-    // Process links
-    bodystr = processTwineLinks(bodystr)
+    addTransformer (transformerFunc) {
+        this.#addtransformer(transformerFunc)
+    }
 
-    // Add paragraph tags
-    bodystr = addParagraphTags(bodystr)
+    addToolPanel () {
+        return document.querySelector('div.diceboard')
+    }
 
-    return bodystr
-}
+    addPlugin (pluginname, plugin) {
+        this.#addplugin(pluginname, plugin)
+    }
 
-const processHTML = (input) => {
-    // The following will decode HTML-encoded content
-    const element = document.createElement('div');
-    element.innerHTML = input;
-    // TODO: strip unwated tags here
-    return element.textContent;
-}
+    getPlugin (pluginname) {
+        return this.#getplugin(pluginname)
+    }
 
-const processTwineLinks = (input) => {
-    return input
-        .replaceAll(/\[\[(.*?)-(>|&gt;)(.*?)\]\]/g, '<a class="link" data-destination="$3">$1</a>')
-        .replaceAll(/\[\[(.*?)(<|&lt;)-(.*?)\]\]/g, '<a class="link" data-destination="$1">$3</a>')
-        .replaceAll(/\[\[(.*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
-}
+    setCurrentState (key, value) {
+        this.#stateset(key, value)
+    }
 
-const addParagraphTags = (input) => {
-    return input
-        .split(/\r?\n|\r|\n/g)
-        .map((row) => `<p>${row}</p>`)
-        .join('');
+    getCurrentState (key) {
+        return this.#stateget(key)
+    }
+
+    start () {
+        this.#start()
+    }
 }
 
 export default Story;

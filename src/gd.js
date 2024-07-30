@@ -1,7 +1,10 @@
 'use strict'
 
+import DiceBoard from "./diceboard"
 import Story from "./story"
 
-// FINALLY, start the story
+
 const story = new Story()
-story?.Start()
+story.addPlugin('diceboard', new DiceBoard())
+
+story?.start()
