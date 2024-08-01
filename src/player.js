@@ -14,6 +14,10 @@ export default class Player {
     /** @type {Function} */
     #stateget
     /** @type {Function} */
+    #statesetglobal
+    /** @type {Function} */
+    #stategetglobal
+    /** @type {Function} */
     #addplugin
     /** @type {Function} */
     #getplugin
@@ -172,6 +176,7 @@ export default class Player {
 
         /// Navigation state management
         let currentState = {}
+        let globalState = {}
 
         this.#stateset = (key, value) => {
             currentState[key] = value
@@ -186,6 +191,21 @@ export default class Player {
         this.#stateget = (key) => {
             // Navigation has already set the current state
             return currentState[key]
+        }
+
+        this.#statesetglobal = (key, value) => {
+            globalState[key] = value
+
+            console.log(`Global state set key:${key} to value: ${JSON.stringify(value)}`)
+
+            // Setting global state invalidates any navigation
+            // after the current position
+            clearAfterCurrent()
+            manageNavigationButtons()
+        }
+
+        this.#stategetglobal = (key) => {
+            return globalState[key]
         }
 
         /// At the end of the three kinds of navigation defined below
@@ -249,6 +269,7 @@ export default class Player {
             navStack.splice(0)
             stackPosition = -1
             currentState = {}
+            globalState = {}
 
             const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
             if (!passageElement) {
@@ -300,7 +321,9 @@ export default class Player {
                 addPlugin: this.#addplugin,
                 getPlugin: this.#getplugin,
                 setCurrentState: this.#stateset,
-                getCurrentState: this.#stateget
+                getCurrentState: this.#stateget,
+                setGlobalState: this.#statesetglobal,
+                getGlobalState: this.#stategetglobal
             })
         }
 
@@ -351,10 +374,28 @@ export default class Player {
     }
 
     /**
+    * 
+    * @param {string} key A unique key.
+    * @param {*} state Any object
+    */
+    setGlobalState (key, state) {
+        this.#statesetglobal(key, state)
+    }
+
+    /**
+     * 
+     * @param {string} key A unique key.
+     */
+    getGlobalState (key) {
+        return this.#stategetglobal(key)
+    }
+
+
+    /**
      * 
      * @param {BBPlugin} plugin 
      */
-    addPlugin(plugin) {
+    addPlugin (plugin) {
         this.#addplugin(plugin)
     }
 

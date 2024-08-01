@@ -13,8 +13,22 @@
     <main>
         <section class="sidebar-1">
             <h1 id="storyTitle"></h1>
-            <div class="content">
+            <div>
 
+            </div>
+            <div class="charactersheet content">
+                <div>
+                    <label>Vigour:</label>
+                    <label class="vigour"></label>
+                </div>
+                <div>
+                    <label>Agility:</label>
+                    <label class="agility"></label>
+                </div>
+                <div>
+                    <label>Psi:</label>
+                    <label class="psi"></label>
+                </div>
             </div>
             <div class="diceboard">
                 <div class="rollarea">
@@ -38,6 +52,29 @@
 
         </sidebar>
     </main>
+    <dialog id="characterSheet" class="charactersheet">
+        <h2>Character Sheet</h2>
+        <form method="dialog">
+            <fieldset>
+                <div>
+                    <label for="csVigour">Vigour: </label>
+                    <input type="number" id="csVigour" name="vigour" disabled>
+                </div>
+                <div>
+                    <label for="csAgility">Agility: </label>
+                    <input type="number" id="csAgility" name="agility" disabled>
+                </div>
+                <div>
+                    <label for="csPsi">PSI: </label>
+                    <input type="number" id="csPsi" name="psi" disabled>
+                </div>
+            </fieldset>
+            <div class="buttonrow">
+                <button type="button" id="csReRoll">Re-Roll</button>
+                <button type="submit" id="csDone">Done</button>
+            </div>
+        </form>
+    </dialog>
     <script src="../src/brass-basilisk.js"></script>
 </body>
 

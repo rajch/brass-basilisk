@@ -10,6 +10,8 @@ import Passage from "./passage"
  * @property {Function} getPlugin
  * @property {Function} setCurrentState
  * @property {Function} getCurrentState
+ * @property {Function} setGlobalState
+ * @property {Function} getGlobalState
  */
 
 /**
@@ -71,6 +73,9 @@ export class BBScannerPlugin extends BBPlugin {
     #setcurrentstate
     /** @type {Function} */
     #getcurrentstate
+    /** @type {Function} */
+    #setglobalstate
+
 
     /**
      * 
@@ -103,6 +108,13 @@ export class BBScannerPlugin extends BBPlugin {
         this.#getcurrentstate = () => {
             return player.getCurrentState(
                 `${self.#currentpassage.name}-${self.name}`
+            ) ?? player.getGlobalState(`${self.name}`)
+        }
+
+        this.#setglobalstate = (state) => {
+            player.setGlobalState(
+                `${self.name}`,
+                state
             )
         }
 
@@ -135,6 +147,10 @@ export class BBScannerPlugin extends BBPlugin {
 
     getCurrentState() {
         return this.#getcurrentstate()
+    }
+
+    setGlobalState(value) {
+        return this.#setglobalstate(value)
     }
 
     get active() {

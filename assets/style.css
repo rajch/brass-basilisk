@@ -5,6 +5,9 @@
     --content-background-color: black;
     --content-color: white;
     --link-color: blueviolet;
+
+    --button-background-color: green;
+    --button-color: white
 }
 
 * {
@@ -16,6 +19,19 @@
 
 .hidden {
     visibility: hidden;
+}
+
+button {
+    margin: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--button-background-color);
+    color: var(--button-color);
+}
+
+button:disabled {
+    opacity: 0.3;
 }
 
 tw-storydata {
@@ -96,10 +112,12 @@ h1.storyTitle {
     --roll-button-color: white;
 }
 
-.dice, .dice .side, .dice .side svg {
+.dice,
+.dice .side,
+.dice .side svg {
     width: 50px;
     height: 50px;
-} 
+}
 
 .dice {
     position: relative;
@@ -174,11 +192,67 @@ h1.storyTitle {
     margin: 1rem 0;
 }
 
-.dicerollbutton {
+/* .dicerollbutton {
     margin: 0.25rem;
     padding: 0.5rem;
     border-radius: 5px;
     cursor: pointer;
     background-color: var(--roll-button-background-color);
     color: var(--roll-button-color);
- }
+} */
+
+/* Character Sheet */
+.sidebar-1 .charactersheet {
+    padding: 2rem;
+    width: 100%;
+}
+
+.sidebar-1 .charactersheet>div {
+    height: 2rem;
+}
+
+.sidebar-1 .charactersheet>div>label {
+    display: inline-block;
+    width: 40%;
+}
+
+.sidebar-1 .charactersheet>div>label:first-child {
+    font-weight: bold;
+    text-align: right;
+}
+
+dialog.charactersheet {
+    margin: auto;
+    padding: 0.5rem;
+    border: 5px solid violet;
+}
+
+dialog.charactersheet h2 {
+    margin: 0 auto 1rem;
+    text-align: center;
+}
+
+dialog.charactersheet div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+dialog.charactersheet div label {
+    width: 50%;
+    text-align: right;
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+dialog.charactersheet div input {
+    width: 50%;
+}
+
+dialog.charactersheet .buttonrow {
+    display: block;
+    text-align: right;
+    margin-top: 1rem;
+}
+
+
