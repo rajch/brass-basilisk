@@ -1,10 +1,14 @@
 'use strict'
 
-import DiceBoard from "./diceboard"
-import Story from "./story"
+import { ChanceRollPlugin } from "./chancerollplugin"
+import { DiceBoardPlugin } from "./diceboardplugin"
+import Player from "./player"
+
+const player = new Player
 
 
-const story = new Story()
-story.addPlugin('diceboard', new DiceBoard())
+player.addPlugin(new DiceBoardPlugin)
 
-story?.start()
+player.addPlugin(new ChanceRollPlugin)
+
+player.start()

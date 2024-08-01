@@ -1,27 +1,34 @@
-'use strict';
+'use strict'
 
-import Passage from './passage'
+import { BBPlugin } from "./plugin"
 import { processHTML, processTwineLinks, addParagraphTags } from './transformers'
+import Passage from "./passage"
 
-class Story {
+export default class Player {
+    /** @type {Function} */
     #addscanner
+    /** @type {Function} */
     #addtransformer
+    /** @type {Function} */
     #stateset
+    /** @type {Function} */
     #stateget
+    /** @type {Function} */
     #addplugin
+    /** @type {Function} */
     #getplugin
+    /** @type {Function} */
     #start
-
 
     constructor() {
         const storyElement = document.querySelector('tw-storydata')
         if (!storyElement) {
-            return
+            throw new Error('could not initialize reader')
         }
 
         const contentElement = document.querySelector('section.content')
         if (!contentElement) {
-            return
+            throw new Error('could not initialize renderer')
         }
 
         const storyName = storyElement.getAttribute('name')
@@ -29,20 +36,20 @@ class Story {
         const tags = storyElement.getAttribute('tags')?.split(' ')
 
         // Scan management
-        // A scanner is a function which takes a single string, and returns
+        // A scanner is a function which takes a passage object and returns
         // nothing. It is called when a new passage is about to be rendered
         // after successful navigation. Scanners are called in the order of
-        // registration. They are usually implemented by Plugins.
+        // registration. They are implemented by BBScannerPlugins.
         const scanners = []
 
         this.#addscanner = (scannerFunc) => {
             scanners.push(scannerFunc)
         }
 
-        function scanPassageBody (body) {
+        function scanPassage (passage) {
             for (let i = 0; i < scanners.length; i++) {
                 if (typeof scanners[i] === 'function') {
-                    scanners[i](body)
+                    scanners[i](passage)
                 }
             }
         }
@@ -66,11 +73,11 @@ class Story {
             // all unencoded HTML.
             bodystr = processHTML(bodystr)
 
-            // Run the in-build links transformer next
+            // Run the in-built links transformer next
             bodystr = processTwineLinks(bodystr)
 
             // Run all registered transformers. In all
-            // of them, the string should contain text
+            // of them, the result should contain text
             // and unencoded HTML.
             for (let i = 0; i < transformers.length; i++) {
                 if (typeof transformers[i] === 'function') {
@@ -99,12 +106,16 @@ class Story {
             return Passage.FromElement(passageElement)
         }
 
-        // This is where a passage is rendered. Body can be scanned, for
-        // taking any action. Scanning cannot change the text.
-        // After scanning, body is transformed into HTML and rendered.
+        // This is where a passage is rendered. This is the final action
+        // of any navigation step. The actions are as follows:
+        // First, all registered scanners are called. They cannot change
+        // the passage in any way. 
+        // Next, the passage body text is piped through all registered 
+        // transformers, in the process becoming unencoded HTML. As part
+        // of this process, hyperlinks are also generated.
         // Finally, hyperlinks are connected to navigation. 
         function renderPassage (passage) {
-            scanPassageBody(passage.body)
+            scanPassage(passage)
 
             contentElement.innerHTML = transformPassageBody(passage.body)
 
@@ -113,6 +124,16 @@ class Story {
                     element.addEventListener('click', linkClickedToNavigate)
                 })
         }
+
+        // This connects the navigation, defined below, to passage rendering.
+        // As the final task of any navigation step, this function is called.
+        function navigateToPassage (name) {
+            const passage = getPassageByName(name)
+            if (passage) {
+                renderPassage(passage)
+            }
+        }
+
 
         // Navigation
         const navStack = []
@@ -129,12 +150,6 @@ class Story {
         const forwardButton = document.getElementById('forwardButton')
         const restartButton = document.getElementById('restartButton')
 
-        function navigateToPassage (name) {
-            const passage = getPassageByName(name)
-            if (passage) {
-                renderPassage(passage)
-            }
-        }
 
         function manageNavigationButtons () {
             // Back button
@@ -155,7 +170,7 @@ class Story {
             }
         }
 
-        /// Navigation state
+        /// Navigation state management
         let currentState = {}
 
         this.#stateset = (key, value) => {
@@ -173,26 +188,29 @@ class Story {
             return currentState[key]
         }
 
+        /// At the end of the three kinds of navigation defined below
+        /// , this is called. Here, we manage the navigation buttons
+        /// based on our current location, and restore the current 
+        /// state from the navigation stack.
         function finishNavigation () {
             manageNavigationButtons()
 
             const stackFrame = navStack[stackPosition]
-            // console.log(`You have come to ${stackFrame.passageName}. The state is ${JSON.stringify(stackFrame)}`)
-            // console.log(`The whole stack is ${JSON.stringify(navStack)}`)
+            console.log(`You have come to ${stackFrame.passageName}. The state is ${JSON.stringify(stackFrame)}`)
+            console.log(`The whole stack is ${JSON.stringify(navStack)}`)
             currentState = stackFrame.state
             navigateToPassage(stackFrame.passageName)
         }
 
+        /// This is what gets called when a player clicks a link, and
+        /// boldly goes where she has never gone before.
         function navigateNew (passageName) {
-            // If current position is not at end, and we are
-            // pushing, then the elements after the current
-            // position are no longer required.
-            if (stackPosition < (navStack.length - 1)) {
-                navStack.splice(stackPosition + 1)
-            }
+            // Moving to a "new" passage means, any navigation  after
+            // the current position is no longer required. 
+            clearAfterCurrent()
 
-            // navigateNew is the only operation that can
-            // push state on the stack
+            // This is the only operation that can push state on  the
+            // navigation stack. All other operations restore from it
             navStack.push({
                 passageName,
                 state: structuredClone(currentState)
@@ -202,6 +220,10 @@ class Story {
             finishNavigation()
         }
 
+        /// This gets called when the "back" button is clicked in the
+        /// UI. It goes back one step in the navigation stack, if not
+        /// already at the beginning, and restores the current state
+        /// from what was saved on the stack. 
         function navigateBack () {
             if (stackPosition > 0) {
                 stackPosition--
@@ -210,6 +232,11 @@ class Story {
             finishNavigation()
         }
 
+        /// This gets called when the "forward" button is clicked in 
+        /// the UI. It goes forward one step provided there has been
+        /// backward movement earlier.  It will never navigate  to a
+        /// new position. It restores the current state from the 
+        /// stack. 
         function navigateForward () {
             if (stackPosition < (navStack.length - 1)) {
                 stackPosition++
@@ -242,25 +269,42 @@ class Story {
             }
         }
 
-        // Plugin management
+        // Plugin Management
         const plugins = {}
-
-        this.#addplugin = (pluginname, plugin) => {
-            // Check for validity of plugin
-            // TODO: Do this better
-            if(typeof plugin?.init !== 'function') {
-                throw new Error(`${pluginname} is not a valid plugin`)
-            }
-
-            plugins[pluginname] = plugin
-            plugin.init(this)
-        }
 
         this.#getplugin = (pluginname) => {
             return plugins[pluginname]
         }
 
-        // Start
+        /**
+         * 
+         * @param {BBPlugin} plugin 
+         */
+        this.#addplugin = (plugin) => {
+            // Check for validity of plugin
+            if (!plugin instanceof BBPlugin) {
+                throw new Error(`${pluginname} is not a valid plugin`)
+            }
+
+            const pluginname = plugin.name
+            if (typeof plugins[pluginname] === 'object') {
+                throw new Error(`a plugin called ${pluginname} already exists`)
+            }
+
+            plugins[pluginname] = plugin
+
+            // Pass a player "proxy" to plugin
+            plugin.init({
+                addScanner: this.#addscanner,
+                addTransformer: this.#addtransformer,
+                addPlugin: this.#addplugin,
+                getPlugin: this.#getplugin,
+                setCurrentState: this.#stateset,
+                getCurrentState: this.#stateget
+            })
+        }
+
+        // Start playing
         this.#start = function () {
             // Set up story styles
             const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
@@ -289,37 +333,32 @@ class Story {
         }
     }
 
-    addScanner (scannerFunc) {
-        this.#addscanner(scannerFunc)
+    /**
+    * 
+    * @param {string} key A unique key. Usually involves the passage name.
+    * @param {*} state Any object
+    */
+    setCurrentState (key, state) {
+        this.#stateset(key, state)
     }
 
-    addTransformer (transformerFunc) {
-        this.#addtransformer(transformerFunc)
-    }
-
-    addToolPanel () {
-        return document.querySelector('div.diceboard')
-    }
-
-    addPlugin (pluginname, plugin) {
-        this.#addplugin(pluginname, plugin)
-    }
-
-    getPlugin (pluginname) {
-        return this.#getplugin(pluginname)
-    }
-
-    setCurrentState (key, value) {
-        this.#stateset(key, value)
-    }
-
+    /**
+     * 
+     * @param {string} key A unique key. Usually involves the passage name.
+     */
     getCurrentState (key) {
         return this.#stateget(key)
+    }
+
+    /**
+     * 
+     * @param {BBPlugin} plugin 
+     */
+    addPlugin(plugin) {
+        this.#addplugin(plugin)
     }
 
     start () {
         this.#start()
     }
 }
-
-export default Story;
