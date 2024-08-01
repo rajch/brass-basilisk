@@ -1,8 +1,21 @@
+:root {
+    --sidebar-background-color: grey;
+    --sidebar-color: white;
+
+    --content-background-color: black;
+    --content-color: white;
+    --link-color: blueviolet;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     border: 0;
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 tw-storydata {
@@ -24,11 +37,11 @@ section {
 section.sidebar-1 {
     min-width: 18rem;
     max-width: 18rem;
-    background-color: grey;
-    color: white;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    background-color: var(--sidebar-background-color);
+    color: var(--sidebar-color);
 }
 
 section.sidebar-1 .content {
@@ -47,13 +60,10 @@ section.sidebar-2 {
 
 section.content {
     flex-grow: 1;
-
-    background-color: black;
-    color: white;
-
     padding: 2.5rem;
-
     overflow-y: scroll;
+    background-color: var(--content-background-color);
+    color: var(--content-color);
 }
 
 section.content p {
@@ -67,21 +77,31 @@ section.content a.link:visited {
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
-    color: blueviolet;
+    color: var(--link-color);
 }
 
 h1.storyTitle {
     word-break: break-all;
 }
 
-.hidden {
-    visibility: hidden;
-}
 
 /* Dice */
-.dice {
+:root {
+    --dice-background-color: orangered;
+    --dice-dot-color: black;
+    --dice-color: white;
+    --dice-1-background-color: white;
+    --dice-2-background-color: blue;
+    --roll-button-background-color: green;
+    --roll-button-color: white;
+}
+
+.dice, .dice .side, .dice .side svg {
     width: 50px;
     height: 50px;
+} 
+
+.dice {
     position: relative;
     transform-style: preserve-3d;
     transform: rotateX(0deg) rotateY(0deg);
@@ -89,12 +109,8 @@ h1.storyTitle {
 }
 
 .side {
-    width: 50px;
-    height: 50px;
     position: absolute;
-    background: orangered;
-    color: white;
-    border: 2px solid orangered;
+    border: 2px solid;
     border-radius: 5px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -102,25 +118,24 @@ h1.storyTitle {
     justify-content: center;
     font-size: 12px;
     font-weight: bold;
+    background: var(--dice-background-color);
+    border-color: var(--dice-background-color);
+    color: var(--dice-color);
 }
 
-.side svg {
-    width: 50px;
-    height: 50px;
-}
 
 .side svg circle {
-    fill: black;
+    fill: var(--dice-dot-color);
 }
 
 .dice-1 .side {
-    background-color: white;
-    border-color: white;
+    background-color: var(--dice-1-background-color);
+    border-color: var(--dice-1-background-color);
 }
 
 .dice-2 .side {
-    background-color: blue;
-    border-color: blue;
+    background-color: var(--dice-2-background-color);
+    border-color: var(--dice-2-background-color);
 }
 
 .one {
@@ -163,7 +178,7 @@ h1.storyTitle {
     margin: 0.25rem;
     padding: 0.5rem;
     border-radius: 5px;
-    background-color: green;
-    color: white;
     cursor: pointer;
-}
+    background-color: var(--roll-button-background-color);
+    color: var(--roll-button-color);
+ }
