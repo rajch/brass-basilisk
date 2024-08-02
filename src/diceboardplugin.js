@@ -28,7 +28,7 @@ export class DiceBoardPlugin extends BBPlugin {
     init (player) {
         super.init(player)
 
-        // This should move to renderer interace
+        // This should move to renderer interface
         const element = document.querySelector('div.diceboard')
 
         const buttonsArea = element.querySelector('div.buttonsarea')
