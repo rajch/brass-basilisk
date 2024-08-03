@@ -74,7 +74,7 @@ export class BBScannerPlugin extends BBPlugin {
     /** @type {Function} */
     #getcurrentstate
     /** @type {Function} */
-    #setglobalstate
+    // #setglobalstate
 
 
     /**
@@ -111,12 +111,12 @@ export class BBScannerPlugin extends BBPlugin {
             ) ?? player.getGlobalState(`${self.name}`)
         }
 
-        this.#setglobalstate = (state) => {
-            player.setGlobalState(
-                `${self.name}`,
-                state
-            )
-        }
+        // this.#setglobalstate = (state) => {
+        //     player.setGlobalState(
+        //         `${self.name}`,
+        //         state
+        //     )
+        // }
 
         //const scanMethod = this.scan
 
@@ -130,30 +130,30 @@ export class BBScannerPlugin extends BBPlugin {
             //     player: () => player
             // }
 
-            self.#active =  Boolean(self.scan(passage))
+            self.#active = Boolean(self.scan(passage))
             // scanMethod.call(pluginProxy, passage)
         }
 
         player.addScanner(realscan)
     }
 
-    currentPassage() {
+    currentPassage () {
         return this.#currentpassage
     }
 
-    setCurrentState(value) {
+    setCurrentState (value) {
         this.#setcurrentstate(value)
     }
 
-    getCurrentState() {
+    getCurrentState () {
         return this.#getcurrentstate()
     }
 
-    setGlobalState(value) {
-        return this.#setglobalstate(value)
-    }
+    // setGlobalState (value) {
+    //     return this.#setglobalstate(value)
+    // }
 
-    get active() {
+    get active () {
         return this.#active
     }
 
@@ -162,6 +162,57 @@ export class BBScannerPlugin extends BBPlugin {
      * @param {Passage} passage 
      */
     scan (passage) {
-        throw new Error('the scan method must be overridden. Return true or false')       
+        throw new Error('the scan method must be overridden. Return true or false')
     }
+}
+
+export class BBGlobalStatePlugin extends BBScannerPlugin {
+    /** @type {Function} */
+    #getstate
+    /** @type {Function} */
+    #setstate
+    /** @type {Function} */
+    #setglobalstate
+
+
+    constructor(pluginname) {
+        super(pluginname)
+    }
+
+    init (player) {
+        super.init(player)
+
+        this.#getstate = () => {
+            return player.getCurrentState(
+                `${this.name}`
+            ) ?? player.getGlobalState(`${this.name}`)
+        }
+
+        this.#setstate = (state) => {
+            player.setCurrentState(
+                `${this.name}`,
+                state
+            )
+        }
+
+        this.#setglobalstate = (state) => {
+            player.setGlobalState(
+                `${this.name}`,
+                state
+            )
+        }
+    }
+
+    getCurrentState () {
+        return this.#getstate()
+    }
+
+    setCurrentState (value) {
+        this.#setstate(value)
+    }
+
+    setGlobalState (state) {
+        this.#setglobalstate(state)
+    }
+
 }

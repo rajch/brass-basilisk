@@ -194,7 +194,9 @@ export default class Player {
         }
 
         this.#statesetglobal = (key, value) => {
-            globalState[key] = value
+            // A global state set is always destructive. The old state goes,
+            // and the new one should not be linked with anything
+            globalState[key] = structuredClone(value)
 
             console.log(`Global state set key:${key} to value: ${JSON.stringify(value)}`)
 
@@ -218,6 +220,7 @@ export default class Player {
             const stackFrame = navStack[stackPosition]
             console.log(`You have come to ${stackFrame.passageName}. The state is ${JSON.stringify(stackFrame)}`)
             console.log(`The whole stack is ${JSON.stringify(navStack)}`)
+            console.log(`The global state is ${JSON.stringify(globalState)}`)
             currentState = stackFrame.state
             navigateToPassage(stackFrame.passageName)
         }

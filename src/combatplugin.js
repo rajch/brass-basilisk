@@ -1,5 +1,6 @@
 'use strict'
 
+import { CharacterSheetPlugin } from "./charactersheetplugin";
 import { DiceBoardPlugin } from "./diceboardplugin";
 import Passage from "./passage";
 import { BBScannerPlugin, PlayerProxy } from "./plugin";
@@ -10,6 +11,8 @@ const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:\w+\s)+(loses?)\s+(\d+)
 export class CombatPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
     #diceboard
+    /** @type {CharacterSheetPlugin} */
+    #charactersheet
     #combat
     #element
     #foenamelabel
@@ -27,7 +30,7 @@ export class CombatPlugin extends BBScannerPlugin {
     init (player) {
         super.init(player)
 
-        // This should move to renderer interace
+        // This should move to renderer interface
         const element = document.querySelector('div.combat')
 
         this.#foenamelabel = element.querySelector('label.foename')
@@ -42,6 +45,12 @@ export class CombatPlugin extends BBScannerPlugin {
         if (!player.getPlugin('chancerollplugin')) {
             throw new Error('Combat plugin requires the Chance Roll plugin. Please add it first')
         }
+
+        this.#charactersheet = player.getPlugin('charactersheet')
+        if(!this.#charactersheet) {
+            throw new Error('Combat plugin requires the Character Sheet plugin. Please add it first')
+        }
+
 
         this.#diceboard.addEventListener('roll', (e) => {
             if (this.active) {
@@ -59,8 +68,13 @@ export class CombatPlugin extends BBScannerPlugin {
                                 this.#foenamelabel.textContent = 'DEFEATED!'
                                 window.alert('You won!')
                                 this.#diceboard.hide()
+                                this.setCurrentState({ defeated: true, foe: combat.foe })
+                                this.#charactersheet.vigour = this.#charactersheet.vigour
                             }
 
+                        } else {
+                            const sheet = this.#charactersheet
+                            sheet.vigour = sheet.vigour - rule.turnAmount
                         }
                     }
                 })
@@ -76,7 +90,13 @@ export class CombatPlugin extends BBScannerPlugin {
         let combat
         const combatMatch = passageBody.match(combatRegex)
         if (combatMatch) {
-            passage.isCombat = true;
+            // passage.isCombat = true;
+            const state = this.getCurrentState()
+            if(state?.defeated) {
+                this.#element.classList.add('hidden')
+                return false
+            }
+
             combat = {
                 foe: combatMatch[1].trim(),
                 foeVigour: parseInt(combatMatch[2]),
@@ -104,6 +124,8 @@ export class CombatPlugin extends BBScannerPlugin {
             this.#element.classList.remove('hidden')
 
             return true
+        } else {
+            this.#element.classList.add('hidden')
         }
 
         return false

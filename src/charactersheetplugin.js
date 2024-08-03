@@ -1,6 +1,6 @@
 'use strict'
 
-import { BBScannerPlugin, PlayerProxy } from "./plugin";
+import { BBGlobalStatePlugin, PlayerProxy } from "./plugin";
 
 /**
  * @typedef {Object} CharacterSheet
@@ -11,20 +11,26 @@ import { BBScannerPlugin, PlayerProxy } from "./plugin";
  */
 
 
-export class CharacterSheetPlugin extends BBScannerPlugin {
+export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     /** @type CharacterSheet */
     #currentSheet
-    /** @type {Function} */
-    #setCurrentSheet
     /** @type {HTMLLabelElement} */
     #vigourlabel
     /** @type {HTMLLabelElement} */
     #agilitylabel
     /** @type {HTMLLabelElement} */
     #psilabel
+    /** @type {Function} */
+    #refreshdisplay
 
     constructor() {
         super('charactersheet')
+
+        this.#currentSheet = {
+            vigour: 0,
+            agility: 0,
+            psi: 0
+        }
     }
 
     /**
@@ -35,9 +41,16 @@ export class CharacterSheetPlugin extends BBScannerPlugin {
         super.init(player)
 
         const element = document.querySelector('.sidebar-1 .charactersheet')
+
         this.#vigourlabel = element.querySelector('label.vigour')
         this.#agilitylabel = element.querySelector('label.agility')
         this.#psilabel = element.querySelector('label.psi')
+
+        this.#refreshdisplay = (vigour, agility, psi) => {
+            this.#vigourlabel.textContent = vigour ?? this.#currentSheet?.vigour
+            this.#agilitylabel.textContent = agility ?? this.#currentSheet?.agility
+            this.#psilabel.textContent = psi ?? this.#currentSheet?.psi
+        }
 
         /** @type {HTMLDialogElement} */
         const dialog = document.getElementById('characterSheet')
@@ -61,19 +74,18 @@ export class CharacterSheetPlugin extends BBScannerPlugin {
         })
 
         dialog.addEventListener('close', (e) => {
-            this.#currentSheet = {
-                vigour: vigourInput.valueAsNumber,
-                agility: agilityInput.valueAsNumber,
-                psi: psiInput.valueAsNumber
-            }
+            this.#currentSheet.vigour = vigourInput.valueAsNumber
+            this.#currentSheet.agility = agilityInput.valueAsNumber
+            this.#currentSheet.psi = psiInput.valueAsNumber
 
             this.setGlobalState({
                 sheet: this.#currentSheet
             })
 
-            this.#vigourlabel.textContent = vigourInput.valueAsNumber
-            this.#agilitylabel.textContent = agilityInput.valueAsNumber
-            this.#psilabel.textContent = psiInput.valueAsNumber
+            this.#refreshdisplay()
+            // this.#vigourlabel.textContent = vigourInput.valueAsNumber
+            // this.#agilitylabel.textContent = agilityInput.valueAsNumber
+            // this.#psilabel.textContent = psiInput.valueAsNumber
         })
     }
 
@@ -83,11 +95,75 @@ export class CharacterSheetPlugin extends BBScannerPlugin {
          */
 
         const currentState = this.getCurrentState()
-       
+
         if (!currentState || !currentState.sheet) {
+
             /** @type {HTMLDialogElement} */
             const dialog = document.getElementById('characterSheet')
             dialog.showModal()
+
+        } else {
+
+            this.#currentSheet.vigour = currentState.sheet.vigour
+            this.#currentSheet.agility = currentState.sheet.agility
+            this.#currentSheet.psi = currentState.sheet.psi
+
+            this.#refreshdisplay()
+
         }
+    }
+
+    /**
+     * 
+     * @returns {Number|null}
+     */
+    get vigour () {
+        return this.#currentSheet.vigour
+    }
+
+    /**
+     * 
+     * @param {Number} value 
+     */
+    set vigour (value) {
+        this.#currentSheet.vigour = value
+        this.#vigourlabel.textContent = value
+        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
+    }
+
+    /**
+ * 
+ * @returns {Number|null}
+ */
+    get agility () {
+        return this.#currentSheet.agility
+    }
+
+    /**
+     * 
+     * @param {Number} value 
+     */
+    set agility (value) {
+        this.#currentSheet.agility = value
+        this.#agilitylabel.textContent = value
+        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
+    }
+
+    /**
+     * 
+     * @returns {Number|null}
+     */
+    get psi () {
+        return this.#currentSheet.psi
+    }
+
+    /**
+     * 
+     * @param {Number} value 
+     */
+    set psi (value) {
+        this.#currentSheet.psi = value
+        this.#psilabel.textContent = value
+        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
     }
 }
