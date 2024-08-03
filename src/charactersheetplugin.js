@@ -1,6 +1,6 @@
 'use strict'
 
-import { BBGlobalStatePlugin, PlayerProxy } from "./plugin";
+import { BBGlobalStatePlugin } from "./plugin";
 
 /**
  * @typedef {Object} CharacterSheet
@@ -35,7 +35,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
     /**
      * 
-     * @param {PlayerProxy} player 
+     * @param {import("./plugin").PlayerProxy} player 
      */
     init (player) {
         super.init(player)

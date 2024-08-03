@@ -2,7 +2,7 @@
 
 import { DiceBoardPlugin } from "./diceboardplugin";
 import Passage from "./passage";
-import { BBScannerPlugin, PlayerProxy, PluginProxy } from "./plugin";
+import { BBScannerPlugin } from "./plugin";
 
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -14,7 +14,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
 
     /**
      * 
-     * @param {PlayerProxy} player 
+     * @param {import("./plugin").PlayerProxy}} player 
      */
     init (player) {
         super.init(player)

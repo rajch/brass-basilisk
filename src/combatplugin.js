@@ -3,7 +3,7 @@
 import { CharacterSheetPlugin } from "./charactersheetplugin";
 import { DiceBoardPlugin } from "./diceboardplugin";
 import Passage from "./passage";
-import { BBScannerPlugin, PlayerProxy } from "./plugin";
+import { BBScannerPlugin } from "./plugin";
 
 const combatRegex = /([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)/
 const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:\w+\s)+(loses?)\s+(\d+)\s+VIGOUR/g
@@ -27,7 +27,7 @@ export class CombatPlugin extends BBScannerPlugin {
 
     /**
      * 
-     * @param {PlayerProxy} player 
+     * @param {import("./plugin").PlayerProxy} player 
      */
     init (player) {
         super.init(player)
