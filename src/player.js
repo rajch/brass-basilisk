@@ -5,6 +5,12 @@ import { processHTML, processTwineLinks, addParagraphTags } from './transformers
 import Passage from "./passage"
 
 export default class Player {
+    /** @type {Boolean} */
+    #blocklinks = false
+    /** @type {Function} */
+    #preventnavigation
+    /** @type {Function} */
+    #allownavigation
     /** @type {Function} */
     #addscanner
     /** @type {Function} */
@@ -38,6 +44,8 @@ export default class Player {
         const storyName = storyElement.getAttribute('name')
         const startNodePid = storyElement.getAttribute('startnode')
         const tags = storyElement.getAttribute('tags')?.split(' ')
+
+        const self = this
 
         // Scan management
         // A scanner is a function which takes a passage object and returns
@@ -110,6 +118,27 @@ export default class Player {
             return Passage.FromElement(passageElement)
         }
 
+        /// These methods can be called from plugins to prevent
+        /// or allow navigation from a passage. Only navigation
+        /// to new passages is prevented.
+        this.#preventnavigation = () => {
+            this.#blocklinks = true
+
+            contentElement.querySelectorAll('a.link')
+                .forEach((element) => {
+                    element.classList.add('navblocked')
+                })
+        }
+
+        this.#allownavigation = () => {
+            this.#blocklinks = false
+
+            contentElement.querySelectorAll('a.link')
+            .forEach((element) => {
+                element.classList.remove('navblocked')
+            })
+        }
+
         // This is where a passage is rendered. This is the final action
         // of any navigation step. The actions are as follows:
         // First, all registered scanners are called. They cannot change
@@ -126,6 +155,9 @@ export default class Player {
             contentElement.querySelectorAll('a[class="link"]')
                 .forEach((element) => {
                     element.addEventListener('click', linkClickedToNavigate)
+                    if(self.#blocklinks) {
+                        element.classList.add('navblocked')
+                    }
                 })
         }
 
@@ -326,7 +358,9 @@ export default class Player {
                 setCurrentState: this.#stateset,
                 getCurrentState: this.#stateget,
                 setGlobalState: this.#statesetglobal,
-                getGlobalState: this.#stategetglobal
+                getGlobalState: this.#stategetglobal,
+                preventNavigation: this.#preventnavigation,
+                allowNavigation: this.#allownavigation
             })
         }
 

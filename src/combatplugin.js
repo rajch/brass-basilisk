@@ -14,6 +14,8 @@ export class CombatPlugin extends BBScannerPlugin {
     /** @type {CharacterSheetPlugin} */
     #charactersheet
     #combat
+    #won
+    #lost
     #element
     #foenamelabel
     #foevigourlabel
@@ -42,15 +44,15 @@ export class CombatPlugin extends BBScannerPlugin {
             throw new Error('Combat plugin requires the Dice Board plugin. Please add it first')
         }
 
-        if (!player.getPlugin('chancerollplugin')) {
-            throw new Error('Combat plugin requires the Chance Roll plugin. Please add it first')
-        }
-
         this.#charactersheet = player.getPlugin('charactersheet')
-        if(!this.#charactersheet) {
+        if (!this.#charactersheet) {
             throw new Error('Combat plugin requires the Character Sheet plugin. Please add it first')
         }
 
+        const updateFightArea = (message) => {
+            const fightarea = document.querySelector('.content .fightarea')
+            fightarea.textContent = message
+        }
 
         this.#diceboard.addEventListener('roll', (e) => {
             if (this.active) {
@@ -64,21 +66,54 @@ export class CombatPlugin extends BBScannerPlugin {
                         if (rule.action === 'loses') {
                             combat.foeVigour = combat.foeVigour - rule.turnAmount;
                             this.#foevigourlabel.textContent = combat.foeVigour
+                            updateFightArea(`You hit ${combat.foe} for ${rule.turnAmount} points.`)
                             if (combat.foeVigour <= 0) {
+                                this.#won = true
+                                this.#lost = false
                                 this.#foenamelabel.textContent = 'DEFEATED!'
-                                window.alert('You won!')
+                                updateFightArea('You won!')
                                 this.#diceboard.hide()
-                                this.setCurrentState({ defeated: true, foe: combat.foe })
+                                this.setCurrentState({ defeated: true })
                                 this.#charactersheet.vigour = this.#charactersheet.vigour
+                                this.player.allowNavigation()
                             }
 
                         } else {
                             const sheet = this.#charactersheet
                             sheet.vigour = sheet.vigour - rule.turnAmount
+                            updateFightArea(`${combat.foe} hit you for ${rule.turnAmount} points.`)
+                            if(sheet.vigour <= 0) {
+                                this.#lost = true
+                                this.#won = false
+                                updateFightArea(`You were killed by ${combat.foe}.`)
+                                this.setCurrentState({ playerdefeated: true })
+                                this.#diceboard.hide()
+                            }
                         }
                     }
                 })
             }
+        })
+
+        this.player.addTransformer(
+            /** @params {String} 
+             * @returns {String} 
+             */
+            (input) => {
+            if(!this.active) {
+                return input
+            }
+
+            const text = this.#won 
+                ? `You defeated ${this.#combat.foe} here.` 
+                : this.#lost 
+                ? `You were killed by ${this.#combat.foe} in combat.`
+                : `You face ${this.#combat.foe} in combat.`
+
+            return input.replace(
+                combatRegex,
+                `<div class="fightarea">${text}</div>\n`
+            )
         })
 
     }
@@ -90,12 +125,26 @@ export class CombatPlugin extends BBScannerPlugin {
         let combat
         const combatMatch = passageBody.match(combatRegex)
         if (combatMatch) {
-            // passage.isCombat = true;
+            // Check if there is old state
             const state = this.getCurrentState()
-            if(state?.defeated) {
+            if (state?.defeated) {
+                // Player had won earlier
+                this.#won = true
+                this.#lost = false
                 this.#element.classList.add('hidden')
-                return false
+                this.player.allowNavigation()
+                return true
+            } else if (state?.playerdefeated) {
+                // Player had lost earlier
+                this.#won = false
+                this.#lost = true
+                this.player.preventNavigation()
+                return true
             }
+            
+            // Player has neither won nor lost. Time to fight.
+            this.#won = false
+            this.#lost = false
 
             combat = {
                 foe: combatMatch[1].trim(),
@@ -120,14 +169,17 @@ export class CombatPlugin extends BBScannerPlugin {
 
             this.#foenamelabel.textContent = combat.foe
             this.#foevigourlabel.textContent = combat.foeVigour
-
+            
+            this.#diceboard.setDice(combat.numberOfDice)
+            this.#diceboard.show()
             this.#element.classList.remove('hidden')
-
+            this.player.preventNavigation()
             return true
-        } else {
-            this.#element.classList.add('hidden')
         }
 
+        this.#diceboard.hide()
+        this.#element.classList.add('hidden')
+        this.player.allowNavigation()
         return false
     }
 }

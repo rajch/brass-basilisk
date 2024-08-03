@@ -12,6 +12,8 @@ import Passage from "./passage"
  * @property {Function} getCurrentState
  * @property {Function} setGlobalState
  * @property {Function} getGlobalState
+ * @property {Function} preventNavigation
+ * @property {Function} allowNavigation
  */
 
 /**
@@ -74,8 +76,6 @@ export class BBScannerPlugin extends BBPlugin {
     /** @type {Function} */
     #getcurrentstate
     /** @type {Function} */
-    // #setglobalstate
-
 
     /**
      * 
@@ -111,27 +111,10 @@ export class BBScannerPlugin extends BBPlugin {
             ) ?? player.getGlobalState(`${self.name}`)
         }
 
-        // this.#setglobalstate = (state) => {
-        //     player.setGlobalState(
-        //         `${self.name}`,
-        //         state
-        //     )
-        // }
-
-        //const scanMethod = this.scan
-
         function realscan (passage) {
             self.#currentpassage = passage
 
-            // const pluginProxy = {
-            //     name: pluginname,
-            //     setCurrentState,
-            //     getCurrentState,
-            //     player: () => player
-            // }
-
             self.#active = Boolean(self.scan(passage))
-            // scanMethod.call(pluginProxy, passage)
         }
 
         player.addScanner(realscan)
@@ -149,10 +132,6 @@ export class BBScannerPlugin extends BBPlugin {
         return this.#getcurrentstate()
     }
 
-    // setGlobalState (value) {
-    //     return this.#setglobalstate(value)
-    // }
-
     get active () {
         return this.#active
     }
@@ -162,7 +141,7 @@ export class BBScannerPlugin extends BBPlugin {
      * @param {Passage} passage 
      */
     scan (passage) {
-        throw new Error('the scan method must be overridden. Return true or false')
+        throw new Error('the scan method must be overridden. Return true to mark the plugin as active')
     }
 }
 
@@ -214,5 +193,4 @@ export class BBGlobalStatePlugin extends BBScannerPlugin {
     setGlobalState (state) {
         this.#setglobalstate(state)
     }
-
 }

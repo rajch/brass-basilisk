@@ -1,6 +1,6 @@
 'use strict'
 
-import { BBPlugin, PlayerProxy } from "./plugin";
+import { BBPlugin } from "./plugin";
 
 // Raises 'roll' event, with event.detail containing the total roll
 export class DiceBoardPlugin extends BBPlugin {
@@ -23,7 +23,7 @@ export class DiceBoardPlugin extends BBPlugin {
 
     /**
      * 
-     * @param {PlayerProxy} player 
+     * @param {import("./plugin").PlayerProxy} player 
      */
     init (player) {
         super.init(player)
@@ -102,8 +102,17 @@ export class DiceBoardPlugin extends BBPlugin {
             rollDice()
         })
 
+        const matchMap = {
+            "2": 2,
+            "two": 2,
+            "3": 3,
+            "three": 3,
+            "some": 3
+        }
 
         this.#setdice = (number) => {
+            number = matchMap[number] ?? 1
+            
             this.#numdice = number
 
             rollArea.innerHTML = ''

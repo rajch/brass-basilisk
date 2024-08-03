@@ -96,6 +96,14 @@ section.content a.link:visited {
     color: var(--link-color);
 }
 
+section.content a.link.navblocked,
+section.content a.link.navblocked:visited {
+    text-decoration: line-through;
+    color: red;
+    background-color: yellow;
+    pointer-events: none;
+}
+
 h1.storyTitle {
     word-break: break-all;
 }

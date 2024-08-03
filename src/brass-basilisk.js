@@ -11,7 +11,7 @@ const player = new Player
 
 player.addPlugin(new DiceBoardPlugin)
 
-player.addPlugin(new ChanceRollPlugin)
+// player.addPlugin(new ChanceRollPlugin)
 
 player.addPlugin(new CharacterSheetPlugin)
 
