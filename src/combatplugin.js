@@ -5,8 +5,27 @@ import { DiceBoardPlugin } from "./diceboardplugin";
 import Passage from "./passage";
 import { BBScannerPlugin } from "./plugin";
 
-const combatRegex = /([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)/
-const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:\w+\s)+(loses?)\s+(\d+)\s+VIGOUR/g
+
+/**
+ * @typedef {Object} CombatRule
+ * @property {number} rangeLow
+ * @property {number} rangeHigh
+ * @property {string} action
+ * @property {number} turnAmount
+ */
+
+/**
+ * @typedef {Object} Combat
+ * @property {string} foe
+ * @property {number} foeVigour
+ * @property {number} numberOfDice
+ * @property {CombatRule[]} rules
+ * @property {boolean} flee
+ * @property {string|null} fleeTo
+ */
+
+const combatRegex = /([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)\n[\s\S]*?(FLEE[\s\S]*?turn to (\d+)[\D]|\n)/
+const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g
 
 export class CombatPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -50,8 +69,10 @@ export class CombatPlugin extends BBScannerPlugin {
         }
 
         const updateFightArea = (message) => {
-            const fightarea = document.querySelector('.content .fightarea')
-            fightarea.textContent = message
+            const rollstatusarea = document.querySelector('.content .fightarea .rollstatus')
+            rollstatusarea.textContent = message
+            const foevigourarea = document.querySelector('.content .fightarea .foeVigour')
+            foevigourarea.textContent = this.#combat.foeVigour
         }
 
         this.#diceboard.addEventListener('roll', (e) => {
@@ -82,7 +103,7 @@ export class CombatPlugin extends BBScannerPlugin {
                             const sheet = this.#charactersheet
                             sheet.vigour = sheet.vigour - rule.turnAmount
                             updateFightArea(`${combat.foe} hit you for ${rule.turnAmount} points.`)
-                            if(sheet.vigour <= 0) {
+                            if (sheet.vigour <= 0) {
                                 this.#lost = true
                                 this.#won = false
                                 updateFightArea(`You were killed by ${combat.foe}.`)
@@ -100,21 +121,29 @@ export class CombatPlugin extends BBScannerPlugin {
              * @returns {String} 
              */
             (input) => {
-            if(!this.active) {
-                return input
-            }
+                if (!this.active) {
+                    return input
+                }
 
-            const text = this.#won 
-                ? `You defeated ${this.#combat.foe} here.` 
-                : this.#lost 
-                ? `You were killed by ${this.#combat.foe} in combat.`
-                : `You face ${this.#combat.foe} in combat.`
+                const text = this.#won
+                    ? `You defeated ${this.#combat.foe} here.`
+                    : this.#lost
+                        ? `You were killed by ${this.#combat.foe} in combat.`
+                        : formatCombat(this.#combat)
+                // : `<div>You face ${this.#combat.foe} in combat.<div>` +
+                //     `<div class='rollstatus'></div>` +
+                //     (this.#combat.fleeTo
+                //         ? `<div>You may <a class="link" data-destination="this.#combat.fleeTo">flee</a>.</div>`
+                //         : ''
+                //     )
+                // : `You face ${this.#combat.foe} in combat.` + 
+                //         (this.#combat.fleeTo ? ` You can flee to ${this.#combat.fleeTo}` : '')
 
-            return input.replace(
-                combatRegex,
-                `<div class="fightarea">${text}</div>\n`
-            )
-        })
+                return input.replace(
+                    combatRegex,
+                    `<div class="fightarea">${text}</div>\n`
+                )
+            })
 
     }
 
@@ -141,7 +170,7 @@ export class CombatPlugin extends BBScannerPlugin {
                 this.player.preventNavigation()
                 return true
             }
-            
+
             // Player has neither won nor lost. Time to fight.
             this.#won = false
             this.#lost = false
@@ -150,7 +179,9 @@ export class CombatPlugin extends BBScannerPlugin {
                 foe: combatMatch[1].trim(),
                 foeVigour: parseInt(combatMatch[2]),
                 numberOfDice: combatMatch[3],
-                rules: []
+                rules: [],
+                flee: combatMatch[5] ? true : false,
+                fleeTo: combatMatch[5] ? combatMatch[6] : undefined
             };
 
             let ruleMatch;
@@ -169,11 +200,16 @@ export class CombatPlugin extends BBScannerPlugin {
 
             this.#foenamelabel.textContent = combat.foe
             this.#foevigourlabel.textContent = combat.foeVigour
-            
+
             this.#diceboard.setDice(combat.numberOfDice)
             this.#diceboard.show()
             this.#element.classList.remove('hidden')
             this.player.preventNavigation()
+
+            console.log('Combat detected:')
+            console.dir(combat)
+            console.dir(combatMatch)
+
             return true
         }
 
@@ -184,3 +220,23 @@ export class CombatPlugin extends BBScannerPlugin {
     }
 }
 
+const combatTemplate = '<div class="combattable"><div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div></div><div class="rollstatus"></div></div>'
+
+/**
+ * 
+ * @param {Combat} combat 
+ * @returns {string}
+ */
+const formatCombat = (combat) => {
+    const result = combatTemplate
+        .replace('{foe}', `You face ${combat.foe} in combat.`)
+        .replace('{foeVigour}', combat.foeVigour)
+        .replace(
+            '{rules}',
+            combat.rules.reduce(
+                (accum, rule) => accum + `<tr><td>${rule.rangeLow} to ${rule.rangeHigh}</td><td>${rule.action === 'lose' ? ': you lose' : ': they lose'} ${rule.turnAmount}</td></tr>`,
+                '')
+        )
+        .replace('{flee}', combat.fleeTo ? `[[Flee|${combat.fleeTo}]]` : '')
+    return result
+}

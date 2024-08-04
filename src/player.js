@@ -83,10 +83,7 @@ export default class Player {
             // This will read and sanitise any HTML in
             // the passage body. From this point, it's
             // all unencoded HTML.
-            bodystr = processHTML(bodystr)
-
-            // Run the in-built links transformer next
-            bodystr = processTwineLinks(bodystr)
+            // bodystr = processHTML(bodystr)
 
             // Run all registered transformers. In all
             // of them, the result should contain text
@@ -96,6 +93,9 @@ export default class Player {
                     bodystr = transformers[i](bodystr)
                 }
             }
+
+            // Run the in-built links transformer next
+            bodystr = processTwineLinks(bodystr)
 
             // Run the in-built transformer to change
             // newlines into <p> tags last.
@@ -134,9 +134,9 @@ export default class Player {
             this.#blocklinks = false
 
             contentElement.querySelectorAll('a.link')
-            .forEach((element) => {
-                element.classList.remove('navblocked')
-            })
+                .forEach((element) => {
+                    element.classList.remove('navblocked')
+                })
         }
 
         // This is where a passage is rendered. This is the final action
@@ -152,13 +152,21 @@ export default class Player {
 
             contentElement.innerHTML = transformPassageBody(passage.body)
 
+            // Regular links can be navigation-blocked
             contentElement.querySelectorAll('a[class="link"]')
                 .forEach((element) => {
                     element.addEventListener('click', linkClickedToNavigate)
-                    if(self.#blocklinks) {
+                    if (self.#blocklinks) {
                         element.classList.add('navblocked')
                     }
                 })
+
+            // Some links are unblockable
+            contentElement.querySelectorAll('a[class="stronglink"]')
+                .forEach((element) => {
+                    element.addEventListener('click', linkClickedToNavigate)
+                })
+
         }
 
         // This connects the navigation, defined below, to passage rendering.

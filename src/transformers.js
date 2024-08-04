@@ -14,6 +14,7 @@ export const processTwineLinks = (input) => {
     return input
         .replaceAll(/\[\[(.*?)-(>|&gt;)(.*?)\]\]/g, '<a class="link" data-destination="$3">$1</a>')
         .replaceAll(/\[\[(.*?)(<|&lt;)-(.*?)\]\]/g, '<a class="link" data-destination="$1">$3</a>')
+        .replaceAll(/\[\[(.*?)\|(.*?)\]\]/g, '<a class="stronglink" data-destination="$2">$1</a>')
         .replaceAll(/\[\[(.*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
 }
 

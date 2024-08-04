@@ -89,7 +89,10 @@ section.content p {
 }
 
 section.content a.link,
-section.content a.link:visited {
+section.content a.link:visited,
+section.content a.stronglink,
+section.content a.stronglink:visited
+{
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
@@ -263,4 +266,27 @@ dialog.charactersheet .buttonrow {
     margin-top: 1rem;
 }
 
+/* Combat */
+.combattable {
+    display: flex;
+    flex-direction: column;
+}
 
+div.combattable>div:first-child {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between; 
+}
+
+div.rollstatus {
+    margin-top: 0.5rem;
+    text-align: center;
+    height: 2rem;
+}
+
+.combattable table caption {
+    text-align: left;
+    font-weight: bold;
+}

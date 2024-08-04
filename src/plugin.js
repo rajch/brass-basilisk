@@ -3,9 +3,20 @@
 import Passage from "./passage"
 
 /**
+ * @callback TransformerFunc
+ * @param {string} text
+ * @returns {string} transformedText
+ */
+
+/**
+ * @callback AddTransformerFunction
+ * @param {TransformerFunc} f
+ */
+
+/**
  * @typedef {Object} PlayerProxy
  * @property {Function} addScanner
- * @property {Function} addTransformer
+ * @property {AddTransformerFunction} addTransformer
  * @property {Function} addPlugin
  * @property {Function} getPlugin
  * @property {Function} setCurrentState
