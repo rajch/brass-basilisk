@@ -39,39 +39,34 @@ export class ChanceRollPlugin extends BBScannerPlugin {
     scan (passage) {
         const passageBody = passage.body
 
-        const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e/
+        const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e\./
         let match = passageBody.match(phrase1)
 
         if (!match) {
-            const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e/
+            const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e\./
             match = passageBody.match(phrase2)
         }
 
         if (!match) {
-            this.#diceboard.hide()
+            this.#diceboard.hide('chanceroll')
             return false
         }
 
         const numdice = match[1].trim().toLowerCase()
-        const lookup = matchMap[numdice]
-        let finalNum = lookup ?? 1
+        this.#diceboard.setDice(numdice)
 
-        this.#diceboard.setDice(finalNum)
+        // const lookup = matchMap[numdice]
+        // let finalNum = lookup ?? 1
+
+        // this.#diceboard.setDice(finalNum)
+        this.#diceboard.show('chanceroll')
 
         const currentState = this.getCurrentState()
         if (currentState && Array.isArray(currentState.rolls)) {
             this.#diceboard.setResults(currentState.rolls)
         }
 
-        this.#diceboard.show()
+        
         return true
     }
-}
-
-const matchMap = {
-    "2": 2,
-    "two": 2,
-    "3": 3,
-    "three": 3,
-    "some": 3
 }

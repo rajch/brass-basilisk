@@ -12,11 +12,11 @@ const player = new Player
 
 player.addPlugin(new DiceBoardPlugin)
 
-// player.addPlugin(new ChanceRollPlugin)
-
 player.addPlugin(new CharacterSheetPlugin)
 
 player.addPlugin(new CombatPlugin)
+
+player.addPlugin(new ChanceRollPlugin)
 
 player.addPlugin(new TurnToLinksPlugin)
 

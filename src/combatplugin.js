@@ -68,6 +68,11 @@ export class CombatPlugin extends BBScannerPlugin {
             throw new Error('Combat plugin requires the Character Sheet plugin. Please add it first')
         }
 
+        const replaceFightArea = (message) => {
+            const fightarea = document.querySelector('.content .fightarea')
+            fightarea.textContent = message
+        }
+
         const updateFightArea = (message) => {
             const rollstatusarea = document.querySelector('.content .fightarea .rollstatus')
             rollstatusarea.textContent = message
@@ -92,8 +97,8 @@ export class CombatPlugin extends BBScannerPlugin {
                                 this.#won = true
                                 this.#lost = false
                                 this.#foenamelabel.textContent = 'DEFEATED!'
-                                updateFightArea('You won!')
-                                this.#diceboard.hide()
+                                replaceFightArea('You won!')
+                                this.#diceboard.hide('combat')
                                 this.setCurrentState({ defeated: true })
                                 this.#charactersheet.vigour = this.#charactersheet.vigour
                                 this.player.allowNavigation()
@@ -106,9 +111,9 @@ export class CombatPlugin extends BBScannerPlugin {
                             if (sheet.vigour <= 0) {
                                 this.#lost = true
                                 this.#won = false
-                                updateFightArea(`You were killed by ${combat.foe}.`)
+                                replaceFightArea(`You were killed by ${combat.foe}.`)
                                 this.setCurrentState({ playerdefeated: true })
-                                this.#diceboard.hide()
+                                this.#diceboard.hide('combat')
                             }
                         }
                     }
@@ -202,7 +207,7 @@ export class CombatPlugin extends BBScannerPlugin {
             this.#foevigourlabel.textContent = combat.foeVigour
 
             this.#diceboard.setDice(combat.numberOfDice)
-            this.#diceboard.show()
+            this.#diceboard.show('combat')
             this.#element.classList.remove('hidden')
             this.player.preventNavigation()
 
@@ -213,7 +218,7 @@ export class CombatPlugin extends BBScannerPlugin {
             return true
         }
 
-        this.#diceboard.hide()
+        this.#diceboard.hide('combat')
         this.#element.classList.add('hidden')
         this.player.allowNavigation()
         return false

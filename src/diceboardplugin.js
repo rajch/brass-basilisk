@@ -1,11 +1,13 @@
 'use strict'
 
-import { BBPlugin } from "./plugin";
+import { BBScannerPlugin } from "./plugin";
 
 // Raises 'roll' event, with event.detail containing the total roll
-export class DiceBoardPlugin extends BBPlugin {
+export class DiceBoardPlugin extends BBScannerPlugin {
     /** @type {number} */
     #numdice = 0
+    /** @type {Function} */
+    #updatelabel
     /** @type {Function} */
     #setdice
     /** @type {Function} */
@@ -16,6 +18,7 @@ export class DiceBoardPlugin extends BBPlugin {
     #show
     /** @type {Number} */
     #currentresult = 0
+    #hidestack = {}
 
     constructor() {
         super('diceboard')
@@ -31,7 +34,6 @@ export class DiceBoardPlugin extends BBPlugin {
         // This should move to renderer interface
         const element = document.querySelector('div.diceboard')
 
-        const buttonsArea = element.querySelector('div.buttonsarea')
         const rollArea = element.querySelector('div.rollarea')
         const rollButton = element.querySelector('button.dicerollbutton')
         const rollResultLabel = element.querySelector('label.rollresultlabel')
@@ -50,6 +52,12 @@ export class DiceBoardPlugin extends BBPlugin {
             dice.style.transform = diceRotationMap[score]
         }
 
+        this.#updatelabel = (message) => {
+            rollResultLabel.innerText = message
+        }
+
+        const self = this
+
         /**
          * 
          * @param {Number[]} results 
@@ -62,10 +70,8 @@ export class DiceBoardPlugin extends BBPlugin {
                 return finalValue
             }, '')
             const verb = isOldRoll ? 'was' : 'is'
-            rollResultLabel.innerText = `Your score ${verb} ${resultsStr} = ${totalresults}.`
+            self.#updatelabel(`Your score ${verb} ${resultsStr} = ${totalresults}.`)
         }
-
-        const self = this
 
         function rollDice () {
             const number = self.#numdice
@@ -103,6 +109,7 @@ export class DiceBoardPlugin extends BBPlugin {
         })
 
         const matchMap = {
+            "0": 0,
             "2": 2,
             "two": 2,
             "3": 3,
@@ -112,7 +119,7 @@ export class DiceBoardPlugin extends BBPlugin {
 
         this.#setdice = (number) => {
             number = matchMap[number] ?? 1
-            
+
             this.#numdice = number
 
             rollArea.innerHTML = ''
@@ -158,12 +165,39 @@ export class DiceBoardPlugin extends BBPlugin {
         this.#hide()
     }
 
-    hide () {
+    scan (passage) {
         this.#hide()
+        this.#setdice(0)
+        this.#updatelabel('')
+        this.#hidestack = {}
+
+        return true
     }
 
-    show () {
+    hide (owner) {
+        if (!owner) {
+            throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
+        }
+
+        if (this.#hidestack[owner]) {
+            this.#hide()
+            this.#hidestack[owner] = undefined
+            console.log(`Dice hidden by ${owner}`)
+            return
+        }
+
+        console.log(`Dice NOT hidden by ${owner} `)
+    }
+
+    show (owner) {
+        if (!owner) {
+            throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
+        }
+
+        this.#hidestack[owner] = true
         this.#show()
+
+        console.log(`Dice shown by ${owner}`)
     }
 
     /**
