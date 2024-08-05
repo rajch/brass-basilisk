@@ -24,8 +24,9 @@ import { BBScannerPlugin } from "./plugin";
  * @property {string|null} fleeTo
  */
 
-const combatRegex = /([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)\n[\s\S]*?(FLEE[\s\S]*?turn to (\d+)[\D]|\n)/
+const combatRegex = /\n+([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
 const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g
+const destRegex = /[Ii]f .*?(FLEE|win|lose).*?turn to (\d{1,3})\./g
 
 export class CombatPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -69,8 +70,9 @@ export class CombatPlugin extends BBScannerPlugin {
         }
 
         const replaceFightArea = (message) => {
-            const fightarea = document.querySelector('.content .fightarea')
-            fightarea.textContent = message
+            updateFightArea(message)
+            const fightarea = document.querySelector('.content .fightarea .combattable>div:first-child')
+            fightarea.textContent = ''
         }
 
         const updateFightArea = (message) => {
@@ -102,6 +104,10 @@ export class CombatPlugin extends BBScannerPlugin {
                                 this.setCurrentState({ defeated: true })
                                 this.#charactersheet.vigour = this.#charactersheet.vigour
                                 this.player.allowNavigation()
+
+                                document.querySelectorAll('.combatwon').forEach((item) =>{
+                                    item.classList.remove('hidden')
+                                })
                             }
 
                         } else {
@@ -114,6 +120,11 @@ export class CombatPlugin extends BBScannerPlugin {
                                 replaceFightArea(`You were killed by ${combat.foe}.`)
                                 this.setCurrentState({ playerdefeated: true })
                                 this.#diceboard.hide('combat')
+
+                                document.querySelectorAll('.combatlost').forEach((item) =>{
+                                    item.classList.remove('hidden')
+                                })
+
                             }
                         }
                     }
@@ -122,7 +133,8 @@ export class CombatPlugin extends BBScannerPlugin {
         })
 
         this.player.addTransformer(
-            /** @params {String} 
+            /** 
+             * @params {String} 
              * @returns {String} 
              */
             (input) => {
@@ -130,23 +142,17 @@ export class CombatPlugin extends BBScannerPlugin {
                     return input
                 }
 
+                // input = input + '\n'
+
                 const text = this.#won
                     ? `You defeated ${this.#combat.foe} here.`
                     : this.#lost
                         ? `You were killed by ${this.#combat.foe} in combat.`
                         : formatCombat(this.#combat)
-                // : `<div>You face ${this.#combat.foe} in combat.<div>` +
-                //     `<div class='rollstatus'></div>` +
-                //     (this.#combat.fleeTo
-                //         ? `<div>You may <a class="link" data-destination="this.#combat.fleeTo">flee</a>.</div>`
-                //         : ''
-                //     )
-                // : `You face ${this.#combat.foe} in combat.` + 
-                //         (this.#combat.fleeTo ? ` You can flee to ${this.#combat.fleeTo}` : '')
 
                 return input.replace(
                     combatRegex,
-                    `<div class="fightarea">${text}</div>\n`
+                    `<div class="fightarea">${text}</div>\n${this.#combat.lastParagragh}\n`
                 )
             })
 
@@ -154,7 +160,7 @@ export class CombatPlugin extends BBScannerPlugin {
 
     /** @type {Passage} */
     scan (passage) {
-        const passageBody = passage.body
+        const passageBody = passage.body // + '\n'
 
         let combat
         const combatMatch = passageBody.match(combatRegex)
@@ -185,8 +191,10 @@ export class CombatPlugin extends BBScannerPlugin {
                 foeVigour: parseInt(combatMatch[2]),
                 numberOfDice: combatMatch[3],
                 rules: [],
-                flee: combatMatch[5] ? true : false,
-                fleeTo: combatMatch[5] ? combatMatch[6] : undefined
+                destinations: {},
+                lastParagragh: ''
+                // flee: combatMatch[5] ? true : false,
+                // fleeTo: combatMatch[5] ? combatMatch[6] : undefined
             };
 
             let ruleMatch;
@@ -197,9 +205,35 @@ export class CombatPlugin extends BBScannerPlugin {
                     action: ruleMatch[3],
                     turnAmount: parseInt(ruleMatch[4])
                 });
-
-                console.dir(ruleMatch)
             }
+
+            // If there is a paragraph after the rules table
+            if (combatMatch[5]) {
+                combat.lastParagragh = combatMatch[5]
+
+                let destMatch
+                while ((destMatch = destRegex.exec(combatMatch[5])) !== null) {
+                    if (destMatch[1] === 'FLEE') {
+                        combat.destinations.fleeTo = destMatch[2]
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0],'')
+                    } else if (destMatch[1] === 'lose') {
+                        combat.destinations.loseGoTo = destMatch[2]
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0],'')
+                    } else if (destMatch[1] === 'win') {
+                        combat.destinations.winGoTo = destMatch[2]
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0],'')
+                    }
+                }
+            }
+
+            // If that paragraph could not be parsed, put it into
+            // the combat object for restoring during transform.
+            if(!combat.destinations.fleeTo 
+                && !combat.destinations.winGoToTo  
+                && !combat.destinations.loseGoTo
+            ) {
+                combat.lastParagragh = combatMatch[5]
+            } 
 
             this.#combat = combat
 
@@ -225,7 +259,7 @@ export class CombatPlugin extends BBScannerPlugin {
     }
 }
 
-const combatTemplate = '<div class="combattable"><div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div></div><div class="rollstatus"></div></div>'
+const combatTemplate = '<div class="combattable"><div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div></div><div class="rollstatus"></div></div>{wingoto}{losegoto}'
 
 /**
  * 
@@ -233,7 +267,7 @@ const combatTemplate = '<div class="combattable"><div><div>{foe}</div><div>VIGOU
  * @returns {string}
  */
 const formatCombat = (combat) => {
-    const result = combatTemplate
+    let result = combatTemplate
         .replace('{foe}', `You face ${combat.foe} in combat.`)
         .replace('{foeVigour}', combat.foeVigour)
         .replace(
@@ -242,6 +276,9 @@ const formatCombat = (combat) => {
                 (accum, rule) => accum + `<tr><td>${rule.rangeLow} to ${rule.rangeHigh}</td><td>${rule.action === 'lose' ? ': you lose' : ': they lose'} ${rule.turnAmount}</td></tr>`,
                 '')
         )
-        .replace('{flee}', combat.fleeTo ? `[[Flee|${combat.fleeTo}]]` : '')
+        .replace('{flee}', combat.destinations.fleeTo ? `[[Flee|${combat.destinations.fleeTo}]]` : '')
+        .replace('{wingoto}', combat.destinations.winGoTo ? `<p class="combatwon hidden">[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]</p>` : '')
+        .replace('{losegoto}', combat.destinations.loseGoTo ? `<p class="combatlost hidden">[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]</p>` : '')
+
     return result
 }
