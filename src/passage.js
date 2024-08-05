@@ -10,7 +10,14 @@ class Passage {
     static FromElement (passageElement) {
         const pid = passageElement.getAttribute('pid')
         const name = passageElement.getAttribute('name')
-        const body = passageElement.innerHTML
+        let body = passageElement.innerHTML
+
+        /* Ours is a text and paragraph based DSL.
+         *  The body should end in a paragraph break.
+        */
+        if (!body.endsWith('\n')) {
+            body = body + '\n'
+        }
 
         return new Passage(pid, name, body)
     }
