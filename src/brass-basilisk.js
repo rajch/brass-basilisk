@@ -8,6 +8,7 @@ import { DiceBoardPlugin } from "./diceboardplugin"
 import { DefaultStory } from "./defaultstory"
 import { Player } from "./player"
 import { TurnToLinksPlugin } from "./turntolinksplugin"
+import { AttributePhrasePlugin } from "./attributephraseplugin"
 
 
 try {
@@ -21,6 +22,8 @@ try {
     player.addPlugin(new CombatPlugin)
 
     player.addPlugin(new ChanceRollPlugin)
+
+    player.addPlugin(new AttributePhrasePlugin)
 
     player.addPlugin(new TurnToLinksPlugin)
 

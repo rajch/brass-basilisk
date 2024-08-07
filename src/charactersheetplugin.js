@@ -6,6 +6,9 @@ import './types'
 export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     /** @type CharacterSheet */
     #currentSheet
+    /** @type CharacterSheet */
+    #globalSheet
+
     /** @type {HTMLLabelElement} */
     #vigourlabel
     /** @type {HTMLLabelElement} */
@@ -20,11 +23,13 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     constructor() {
         super('charactersheet')
 
-        this.#currentSheet = {
+        this.#globalSheet = {
             vigour: 0,
             agility: 0,
             psi: 0
         }
+
+        this.#currentSheet = structuredClone(this.#globalSheet)
     }
 
     /**
@@ -68,9 +73,11 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         })
 
         dialog.addEventListener('close', (e) => {
-            this.#currentSheet.vigour = vigourInput.valueAsNumber
-            this.#currentSheet.agility = agilityInput.valueAsNumber
-            this.#currentSheet.psi = psiInput.valueAsNumber
+            this.#globalSheet.vigour = vigourInput.valueAsNumber
+            this.#globalSheet.agility = agilityInput.valueAsNumber
+            this.#globalSheet.psi = psiInput.valueAsNumber
+
+            this.#currentSheet = structuredClone(this.#globalSheet)
 
             this.setGlobalState({
                 sheet: this.#currentSheet
@@ -113,13 +120,20 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     }
 
     /**
+     * The current VIGOUR of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
      * 
      * @param {Number} value 
      */
     set vigour (value) {
+        if (value > this.#globalSheet.vigour) {
+            value = this.#globalSheet.vigour
+        }
+
         this.#currentSheet.vigour = value
         this.#vigourlabel.textContent = value
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
+
     }
 
     /**
@@ -131,10 +145,16 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     }
 
     /**
+     * The current AGILITY of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
      * 
      * @param {Number} value 
      */
     set agility (value) {
+        if (value > this.#globalSheet.agility) {
+            value = this.#globalSheet.agility
+        }
+
         this.#currentSheet.agility = value
         this.#agilitylabel.textContent = value
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
@@ -149,10 +169,16 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     }
 
     /**
+     * The current PSI of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
      * 
      * @param {Number} value 
      */
     set psi (value) {
+        if(value > this.#globalSheet.psi) {
+            value = this.#globalSheet.psi
+        }
+
         this.#currentSheet.psi = value
         this.#psilabel.textContent = value
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })

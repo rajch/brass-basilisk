@@ -137,3 +137,16 @@
  * @property {Number} psi
  */
 
+/** 
+ * @callback Action
+ * @param {RegExpMatchArray} matches
+ * @returns {boolean}
+ */
+
+/**
+ * @typedef {Object} PhraseAction
+ * @property {string} name
+ * @property {string} phraseRegExp
+ * @property {Action} action 
+ * */
+
