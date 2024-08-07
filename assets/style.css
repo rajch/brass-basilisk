@@ -91,8 +91,7 @@ section.content p {
 section.content a.link,
 section.content a.link:visited,
 section.content a.stronglink,
-section.content a.stronglink:visited
-{
+section.content a.stronglink:visited {
     font-weight: bold;
     text-decoration: none;
     cursor: pointer;
@@ -121,13 +120,16 @@ h1.storyTitle {
     --dice-2-background-color: blue;
     --roll-button-background-color: green;
     --roll-button-color: white;
+
+    --dice-size: 50px;
+    --dice-translatez: ;
 }
 
 .dice,
 .dice .side,
 .dice .side svg {
-    width: 50px;
-    height: 50px;
+    width: var(--dice-size);
+    height: var(--dice-size);
 }
 
 .dice {
@@ -168,27 +170,28 @@ h1.storyTitle {
 }
 
 .one {
-    transform: rotateY(0deg) translateZ(25px);
+    /* transform: rotateY(0deg) translateZ(25px); */
+    transform: rotateY(0deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .two {
-    transform: rotateY(90deg) translateZ(25px);
+    transform: rotateY(90deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .three {
-    transform: rotateY(180deg) translateZ(25px);
+    transform: rotateY(180deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .four {
-    transform: rotateY(-90deg) translateZ(25px);
+    transform: rotateY(-90deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .five {
-    transform: rotateX(90deg) translateZ(25px);
+    transform: rotateX(90deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .six {
-    transform: rotateX(-90deg) translateZ(25px);
+    transform: rotateX(-90deg) translateZ(calc(var(--dice-size) / 2));
 }
 
 .rollarea {
@@ -277,7 +280,7 @@ div.combattable>div:first-child {
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
 div.rollstatus {
@@ -289,4 +292,96 @@ div.rollstatus {
 .combattable table caption {
     text-align: left;
     font-weight: bold;
+}
+
+@media (max-width:640px) {
+    :root {
+        --dice-size: 25px;
+    }
+
+    main {
+        flex-direction: column;
+    }
+
+    section {
+        /* border: 3px solid saddlebrown;*/
+        display: inline-block;
+    }
+
+    section.sidebar-1 {
+        min-width: initial;
+        max-width: initial;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: var(--sidebar-background-color);
+        color: var(--sidebar-color);
+    }
+
+    .sidebar-1 h1 {
+        width: 100%;
+    }
+
+    .sidebar-1 .charactersheet {
+        padding: 0.5rem;
+        font-size: small;
+        width: initial;
+    }
+
+    .sidebar-1 .charactersheet>div {
+        height: initial;
+        margin-left: 0.5rem;
+    }
+
+    section.sidebar-1 .toolbar {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    section.sidebar-1 .toolbar button {
+        font-size: larger;
+        padding: 0.1rem;
+        margin: 0.05rem;
+        display: inline;
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .sidebar-1 .charactersheet>div>label {
+        display: inline-block;
+        width: unset;
+    }
+    
+    .sidebar-1 .charactersheet>div>label:first-child {
+        font-weight: unset;
+        text-align: unset;
+    }
+
+    section.sidebar-1 .diceboard {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 1rem;
+    }
+
+    section.sidebar-1 .diceboard.hidden {
+        display: flex !important;
+        visibility: hidden;
+    }
+
+    section.sidebar-1 .diceboard .rollarea {
+        min-width: 70px;
+    }
+
+    section.sidebar-1 .diceboard label.rollresultlabel {
+        display: none;
+    }
+
+    div.combattable>div:first-child {
+        flex-wrap: wrap;
+    }
 }
