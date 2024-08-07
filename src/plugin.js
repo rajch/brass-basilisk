@@ -1,40 +1,7 @@
 'use strict'
 
-import Passage from "./passage"
-
-/**
- * @callback TransformerFunc
- * @param {string} text
- * @returns {string} transformedText
- */
-
-/**
- * @callback AddTransformerFunction
- * @param {TransformerFunc} f
- */
-
-/**
- * @typedef {Object} PlayerProxy
- * @property {Function} addScanner
- * @property {AddTransformerFunction} addTransformer
- * @property {Function} addPlugin
- * @property {Function} getPlugin
- * @property {Function} setCurrentState
- * @property {Function} getCurrentState
- * @property {Function} setGlobalState
- * @property {Function} getGlobalState
- * @property {Function} preventNavigation
- * @property {Function} allowNavigation
- */
-
-/**
- * @typedef {Object} PluginProxy
- * @property {string} name Plugin Name
- * @property {Function} getCurrentState
- * @property {Function} setCurrentState
- * @property {Function} player
- */
-
+import { Passage } from "./passage"
+import './types'
 
 export class BBPlugin extends EventTarget {
     /** @type {string} */
@@ -46,10 +13,6 @@ export class BBPlugin extends EventTarget {
         super()
 
         this.#name = pluginname
-    }
-
-    postMessage (message) {
-
     }
 
     /**
@@ -143,13 +106,27 @@ export class BBScannerPlugin extends BBPlugin {
         return this.#getcurrentstate()
     }
 
+    /**
+     * Will return true if the plugin found something relevant 
+     * to it in the passage body, false otherwise.
+     * 
+     * @returns {boolean}
+     */
     get active () {
         return this.#active
     }
 
     /**
+     * Needs to be overridden in plugins. It should scan the
+     * passage body and perform any UI setup if needed. Then
+     * it should return true, to indicate that the plugin is
+     * active. 
+     * 
+     * If it finds nothing relevant it should reverse any UI
+     * changes, and return false.
      * 
      * @param {Passage} passage 
+     * @returns {boolean}
      */
     scan (passage) {
         throw new Error('the scan method must be overridden. Return true to mark the plugin as active')

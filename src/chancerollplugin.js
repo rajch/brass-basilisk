@@ -1,20 +1,22 @@
 'use strict'
 
 import { DiceBoardPlugin } from "./diceboardplugin";
-import Passage from "./passage";
+import { Passage } from "./passage";
 import { BBScannerPlugin } from "./plugin";
+
+import './types'
 
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
     #diceboard
+
     constructor() {
         super('chancerollplugin')
     }
 
-
     /**
      * 
-     * @param {import("./plugin").PlayerProxy}} player 
+     * @param {PlayerProxy}} player 
      */
     init (player) {
         super.init(player)
@@ -55,10 +57,6 @@ export class ChanceRollPlugin extends BBScannerPlugin {
         const numdice = match[1].trim().toLowerCase()
         this.#diceboard.setDice(numdice)
 
-        // const lookup = matchMap[numdice]
-        // let finalNum = lookup ?? 1
-
-        // this.#diceboard.setDice(finalNum)
         this.#diceboard.show('chanceroll')
 
         const currentState = this.getCurrentState()
@@ -66,7 +64,6 @@ export class ChanceRollPlugin extends BBScannerPlugin {
             this.#diceboard.setResults(currentState.rolls)
         }
 
-        
         return true
     }
 }

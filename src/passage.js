@@ -1,10 +1,35 @@
 'use strict'
 
-class Passage {
+export class Passage {
+    #pid
+    #name
+    #body
+
     constructor(id, name, body) {
-        this.pid = id
-        this.name = name
-        this.body = body
+        this.#pid = id
+        this.#name = name
+        this.#body = body
+    }
+
+    /**
+     * @returns {string}
+     */
+    get pid() {
+        return this.#pid
+    }
+
+    /**
+     * @returns {string}
+     */
+    get name() {
+        return this.#name
+    }
+
+    /**
+     * @returns {string}
+     */
+    get body() {
+        return this.#body
     }
 
     static FromElement (passageElement) {
@@ -22,6 +47,3 @@ class Passage {
         return new Passage(pid, name, body)
     }
 }
-
-
-export default Passage

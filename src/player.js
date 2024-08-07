@@ -2,19 +2,23 @@
 
 import { BBPlugin } from "./plugin"
 import { processHTML, processTwineLinks, addParagraphTags } from './transformers'
-import Passage from "./passage"
+import { Passage } from "./passage"
+import './types'
 
-export default class Player {
+
+export class Player {
+    /** @type {Function} */
+    #addscanner
+    /** @type {Function} */
+    #addtransformer
+
     /** @type {Boolean} */
     #blocklinks = false
     /** @type {Function} */
     #preventnavigation
     /** @type {Function} */
     #allownavigation
-    /** @type {Function} */
-    #addscanner
-    /** @type {Function} */
-    #addtransformer
+
     /** @type {Function} */
     #stateset
     /** @type {Function} */
@@ -24,28 +28,29 @@ export default class Player {
     /** @type {Function} */
     #stategetglobal
     /** @type {Function} */
+
     #addplugin
     /** @type {Function} */
     #getplugin
+    
     /** @type {Function} */
     #start
 
-    constructor() {
-        const storyElement = document.querySelector('tw-storydata')
-        if (!storyElement) {
-            throw new Error('could not initialize reader')
+    /**
+     * 
+     * @param {Story} story 
+     * @param {View} view 
+     */
+    constructor(story, view) {
+        if (!story) {
+            throw new Error('please provide a story reader to the player')
         }
 
-        const contentElement = document.querySelector('section.content')
-        if (!contentElement) {
-            throw new Error('could not initialize renderer')
+        if (!view) {
+            throw new Error('please provide a view to the player')
         }
 
-        const storyName = storyElement.getAttribute('name')
-        const startNodePid = storyElement.getAttribute('startnode')
-        const tags = storyElement.getAttribute('tags')?.split(' ')
-
-        const self = this
+        const contentElement = view.content
 
         // Scan management
         // A scanner is a function which takes a passage object and returns
@@ -54,16 +59,16 @@ export default class Player {
         // registration. They are implemented by BBScannerPlugins.
         const scanners = []
 
-        this.#addscanner = (scannerFunc) => {
-            scanners.push(scannerFunc)
-        }
-
-        function scanPassage (passage) {
+        const scanPassage = (passage) => {
             for (let i = 0; i < scanners.length; i++) {
                 if (typeof scanners[i] === 'function') {
                     scanners[i](passage)
                 }
             }
+        }
+
+        this.#addscanner = (scannerFunc) => {
+            scanners.push(scannerFunc)
         }
 
         // Transformation
@@ -76,30 +81,46 @@ export default class Player {
         // the results are rendered.
         const transformers = []
 
-        function transformPassageBody (body) {
+        const transformPassageBody = (body) => {
             let bodystr = body
 
             // Run the in-built HTML transformer first
             // This will read and sanitise any HTML in
             // the passage body. From this point, it's
             // all unencoded HTML.
+            // We are not doing this any, for for this
+            // particular format.
             // bodystr = processHTML(bodystr)
 
             // Run all registered transformers. In all
             // of them, the result should contain text
             // and unencoded HTML.
+
+            console.log('Transformation starts with:')
+            console.log(bodystr)
+
             for (let i = 0; i < transformers.length; i++) {
                 if (typeof transformers[i] === 'function') {
                     bodystr = transformers[i](bodystr)
+                    console.log('Transformed:')
+                    console.log(bodystr)
                 }
             }
 
             // Run the in-built links transformer next
-            bodystr = processTwineLinks(bodystr)
+            //bodystr = processTwineLinks(bodystr)
+
+            // Run the view-provided link transformer
+            bodystr = view.transformLinks(bodystr)
+            console.log('Transformed:')
+            console.log(bodystr)
 
             // Run the in-built transformer to change
             // newlines into <p> tags last.
-            bodystr = addParagraphTags(bodystr)
+            // bodystr = addParagraphTags(bodystr)
+
+            // Run the view-provided paragraph transformer
+            bodystr = view.transformParagraphs(bodystr)
 
             return bodystr
         }
@@ -108,35 +129,19 @@ export default class Player {
             transformers.push(transformerFunc)
         }
 
-        // Passage management
-        function getPassageByName (name) {
-            const passageElement = storyElement?.querySelector(`tw-passagedata[name="${name}"]`)
-            if (!passageElement) {
-                return
-            }
-
-            return Passage.FromElement(passageElement)
-        }
-
         /// These methods can be called from plugins to prevent
         /// or allow navigation from a passage. Only navigation
         /// to new passages is prevented.
         this.#preventnavigation = () => {
             this.#blocklinks = true
 
-            contentElement.querySelectorAll('a.link')
-                .forEach((element) => {
-                    element.classList.add('navblocked')
-                })
+            view.disableNavLinks()
         }
 
         this.#allownavigation = () => {
             this.#blocklinks = false
 
-            contentElement.querySelectorAll('a.link')
-                .forEach((element) => {
-                    element.classList.remove('navblocked')
-                })
+            view.enableNavLinks()
         }
 
         // This is where a passage is rendered. This is the final action
@@ -147,70 +152,50 @@ export default class Player {
         // transformers, in the process becoming unencoded HTML. As part
         // of this process, hyperlinks are also generated.
         // Finally, hyperlinks are connected to navigation. 
-        function renderPassage (passage) {
+        const renderPassage = (passage) => {
             scanPassage(passage)
 
             contentElement.innerHTML = transformPassageBody(passage.body)
 
-            // Regular links can be navigation-blocked
-            contentElement.querySelectorAll('a[class="link"]')
-                .forEach((element) => {
-                    element.addEventListener('click', linkClickedToNavigate)
-                    if (self.#blocklinks) {
-                        element.classList.add('navblocked')
-                    }
-                })
-
-            // Some links are unblockable
-            contentElement.querySelectorAll('a[class="stronglink"]')
-                .forEach((element) => {
-                    element.addEventListener('click', linkClickedToNavigate)
-                })
-
+            view.attachNavLinksHandler(linkClickedToNavigate, this.#blocklinks)
         }
 
         // This connects the navigation, defined below, to passage rendering.
         // As the final task of any navigation step, this function is called.
-        function navigateToPassage (name) {
-            const passage = getPassageByName(name)
+        const navigateToPassage = (name) => {
+            const passage = story.getPassageByName(name)
             if (passage) {
                 renderPassage(passage)
             }
         }
 
-
         // Navigation
         const navStack = []
         let stackPosition = -1
 
-        function clearAfterCurrent () {
+        const clearAfterCurrent = () => {
             if (stackPosition < (navStack.length - 1)) {
                 navStack.splice(stackPosition + 1)
             }
         }
 
         /// Navigation UI
-        const backButton = document.getElementById('backButton')
-        const forwardButton = document.getElementById('forwardButton')
-        const restartButton = document.getElementById('restartButton')
+        const backButton = view.backButton
+        const forwardButton = view.forwardButton
+        const restartButton = view.restartButton
 
-
-        function manageNavigationButtons () {
+        const manageNavigationButtons = () => {
             // Back button
             if (stackPosition > 0) {
-                // backButton?.classList.remove('hidden')
-                backButton?.removeAttribute('disabled')
+                view.enable(backButton)
             } else {
-                // backButton?.classList.add('hidden')
-                backButton?.setAttribute('disabled', 'true')
+                view.disable(backButton)
             }
             // Forward button
             if (stackPosition === (navStack.length - 1)) {
-                // forwardButton?.classList.add('hidden')
-                forwardButton?.setAttribute('disabled', 'true')
+                view.disable(forwardButton)
             } else {
-                //forwardButton?.classList.remove('hidden')
-                forwardButton?.removeAttribute('disabled')
+                view.enable(forwardButton)
             }
         }
 
@@ -254,7 +239,7 @@ export default class Player {
         /// , this is called. Here, we manage the navigation buttons
         /// based on our current location, and restore the current 
         /// state from the navigation stack.
-        function finishNavigation () {
+        const finishNavigation = () => {
             manageNavigationButtons()
 
             const stackFrame = navStack[stackPosition]
@@ -267,7 +252,7 @@ export default class Player {
 
         /// This is what gets called when a player clicks a link, and
         /// boldly goes where she has never gone before.
-        function navigateNew (passageName) {
+        const navigateNew = (passageName) => {
             // Moving to a "new" passage means, any navigation  after
             // the current position is no longer required. 
             clearAfterCurrent()
@@ -287,7 +272,7 @@ export default class Player {
         /// UI. It goes back one step in the navigation stack, if not
         /// already at the beginning, and restores the current state
         /// from what was saved on the stack. 
-        function navigateBack () {
+        const navigateBack = () => {
             if (stackPosition > 0) {
                 stackPosition--
             }
@@ -300,7 +285,7 @@ export default class Player {
         /// backward movement earlier.  It will never navigate  to a
         /// new position. It restores the current state from the 
         /// stack. 
-        function navigateForward () {
+        const navigateForward = () => {
             if (stackPosition < (navStack.length - 1)) {
                 stackPosition++
             }
@@ -308,20 +293,19 @@ export default class Player {
             finishNavigation()
         }
 
-        function restartNavigation () {
+        const restartNavigation = () => {
             navStack.splice(0)
             stackPosition = -1
             currentState = {}
             globalState = {}
 
-            const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
-            if (!passageElement) {
-                return
+            //const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
+            const passage = story.getStartPassage()
+            if (!passage) {
+                throw new Error('start passage not set')
             }
-            const passage = Passage.FromElement(passageElement)
-            if (passage?.name) {
-                navigateNew(passage.name)
-            }
+
+            navigateNew(passage.name)
         }
 
         /// This can be attached to link click events
@@ -368,28 +352,26 @@ export default class Player {
                 setGlobalState: this.#statesetglobal,
                 getGlobalState: this.#stategetglobal,
                 preventNavigation: this.#preventnavigation,
-                allowNavigation: this.#allownavigation
+                allowNavigation: this.#allownavigation,
+                view: view
             })
         }
 
         // Start playing
         this.#start = function () {
             // Set up story styles
-            const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
-            storyStyleElement.removeAttribute('role')
-            storyStyleElement.removeAttribute('type')
-            if (storyStyleElement) {
-                const styleElement = document.querySelector('head style')
-                if (styleElement) {
-                    styleElement.insertAdjacentElement('afterend', storyStyleElement)
-                }
-            }
+            // const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
+            // storyStyleElement.removeAttribute('role')
+            // storyStyleElement.removeAttribute('type')
+            // if (storyStyleElement) {
+            //     const styleElement = document.querySelector('head style')
+            //     if (styleElement) {
+            //         styleElement.insertAdjacentElement('afterend', storyStyleElement)
+            //     }
+            // }
 
             // Show the title
-            const titleElement = document.getElementById('storyTitle')
-            if (titleElement) {
-                titleElement.innerHTML = storyName
-            }
+            view.title = story.name
 
             // Hook up forward, backward and restart buttons
             backButton?.addEventListener('click', navigateBack)
@@ -402,48 +384,16 @@ export default class Player {
     }
 
     /**
-    * 
-    * @param {string} key A unique key. Usually involves the passage name.
-    * @param {*} state Any object
-    */
-    setCurrentState (key, state) {
-        this.#stateset(key, state)
-    }
-
-    /**
-     * 
-     * @param {string} key A unique key. Usually involves the passage name.
-     */
-    getCurrentState (key) {
-        return this.#stateget(key)
-    }
-
-    /**
-    * 
-    * @param {string} key A unique key.
-    * @param {*} state Any object
-    */
-    setGlobalState (key, state) {
-        this.#statesetglobal(key, state)
-    }
-
-    /**
-     * 
-     * @param {string} key A unique key.
-     */
-    getGlobalState (key) {
-        return this.#stategetglobal(key)
-    }
-
-
-    /**
-     * 
+     * Add a plugin to the player. The order of adding is important.
      * @param {BBPlugin} plugin 
      */
     addPlugin (plugin) {
         this.#addplugin(plugin)
     }
 
+    /**
+     * Start playing the story.
+     */
     start () {
         this.#start()
     }

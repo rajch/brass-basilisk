@@ -2,6 +2,8 @@
 
 import { BBPlugin } from "./plugin";
 
+import "./types"
+
 export class TurnToLinksPlugin extends BBPlugin {
 
     constructor() {

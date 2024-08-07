@@ -1,15 +1,7 @@
 'use strict'
 
 import { BBGlobalStatePlugin } from "./plugin";
-
-/**
- * @typedef {Object} CharacterSheet
- * @property {string} name
- * @property {Number} vigour
- * @property {Number} agility
- * @property {Number} psi
- */
-
+import './types'
 
 export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     /** @type CharacterSheet */
@@ -22,6 +14,8 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     #psilabel
     /** @type {Function} */
     #refreshdisplay
+    /** @type {HTMLDialogElement} */
+    #dialog
 
     constructor() {
         super('charactersheet')
@@ -35,12 +29,12 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
     /**
      * 
-     * @param {import("./plugin").PlayerProxy} player 
+     * @param {PlayerProxy} player 
      */
     init (player) {
         super.init(player)
 
-        const element = document.querySelector('.sidebar-1 .charactersheet')
+        const element = player.view.getToolPanel('charactersheet')
 
         this.#vigourlabel = element.querySelector('label.vigour')
         this.#agilitylabel = element.querySelector('label.agility')
@@ -53,7 +47,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         }
 
         /** @type {HTMLDialogElement} */
-        const dialog = document.getElementById('characterSheet')
+        const dialog = player.view.getDialog('characterSheet') //document.getElementById('characterSheet')
         /** @type {HTMLInputElement} */
         const vigourInput = dialog.querySelector('#csVigour')
         const agilityInput = dialog.querySelector('#csAgility')
@@ -83,10 +77,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
             })
 
             this.#refreshdisplay()
-            // this.#vigourlabel.textContent = vigourInput.valueAsNumber
-            // this.#agilitylabel.textContent = agilityInput.valueAsNumber
-            // this.#psilabel.textContent = psiInput.valueAsNumber
         })
+
+        this.#dialog = dialog
     }
 
     scan (passage) {
@@ -98,9 +91,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
         if (!currentState || !currentState.sheet) {
 
-            /** @type {HTMLDialogElement} */
-            const dialog = document.getElementById('characterSheet')
-            dialog.showModal()
+            this.#dialog.showModal()
 
         } else {
 
@@ -128,13 +119,13 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     set vigour (value) {
         this.#currentSheet.vigour = value
         this.#vigourlabel.textContent = value
-        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
 
     /**
- * 
- * @returns {Number|null}
- */
+     * 
+     * @returns {Number|null}
+     */
     get agility () {
         return this.#currentSheet.agility
     }
@@ -146,7 +137,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     set agility (value) {
         this.#currentSheet.agility = value
         this.#agilitylabel.textContent = value
-        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
 
     /**
@@ -164,6 +155,6 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     set psi (value) {
         this.#currentSheet.psi = value
         this.#psilabel.textContent = value
-        this.setCurrentState({sheet: structuredClone(this.#currentSheet)})
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
 }

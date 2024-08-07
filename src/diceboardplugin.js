@@ -1,6 +1,7 @@
 'use strict'
 
 import { BBScannerPlugin } from "./plugin";
+import './types'
 
 // Raises 'roll' event, with event.detail containing the total roll
 export class DiceBoardPlugin extends BBScannerPlugin {
@@ -26,13 +27,13 @@ export class DiceBoardPlugin extends BBScannerPlugin {
 
     /**
      * 
-     * @param {import("./plugin").PlayerProxy} player 
+     * @param {PlayerProxy} player 
      */
     init (player) {
         super.init(player)
 
         // This should move to renderer interface
-        const element = document.querySelector('div.diceboard')
+        const element = player.view.getToolPanel('diceboard')
 
         const rollArea = element.querySelector('div.rollarea')
         const rollButton = element.querySelector('button.dicerollbutton')
@@ -47,7 +48,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             6: 'rotateX(90deg) rotateY(0deg)'
         }
 
-        function setDieTo (dieNum, score) {
+        const setDieTo = (dieNum, score) => {
             const dice = rollArea.querySelector(`div.dice-${dieNum}`)
             dice.style.transform = diceRotationMap[score]
         }
@@ -64,17 +65,22 @@ export class DiceBoardPlugin extends BBScannerPlugin {
          * @param {Number} totalresults 
          * @param {boolean} isOldRoll 
          */
-        function updateResultsLabel (results, totalresults, isOldRoll) {
-            const resultsStr = results.reduce((finalValue, currentValue) => {
-                finalValue = finalValue ? finalValue + "+" + currentValue : '' + currentValue
-                return finalValue
-            }, '')
+        const updateResultsLabel = (results, totalresults, isOldRoll) => {
+            const resultsStr = results.reduce(
+                (finalValue, currentValue) => {
+                    finalValue = finalValue
+                        ? finalValue + '+' + currentValue
+                        : String(currentValue)
+                    return finalValue
+                },
+                ''
+            )
             const verb = isOldRoll ? 'was' : 'is'
-            self.#updatelabel(`Your score ${verb} ${resultsStr} = ${totalresults}.`)
+            this.#updatelabel(`Your score ${verb} ${resultsStr} = ${totalresults}.`)
         }
 
-        function rollDice () {
-            const number = self.#numdice
+        const rollDice = () => {
+            const number = this.#numdice
 
             const results = []
             let totalresults = 0
@@ -89,9 +95,10 @@ export class DiceBoardPlugin extends BBScannerPlugin {
 
             updateResultsLabel(results, totalresults, false)
 
-            self.#currentresult = totalresults
+            this.#currentresult = totalresults
+
             // Raises 'roll' event, with event.detail containing the total roll
-            self.dispatchEvent(
+            this.dispatchEvent(
                 new CustomEvent(
                     'roll',
                     {
@@ -128,6 +135,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             for (let i = 0; i < number; i++) {
                 dieStr = dieStr + dieTemplate.replace('{{n}}', i)
             }
+
             const templ = document.createElement('template')
             templ.innerHTML = dieStr
             const result = templ.content.children
@@ -174,6 +182,14 @@ export class DiceBoardPlugin extends BBScannerPlugin {
         return true
     }
 
+    /**
+     * Hides the diceboard from the UI. The calling plugin needs to specify
+     * its name in the owner parameter. The diceboard can be hidden only by
+     * the same plugin that showed it last.
+     * 
+     * @param {string} owner The plugin which wants to hide the diceboard
+     * @returns {void}
+     */
     hide (owner) {
         if (!owner) {
             throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
@@ -189,6 +205,14 @@ export class DiceBoardPlugin extends BBScannerPlugin {
         console.log(`Dice NOT hidden by ${owner} `)
     }
 
+    /**
+     * Makes the diceboard visible in the UI. The calling plugin needs to 
+     * specify its name in the owner parameter, because the diceboard can
+     * be required by multiple plugins. Only that plugin which last shows 
+     * the diceboard can hide it.
+     * 
+     * @param {*} owner The plugin which wants to show the diceboard
+     */
     show (owner) {
         if (!owner) {
             throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
@@ -201,6 +225,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
     }
 
     /**
+     * Sets up the diceboard to show and roll the specified number of dice.
      * 
      * @param {Number} number Number of dice 
      */
@@ -209,6 +234,8 @@ export class DiceBoardPlugin extends BBScannerPlugin {
     }
 
     /**
+     * Sets the current results of the diceboard, as specified. Also sets
+     * the number of dice.
      * 
      * @param {Number[]} results 
      */
@@ -217,6 +244,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
     }
 
     /**
+     * Returns the total score from the last roll.
      * 
      * @returns {Number}
      */

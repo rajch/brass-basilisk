@@ -2,7 +2,9 @@
     <tw-passagedata pid="1" name="Start" tags="tag1 tag2">
         Some content.
         Lots of content on this page, but very little on the [[Next-1]].
-        Fear not, though. All will be well. You could turn to 100 though.
+        Fear not, though. All will be well. 
+        
+        You could turn to 100 if you want immediate action.
     </tw-passagedata>
     <tw-passagedata pid="2" name="Next-1" tags="tag1 tag2">
         Some more content.
@@ -10,13 +12,15 @@
     </tw-passagedata>
     <tw-passagedata pid="3" name="Next-2" tags="tag1 tag2 tag3">
         Even more content
-        As promised. Perhaps you would like to [[Next-1<-return]]?
-        Or [[99<-Next-3]]
-        Or [[Re-start->Start]]?
+        As promised. Perhaps you would like to [[return|Next-1]]?
+        Or [[Start again at the beginning->Start]]?
+        Or [[99&lt;-Go on to 99]]?
+        
         Maybe turn to 99.
     </tw-passagedata>
     <tw-passagedata pid="4" name="99">
         You are confused.
+
         You should try to roll three dice.
         If your score is 3 or less, you should [[go back to optimism->Next-1]].
         If your score is more, you should [[proceed->100]].
@@ -24,19 +28,20 @@
     <tw-passagedata pid="5" name="100" tags="tag1 tag2 tag3">
         True to form, it is time for a boss fight.
 
-        GATEKEEPER VIGOUR 12
+        BOSS VIGOUR 12
 
         Roll two dice:
         score 2 to 5 You are hit and lose 3 VIGOUR
-        score 6 to 12 The Gatekeeper loses 3 VIGOUR
+        score 6 to 12 The Boss loses 3 VIGOUR
         
         If you FLEE, turn to 99. If you win the fight, turn to 200.
 
+        If the boss is defeated, you will have the option to [[go back to the start->Start]].
     </tw-passagedata>
     <tw-passagedata pid="6" name="200" tags="happyending">
         You have, finally, reached the end.
     </tw-passagedata>
-    <style>
+    <style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
         .content p:nth-of-type(2) { color:red !important; }
     </style>
 </tw-storydata>
