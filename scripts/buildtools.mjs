@@ -32,7 +32,7 @@ const minify = (source) => {
         Buffer.from(source),
         {
             minify_css: true,
-            minify_js: true,
+            minify_js: false,
             keep_closing_tags: true
         }
     ).toString('utf-8');
@@ -119,6 +119,10 @@ const buildFormatJS = async (minimize, transpileToES5) => {
     const inputFileName = htmlOutputFileName(minimize);
     const inputFile = readFileSync(inputFileName, 'utf8');
     manifest.source = inputFile;
+
+    // Insert editor extenstions
+    const extensionsFile = readFileSync("src/twine-extensions/editorextensions.js", 'utf8');
+    manifest.hydrate = extensionsFile;
 
     // Create format.js with manifest
     let format = "window.storyFormat(" + JSON.stringify(manifest) + ");";
