@@ -7,6 +7,7 @@ import { BBScannerPlugin } from "./plugin";
 import './types'
 
 const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e\.(.*?)(?:\n|$)/
+const actionRegEx = /If you roll (?:a )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
 
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -51,11 +52,6 @@ export class ChanceRollPlugin extends BBScannerPlugin {
             let rowToShow
             for (let i = 0; i < chanceroll.actions.length; i++) {
                 const action = chanceroll.actions[i]
-                // if (
-                //     (!action.rangeEnd && rollResult == action.rangeStart)
-                //     || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
-                //     || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
-                // ) {
                 if (rollInRange(action, rollResult)) {
                     console.log(`Going to show ${JSON.stringify(action)}`)
                     rowToShow = view.content.querySelector(`p.chanceroll-result-${i}`)
@@ -111,7 +107,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
                     if (action.destination) {
                         result = result.trimEnd() + ` [[go to ${action.destination}|${action.destination}]]`
                     }
-                    result = result + '</p>'
+                    result = result.trimEnd() + '.</p>'
                 }
 
                 return input.replace(chanceRegEx, result)
@@ -126,15 +122,6 @@ export class ChanceRollPlugin extends BBScannerPlugin {
      */
     scan (passage) {
         const passageBody = passage.body
-
-        // const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e\./
-        // let match = passageBody.match(phrase1)
-
-        // if (!match) {
-        //     const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e\./
-        //     match = passageBody.match(phrase2)
-        // }
-
 
         const match = passageBody.match(chanceRegEx)
 
@@ -156,8 +143,6 @@ export class ChanceRollPlugin extends BBScannerPlugin {
         }
 
         let restOfParagraph = match[2]
-
-        const actionRegEx = /If you roll (?:a )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
 
         let destMatch
         while ((destMatch = actionRegEx.exec(match[2])) !== null) {

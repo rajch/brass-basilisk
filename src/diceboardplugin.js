@@ -260,6 +260,8 @@ export class DiceBoardPlugin extends BBScannerPlugin {
 
 const matchMap = {
     "0": 0,
+    "1": 1,
+    "one": 1,
     "2": 2,
     "two": 2,
     "3": 3,
