@@ -6,9 +6,13 @@ import { BBScannerPlugin } from "./plugin";
 
 import './types'
 
+const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e\.(.*?)(?:\n|$)/
+
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
     #diceboard
+
+    #chanceroll
 
     constructor() {
         super('chancerollplugin')
@@ -27,10 +31,92 @@ export class ChanceRollPlugin extends BBScannerPlugin {
         }
 
         this.#diceboard.addEventListener('roll', (e) => {
-            if (this.active) {
-                this.setCurrentState(e.detail)
+            if (!this.active) {
+                return
+            }
+
+            this.setCurrentState(e.detail)
+
+            const rollResult = parseInt(e.detail.total)
+
+            const chanceroll = this.#chanceroll
+            if (!chanceroll || !chanceroll.numDice) {
+                return
+            }
+
+            const view = this.player.view
+
+            view.hideSelectedContent('p.cr-result')
+
+            let rowToShow
+            for (let i = 0; i < chanceroll.actions.length; i++) {
+                const action = chanceroll.actions[i]
+                // if (
+                //     (!action.rangeEnd && rollResult == action.rangeStart)
+                //     || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
+                //     || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
+                // ) {
+                if (rollInRange(action, rollResult)) {
+                    console.log(`Going to show ${JSON.stringify(action)}`)
+                    rowToShow = view.content.querySelector(`p.chanceroll-result-${i}`)
+                    break;
+                }
+            }
+
+            if (rowToShow) {
+                view.show(rowToShow)
             }
         })
+
+        this.player.addTransformer(
+            /**
+             * 
+             * @param {string} input 
+             */
+            (input) => {
+                if (!this.active) {
+                    return input
+                }
+
+                const chanceroll = this.#chanceroll
+
+                if (!chanceroll || !chanceroll.numDice) {
+                    return input
+                }
+
+                const diceString = chanceroll.numDice == '1' || chanceroll.numDice === 'one'
+                    ? `one die`
+                    : `${chanceroll.numDice} dice`
+
+                const currentState = this.getCurrentState()
+                const introStatement = currentState && currentState.total
+                    ? `You had rolled ${diceString} for a result of ${currentState.total}`
+                    : `Roll ${diceString}`
+
+                let result = `<div class="chancerollarea">${introStatement}.`
+                if (chanceroll.restOfParagraph !== '') {
+                    result = result + ` <span style="color: green;">${chanceroll.restOfParagraph}</span>\n`
+                }
+                result = result + '</div>'
+
+                for (let i = 0; i < chanceroll.actions.length; i++) {
+                    const action = chanceroll.actions[i]
+                    const ishidden = currentState && currentState.total
+                        ? rollInRange(action, currentState.total)
+                            ? ''
+                            : 'hidden'
+                        : 'hidden'
+
+                    result = result + `<p class="cr-result chanceroll-result-${i} ${ishidden}">${action.sentence}`
+                    if (action.destination) {
+                        result = result.trimEnd() + ` [[go to ${action.destination}|${action.destination}]]`
+                    }
+                    result = result + '</p>'
+                }
+
+                return input.replace(chanceRegEx, result)
+            }
+        )
     }
 
     /**
@@ -41,13 +127,16 @@ export class ChanceRollPlugin extends BBScannerPlugin {
     scan (passage) {
         const passageBody = passage.body
 
-        const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e\./
-        let match = passageBody.match(phrase1)
+        // const phrase1 = /[Rr]oll\s{1}(\S*?)\s{1}di(c{0,1})e\./
+        // let match = passageBody.match(phrase1)
 
-        if (!match) {
-            const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e\./
-            match = passageBody.match(phrase2)
-        }
+        // if (!match) {
+        //     const phrase2 = /[Tt]hrow\s{1}(\S*?)\s{1}di(c{0,1})e\./
+        //     match = passageBody.match(phrase2)
+        // }
+
+
+        const match = passageBody.match(chanceRegEx)
 
         if (!match) {
             this.#diceboard.hide('chanceroll')
@@ -55,8 +144,42 @@ export class ChanceRollPlugin extends BBScannerPlugin {
         }
 
         const numdice = match[1].trim().toLowerCase()
-        this.#diceboard.setDice(numdice)
+        if (!this.#diceboard.validateDice(numdice)) {
+            this.#diceboard.hide('chanceroll')
+            return false
+        }
 
+        const chanceroll = {
+            numDice: numdice,
+            actions: [],
+            restOfParagraph: ''
+        }
+
+        let restOfParagraph = match[2]
+
+        const actionRegEx = /If you roll (?:a )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
+
+        let destMatch
+        while ((destMatch = actionRegEx.exec(match[2])) !== null) {
+            const chanceAction = {
+                rangeStart: destMatch[1],
+                rangeEnd: destMatch[3],
+                rangeOperator: destMatch[2].trim().toLocaleLowerCase(),
+                sentence: destMatch[4],
+                destination: destMatch[5]
+            }
+            chanceroll.actions.push(chanceAction)
+            restOfParagraph = restOfParagraph.replace(destMatch[0], '')
+        }
+
+        restOfParagraph = restOfParagraph.trim()
+        if (restOfParagraph !== '') {
+            chanceroll.restOfParagraph = restOfParagraph
+        }
+
+        this.#chanceroll = chanceroll
+
+        this.#diceboard.setDice(numdice)
         this.#diceboard.show('chanceroll')
 
         const currentState = this.getCurrentState()
@@ -66,4 +189,10 @@ export class ChanceRollPlugin extends BBScannerPlugin {
 
         return true
     }
+}
+
+const rollInRange = (action, rollResult) => {
+    return (!action.rangeEnd && rollResult == action.rangeStart)
+        || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
+        || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
 }

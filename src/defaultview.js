@@ -38,6 +38,7 @@ export class DefaultView {
     }
 
 
+
     /**
      * 
      * @param {HTMLElement} element 
@@ -71,23 +72,34 @@ export class DefaultView {
     }
 
     /**
+     * Hides all elements that match the selector 
+     * @param {string} selector 
+     */
+    hideSelectedContent (selector) {
+        this.#contentelement.querySelectorAll(selector)
+            .forEach((item) => {
+                this.hide(item)
+            })
+    }
+
+    /**
      * @returns {HTMLButtonElement}
      */
-    get backButton() {
+    get backButton () {
         return document.getElementById('backButton')
     }
 
     /**
      * @returns {HTMLButtonElement}
      */
-    get forwardButton() {
+    get forwardButton () {
         return document.getElementById('forwardButton')
     }
 
     /**
      * @returns {HTMLButtonElement}
      */
-    get restartButton() {
+    get restartButton () {
         return document.getElementById('restartButton')
     }
 
@@ -163,7 +175,7 @@ export class DefaultView {
      * specified classname under section.sidebar-1
      * @param {*} panelName 
      */
-    getToolPanel(panelName) {
+    getToolPanel (panelName) {
         return document.querySelector(`section.sidebar-1 div.${panelName}`)
     }
 
@@ -175,7 +187,7 @@ export class DefaultView {
      * 
      * @param {*} dialogId
      */
-    getDialog(dialogId) {
+    getDialog (dialogId) {
         return document.getElementById(dialogId)
     }
 }

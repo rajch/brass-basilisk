@@ -115,15 +115,6 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             rollDice()
         })
 
-        const matchMap = {
-            "0": 0,
-            "2": 2,
-            "two": 2,
-            "3": 3,
-            "three": 3,
-            "some": 3
-        }
-
         this.#setdice = (number) => {
             number = matchMap[number] ?? 1
 
@@ -224,6 +215,20 @@ export class DiceBoardPlugin extends BBScannerPlugin {
         console.log(`Dice shown by ${owner}`)
     }
 
+
+    /**
+     * Validates whether the string parameter would correctly translate to
+     * a non-zero number of dice.
+     *  
+     * @param {string} number
+     * @returns {boolean}
+     */
+    validateDice (number) {
+        return matchMap[number]
+            ? true
+            : false
+    }
+
     /**
      * Sets up the diceboard to show and roll the specified number of dice.
      * 
@@ -251,6 +256,15 @@ export class DiceBoardPlugin extends BBScannerPlugin {
     get currentResult () {
         return this.#currentresult
     }
+}
+
+const matchMap = {
+    "0": 0,
+    "2": 2,
+    "two": 2,
+    "3": 3,
+    "three": 3,
+    "some": 3
 }
 
 const dieTemplate = `

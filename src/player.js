@@ -1,8 +1,7 @@
 'use strict'
 
 import { BBPlugin } from "./plugin"
-import { processHTML, processTwineLinks, addParagraphTags } from './transformers'
-import { Passage } from "./passage"
+
 import './types'
 
 
@@ -88,7 +87,7 @@ export class Player {
             // This will read and sanitise any HTML in
             // the passage body. From this point, it's
             // all unencoded HTML.
-            // We are not doing this any, for for this
+            // We are not doing this any more for this
             // particular format.
             // bodystr = processHTML(bodystr)
 

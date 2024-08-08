@@ -77,6 +77,7 @@
  * @property {FuncHTMLElementVoid} show
  * @property {FuncHTMLElementVoid} disable
  * @property {FuncHTMLElementVoid} enable
+ * @property {FuncStringVoid} hideSelectedContent
  * @property {HTMLButtonElement} backButton
  * @property {HTMLButtonElement} forwardButton
  * @property {HTMLButtonElement} restartButton
