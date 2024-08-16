@@ -1,14 +1,14 @@
 'use strict'
 
-import { ChanceRollPlugin } from "./chancerollplugin"
-import { CharacterSheetPlugin } from "./charactersheetplugin"
-import { CombatPlugin } from "./combatplugin"
+import { ChanceRollPlugin } from "./plugins/chancerollplugin"
+import { CharacterSheetPlugin } from "./plugins/charactersheetplugin"
+import { CombatPlugin } from "./plugins/combatplugin"
 import { DefaultView } from "./defaultview"
-import { DiceBoardPlugin } from "./diceboardplugin"
+import { DiceBoardPlugin } from "./plugins/diceboardplugin"
 import { DefaultStory } from "./defaultstory"
-import { Player } from "./player"
-import { TurnToLinksPlugin } from "./turntolinksplugin"
-import { AttributePhrasePlugin } from "./attributephraseplugin"
+import { Player } from "./core/player"
+import { TurnToLinksPlugin } from "./plugins/turntolinksplugin"
+import { AttributePhrasePlugin } from "./plugins/attributephraseplugin"
 
 
 try {

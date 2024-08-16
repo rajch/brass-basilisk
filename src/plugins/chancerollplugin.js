@@ -1,10 +1,10 @@
 'use strict'
 
 import { DiceBoardPlugin } from "./diceboardplugin";
-import { Passage } from "./passage";
-import { BBScannerPlugin } from "./plugin";
+import { Passage } from "../core/passage";
+import { BBScannerPlugin } from "../core/plugin";
 
-import './types'
+import '../core/types'
 
 const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e\.(.*?)(?:\n|$)/
 const actionRegEx = /If you roll (?:a )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g

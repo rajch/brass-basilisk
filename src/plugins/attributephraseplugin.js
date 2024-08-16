@@ -1,10 +1,10 @@
 'use strict'
 
 import { CharacterSheetPlugin } from './charactersheetplugin'
-import { Passage } from './passage'
-import { BBScannerPlugin } from './plugin'
+import { Passage } from '../core/passage'
+import { BBScannerPlugin } from '../core/plugin'
 
-import './types'
+import '../core/types'
 
 // This matches a sentence that ends a paragraph.
 const phraseRegex = /Your (VIGOUR|AGILITY|PSI) ((?:is restored)|(?:increases by)|(?:decreases by))( \d{1,2})?\.\n/g
@@ -61,15 +61,6 @@ export class AttributePhrasePlugin extends BBScannerPlugin {
         if (result) {
             this.setCurrentState({ acted: true })
         }
-
-        // for (let i = 0; i < this.#phraseActions.length; i++) {
-        //     const phraseAction = this.#phraseActions[i]
-        //     const rexp = new RegExp(phraseAction.phraseRegExp)
-        //     const rexMatches = passageBody.match(rexp)
-        //     if (rexMatches) {
-        //         result = result || phraseAction.action(rexMatches)
-        //     }
-        // }
 
         return result
     }

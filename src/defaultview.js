@@ -1,6 +1,6 @@
 'use strict'
 
-import './types'
+import './core/types'
 
 export class DefaultView {
     /** @type {HTMLElement} */
@@ -180,7 +180,7 @@ export class DefaultView {
     }
 
     /**
-     * Gets a container for a "tools" UI element.
+     * Gets a dialog UI element.
      * 
      * In the default implementation, this looks for a dialog with
      * the specified id.

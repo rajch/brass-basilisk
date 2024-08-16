@@ -1,8 +1,8 @@
 'use strict'
 
-import { BBPlugin } from "./plugin";
+import { BBPlugin } from "../core/plugin";
 
-import "./types"
+import "../core/types"
 
 export class TurnToLinksPlugin extends BBPlugin {
 

@@ -1,6 +1,6 @@
 'use strict'
 
-import { Passage } from "./passage"
+import { Passage } from "./core/passage"
 
 export class DefaultStory {
     /** @type {HTMLElement} */

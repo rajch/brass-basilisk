@@ -2,10 +2,10 @@
 
 import { CharacterSheetPlugin } from "./charactersheetplugin";
 import { DiceBoardPlugin } from "./diceboardplugin";
-import { Passage } from "./passage";
-import { BBScannerPlugin } from "./plugin";
+import { Passage } from "../core/passage";
+import { BBScannerPlugin } from "../core/plugin";
 
-import './types'
+import '../core/types'
 
 const combatRegex = /\n+([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
 const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g

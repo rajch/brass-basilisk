@@ -1,7 +1,7 @@
 'use strict'
 
-import { BBScannerPlugin } from "./plugin";
-import './types'
+import { BBScannerPlugin } from "../core/plugin";
+import '../core/types'
 
 // Raises 'roll' event, with event.detail containing the total roll
 export class DiceBoardPlugin extends BBScannerPlugin {

@@ -1,7 +1,7 @@
 'use strict'
 
-import { BBGlobalStatePlugin } from "./plugin";
-import './types'
+import { BBGlobalStatePlugin } from "../core/plugin";
+import '../core/types'
 
 export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     /** @type CharacterSheet */
