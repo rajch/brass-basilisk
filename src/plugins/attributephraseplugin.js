@@ -6,6 +6,8 @@ import { BBScannerPlugin } from '../core/plugin'
 
 import '../core/types'
 
+// This matches a sentence by itself in a paragraph.
+const deadPhraseRegex = /\nYou are dead.\n/g
 // This matches a sentence that ends a paragraph.
 const phraseRegex = /Your (VIGOUR|AGILITY|PSI) ((?:is restored)|(?:increases by)|(?:decreases by))( \d{1,2})?\.\n/g
 
@@ -42,6 +44,15 @@ export class AttributePhrasePlugin extends BBScannerPlugin {
 
         const passageBody = passage.body
         let result = false
+
+        // First check for death. All else is secondary.
+        if (passageBody.match(deadPhraseRegex)) {
+            this.#charactersheet.psi = 0
+            this.#charactersheet.agility = 0
+            this.#charactersheet.vigour = 0
+
+            return true
+        }
 
         let phraseMatch
         while ((phraseMatch = phraseRegex.exec(passageBody)) !== null) {
