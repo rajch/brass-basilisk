@@ -35,13 +35,6 @@ export class CombatPlugin extends BBScannerPlugin {
     init (player) {
         super.init(player)
 
-        // This should move to renderer interface
-        // const element =  document.querySelector('div.combat')
-
-        // this.#foenamelabel = element.querySelector('label.foename')
-        // this.#foevigourlabel = element.querySelector('label.foevigour')
-        // this.#element = element
-
         this.#diceboard = player.getPlugin('diceboard')
         if (!this.#diceboard) {
             throw new Error('Combat plugin requires the Dice Board plugin')
@@ -79,12 +72,10 @@ export class CombatPlugin extends BBScannerPlugin {
                     ) {
                         if (rule.action === 'loses') {
                             combat.foeVigour = combat.foeVigour - rule.turnAmount;
-                            // this.#foevigourlabel.textContent = combat.foeVigour
                             updateFightArea(`You hit ${combat.foe} for ${rule.turnAmount} points.`)
                             if (combat.foeVigour <= 0) {
                                 this.#won = true
                                 this.#lost = false
-                                // this.#foenamelabel.textContent = 'DEFEATED!'
                                 replaceFightArea('You won!')
                                 this.#diceboard.hide('combat')
                                 this.setCurrentState({ defeated: true })
@@ -168,7 +159,6 @@ export class CombatPlugin extends BBScannerPlugin {
                 // Player had won earlier
                 this.#won = true
                 this.#lost = false
-                // this.#element.classList.add('hidden')
                 this.player.allowNavigation()
                 return true
             } else if (state?.playerdefeated) {
@@ -232,12 +222,8 @@ export class CombatPlugin extends BBScannerPlugin {
 
             this.#combat = combat
 
-            // this.#foenamelabel.textContent = combat.foe
-            // this.#foevigourlabel.textContent = combat.foeVigour
-
             this.#diceboard.setDice(combat.numberOfDice)
             this.#diceboard.show('combat')
-            // this.#element.classList.remove('hidden')
             this.player.preventNavigation()
 
             console.log('Combat detected:')
@@ -248,13 +234,12 @@ export class CombatPlugin extends BBScannerPlugin {
         }
 
         this.#diceboard.hide('combat')
-        // this.#element.classList.add('hidden')
         this.player.allowNavigation()
         return false
     }
 }
 
-const combatTemplate = '<div class="combattable"><div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div></div><div class="rollstatus"></div></div>{wingoto}{losegoto}'
+const combatTemplate = '<div class="combattable"><div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div></div><div class="rollstatus"></div></div>{wingoto}{losegoto}'
 
 /**
  * 

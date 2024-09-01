@@ -134,6 +134,10 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         this.#vigourlabel.textContent = value
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
 
+        // Handle the death case
+        if (value === 0 ) {
+            this.player.preventNavigation()
+        }
     }
 
     /**
