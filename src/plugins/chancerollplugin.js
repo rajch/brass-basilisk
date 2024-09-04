@@ -105,7 +105,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
 
                     result = result + `<p class="cr-result chanceroll-result-${i} ${ishidden}">${action.sentence}`
                     if (action.destination) {
-                        result = result.trimEnd() + ` [[go to ${action.destination}|${action.destination}]]`
+                        result = result.trimEnd() + ` [[Go to ${action.destination}|${action.destination}]]`
                     }
                     result = result.trimEnd() + '.</p>'
                 }
