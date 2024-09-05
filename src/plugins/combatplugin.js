@@ -257,8 +257,8 @@ const formatCombat = (combat) => {
                 '')
         )
         .replace('{flee}', combat.destinations.fleeTo ? `[[${combat.destinations.fleeTo}<-Flee]]` : '')
-        .replace('{wingoto}', combat.destinations.winGoTo ? `<p class="combatwon hidden">[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]</p>` : '')
-        .replace('{losegoto}', combat.destinations.loseGoTo ? `<p class="combatlost hidden">[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]</p>` : '')
+        .replace('{wingoto}', combat.destinations.winGoTo ? `<p class="combatwon hidden">[[${combat.destinations.winGoTo}<-Go to ${combat.destinations.winGoTo}]]</p>` : '')
+        .replace('{losegoto}', combat.destinations.loseGoTo ? `<p class="combatlost hidden">[[${combat.destinations.loseGoTo}<-Go to ${combat.destinations.loseGoTo}]]</p>` : '')
 
     return result
 }

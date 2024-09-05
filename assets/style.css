@@ -4,10 +4,10 @@
 
     --content-background-color: black;
     --content-color: white;
-    --link-color: blueviolet;
+    --link-color: #ffdd00;
 
     --button-background-color: green;
-    --button-color: white
+    --button-color: white;
 }
 
 * {
@@ -101,8 +101,6 @@ section.content a.stronglink:visited {
 section.content a.link.navblocked,
 section.content a.link.navblocked:visited {
     text-decoration: line-through;
-    color: red;
-    background-color: yellow;
     pointer-events: none;
 }
 
@@ -216,6 +214,11 @@ h1.storyTitle {
 } */
 
 /* Character Sheet */
+:root {
+    --character-sheet-border-color: violet;
+    --character-sheet-backdrop-color: crimson;
+}
+
 .sidebar-1 .charactersheet {
     padding: 2rem;
     width: 100%;
@@ -238,7 +241,12 @@ h1.storyTitle {
 dialog.charactersheet {
     margin: auto;
     padding: 0.5rem;
-    border: 5px solid violet;
+    border: 5px solid var(--character-sheet-border-color);
+    max-width: 60%;
+}
+
+dialog.charactersheet::backdrop {
+    background-color: var(--character-sheet-backdrop-color);
 }
 
 dialog.charactersheet h2 {
@@ -246,10 +254,16 @@ dialog.charactersheet h2 {
     text-align: center;
 }
 
+dialog.charactersheet p {
+    margin-bottom: 0.5rem;
+    text-align: justify;
+}
+
 dialog.charactersheet div {
     width: 100%;
     display: flex;
     flex-direction: row;
+    align-items: baseline;
 }
 
 dialog.charactersheet div label {
@@ -257,10 +271,13 @@ dialog.charactersheet div label {
     text-align: right;
     font-weight: bold;
     margin-right: 0.5rem;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 dialog.charactersheet div input {
     width: 50%;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.5;
 }
 
 dialog.charactersheet .buttonrow {
@@ -270,9 +287,22 @@ dialog.charactersheet .buttonrow {
 }
 
 /* Combat */
+@keyframes flyin {
+    to { 
+        filter: blur(0);
+        transform: scale(1);
+        opacity: 1;
+      }
+}
+
 .combattable {
     display: flex;
     flex-direction: column;
+
+    animation: flyin 1.2s ease forwards;
+    opacity: 0;
+    transform: scale(2);
+    filter: blur(4px);
 }
 
 div.combattable>div:first-child {

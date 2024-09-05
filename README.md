@@ -31,4 +31,11 @@ The aim of this story format is to recreate that experience as faithfully and ea
 
 ## Status
 
-This story format is currently a work in progress. No releases yet, there will be one hopefully soon.
+This story format has now been released. Import it into twine from:
+
+```
+https://github.com/rajch/brass-basilisk/releases/latest/download/format.js
+```
+
+Documentation and sample story coming soon.
+
