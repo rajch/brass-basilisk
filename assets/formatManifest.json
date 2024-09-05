@@ -1,6 +1,6 @@
 {
 	"name": "Brass Basilisk",
-	"version": "0.1.1",
+	"version": "0.1.2",
     "author": "Raj Chaudhuri",
     "description": "A story format for creating games in the style of Golden Dragon gamebooks. Features minimal markup and dice-based combat.",
     "license": "MIT",
