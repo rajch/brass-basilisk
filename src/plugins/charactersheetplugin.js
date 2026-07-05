@@ -51,6 +51,12 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
             this.#psilabel.textContent = psi ?? this.#currentSheet?.psi
         }
 
+        // Restart the .stat-flash animation on a label, even if it's
+        // already mid-flash from a rapid prior change.
+        for (const label of [this.#vigourlabel, this.#agilitylabel, this.#psilabel]) {
+            label.addEventListener('animationend', () => label.classList.remove('stat-flash'))
+        }
+
         /** @type {HTMLDialogElement} */
         const dialog = player.view.getDialog('characterSheet') //document.getElementById('characterSheet')
         /** @type {HTMLInputElement} */
@@ -112,6 +118,20 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     }
 
     /**
+     * Restarts the .stat-flash animation on a stat's label, forcing a
+     * reflow so it retriggers even if the same stat just changed again
+     * before the previous flash finished.
+     *
+     * @param {HTMLLabelElement} label
+     */
+    #flash (label) {
+        label.classList.remove('stat-flash')
+        // Trick to force the browser to restart a CSS animation
+        void label.offsetWidth
+        label.classList.add('stat-flash')
+    }
+
+    /**
      * 
      * @returns {Number|null}
      */
@@ -132,6 +152,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
         this.#currentSheet.vigour = value
         this.#vigourlabel.textContent = value
+        this.#flash(this.#vigourlabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
 
         // Handle the death case
@@ -161,6 +182,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
         this.#currentSheet.agility = value
         this.#agilitylabel.textContent = value
+        this.#flash(this.#agilitylabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
 
@@ -185,6 +207,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
         this.#currentSheet.psi = value
         this.#psilabel.textContent = value
+        this.#flash(this.#psilabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
 }

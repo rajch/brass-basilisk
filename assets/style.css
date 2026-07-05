@@ -1,13 +1,63 @@
+/*
+ * Theme tokens.
+ *
+ * This is the single source of truth for the "brass & leather" look.
+ * Everything below this block should reference these variables rather
+ * than hardcoding colors, fonts, or decorative values, so a future
+ * alternate theme is a matter of defining a second block of the same
+ * variable names (e.g. behind a class or data-attribute) rather than
+ * rewriting rules.
+ *
+ * No @font-face / embedded font files by design: the compiled story is
+ * a single self-contained HTML file, and this stylesheet is spliced
+ * verbatim into every story exported with this format. Font stacks
+ * below lean entirely on widely pre-installed system serifs so the
+ * look is guaranteed to work fully offline, on any device, without
+ * adding any permanent weight to every published story.
+ */
 :root {
-    --sidebar-background-color: grey;
-    --sidebar-color: white;
+    /* -- Sidebar: the book's leather cover -- */
+    --sidebar-background-color: #2b1d14;
+    --sidebar-color: #e8d9b5;
+    --sidebar-accent-color: #b8860b;
+    --sidebar-border-color: #8b6914;
 
-    --content-background-color: black;
-    --content-color: white;
-    --link-color: #ffdd00;
+    /* -- Content: the open page -- */
+    --content-background-color: #efe0bb;
+    --content-color: #3b2a1a;
+    --link-color: #a5720a;
 
-    --button-background-color: green;
-    --button-color: white;
+    /* -- Shared brass accent, used by buttons and borders everywhere -- */
+    --button-background-color: linear-gradient(180deg, #c9a227, #8b6914);
+    --button-color: #2b1d14;
+    --button-border-color: #6b4f10;
+    --emboss-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        inset 0 -2px 2px rgba(0, 0, 0, 0.35);
+
+    /* -- Typography --
+       Body: a warm, readable serif for long-form reading.
+       Heading: a firmer serif, dressed up with letter-spacing and an
+       embossed text-shadow (below) to read as "stamped into brass"
+       without depending on any specific decorative font being present. */
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-heading: 'Palatino Linotype', Palatino, Georgia, serif;
+    --heading-emboss-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.25),
+        0 -1px 1px rgba(0, 0, 0, 0.6);
+
+    /* -- Faint paper grain for the page background.
+       Generated inline via SVG feTurbulence -- no image asset, no
+       external request, a few hundred bytes at most. -- */
+    --page-texture: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+
+    /* -- Character sheet dialog --
+       Kept as their own named tokens (rather than referencing the
+       sidebar tokens directly at each use site) so a future theme can
+       diverge here without touching component rules. They happen to
+       equal the sidebar palette today. -- */
+    --character-sheet-border-color: var(--sidebar-accent-color);
+    --character-sheet-backdrop-color: rgba(43, 29, 20, 0.75);
 }
 
 * {
@@ -15,6 +65,7 @@
     margin: 0;
     padding: 0;
     border: 0;
+    font-family: var(--font-body);
 }
 
 .hidden {
@@ -24,10 +75,14 @@
 button {
     margin: 0.25rem;
     padding: 0.5rem;
-    border-radius: 5px;
+    border-radius: 2px;
     cursor: pointer;
-    background-color: var(--button-background-color);
+    font-family: var(--font-body);
+    font-weight: bold;
+    background: var(--button-background-color);
     color: var(--button-color);
+    border: 1px solid var(--button-border-color);
+    box-shadow: var(--emboss-shadow);
 }
 
 button:disabled {
@@ -51,6 +106,7 @@ section {
 }
 
 section.sidebar-1 {
+    position: relative;
     min-width: 18rem;
     max-width: 18rem;
     padding: 1.5rem;
@@ -58,6 +114,29 @@ section.sidebar-1 {
     flex-direction: column;
     background-color: var(--sidebar-background-color);
     color: var(--sidebar-color);
+    border-right: 4px double var(--sidebar-accent-color);
+}
+
+/* Brass "rivets" at the panel corners -- pure CSS, no image asset */
+section.sidebar-1::before,
+section.sidebar-1::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #e6c667, var(--sidebar-accent-color) 70%);
+    box-shadow: 0 0 0 1px var(--sidebar-border-color);
+}
+
+section.sidebar-1::before {
+    top: 0.6rem;
+    left: 0.6rem;
+}
+
+section.sidebar-1::after {
+    top: 0.6rem;
+    right: 0.6rem;
 }
 
 section.sidebar-1 .content {
@@ -79,7 +158,9 @@ section.content {
     padding: 2.5rem;
     overflow-y: scroll;
     background-color: var(--content-background-color);
+    background-image: var(--page-texture);
     color: var(--content-color);
+    font-family: var(--font-body);
 }
 
 section.content p {
@@ -106,16 +187,21 @@ section.content a.link.navblocked:visited {
 
 h1.storyTitle {
     word-break: break-all;
+    font-family: var(--font-heading);
+    color: var(--sidebar-accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: var(--heading-emboss-shadow);
 }
 
 
 /* Dice */
 :root {
-    --dice-background-color: orangered;
-    --dice-dot-color: black;
-    --dice-color: white;
-    --dice-1-background-color: white;
-    --dice-2-background-color: blue;
+    --dice-background-color: #e8dcc0;
+    --dice-dot-color: #3b2a1a;
+    --dice-color: #3b2a1a;
+    --dice-1-background-color: #efe0bb;
+    --dice-2-background-color: #4a5f4e;
     --roll-button-background-color: green;
     --roll-button-color: white;
 
@@ -139,7 +225,7 @@ h1.storyTitle {
 
 .side {
     position: absolute;
-    border: 2px solid;
+    border: 2px solid var(--sidebar-accent-color);
     border-radius: 5px;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -148,7 +234,6 @@ h1.storyTitle {
     font-size: 12px;
     font-weight: bold;
     background: var(--dice-background-color);
-    border-color: var(--dice-background-color);
     color: var(--dice-color);
 }
 
@@ -159,12 +244,15 @@ h1.storyTitle {
 
 .dice-1 .side {
     background-color: var(--dice-1-background-color);
-    border-color: var(--dice-1-background-color);
 }
 
 .dice-2 .side {
     background-color: var(--dice-2-background-color);
-    border-color: var(--dice-2-background-color);
+    color: var(--content-background-color);
+}
+
+.dice-2 .side svg circle {
+    fill: var(--content-background-color);
 }
 
 .one {
@@ -214,10 +302,6 @@ h1.storyTitle {
 } */
 
 /* Character Sheet */
-:root {
-    --character-sheet-border-color: violet;
-    --character-sheet-backdrop-color: crimson;
-}
 
 .sidebar-1 .charactersheet {
     padding: 2rem;
@@ -236,13 +320,50 @@ h1.storyTitle {
 .sidebar-1 .charactersheet>div>label:first-child {
     font-weight: bold;
     text-align: right;
+    font-variant-caps: small-caps;
+}
+
+.sidebar-1 .charactersheet>div>label.vigour,
+.sidebar-1 .charactersheet>div>label.agility,
+.sidebar-1 .charactersheet>div>label.psi {
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    color: var(--sidebar-accent-color);
+    font-variant-numeric: tabular-nums;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--sidebar-border-color);
+    border-radius: 2px;
+    padding: 0.1rem 0.4rem;
+}
+
+/* Triggered by a class toggle in CharacterSheetPlugin's setters when a
+   stat's value actually changes -- CSS alone can't detect a textContent
+   mutation, so this only plays when the plugin adds .stat-flash. */
+@keyframes statFlash {
+    0% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.9);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0.5rem rgba(184, 134, 11, 0);
+    }
+}
+
+.stat-flash {
+    animation: statFlash 0.5s ease-out;
 }
 
 dialog.charactersheet {
     margin: auto;
-    padding: 0.5rem;
-    border: 5px solid var(--character-sheet-border-color);
+    padding: 1rem;
+    border: 4px double var(--character-sheet-border-color);
     max-width: 60%;
+    background-color: var(--content-background-color);
+    background-image: var(--page-texture);
+    color: var(--content-color);
+    font-family: var(--font-body);
 }
 
 dialog.charactersheet::backdrop {
@@ -252,6 +373,9 @@ dialog.charactersheet::backdrop {
 dialog.charactersheet h2 {
     margin: 0 auto 1rem;
     text-align: center;
+    font-family: var(--font-heading);
+    color: var(--link-color);
+    letter-spacing: 0.05em;
 }
 
 dialog.charactersheet p {
@@ -271,13 +395,21 @@ dialog.charactersheet div label {
     text-align: right;
     font-weight: bold;
     margin-right: 0.5rem;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--font-body);
+    font-variant-caps: all-petite-caps;
 }
 
 dialog.charactersheet div input {
     width: 50%;
     font-family: 'Courier New', Courier, monospace;
     line-height: 1.5;
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    color: var(--link-color);
+    background: rgba(43, 29, 20, 0.08);
+    border: 1px solid var(--character-sheet-border-color);
+    border-radius: 2px;
 }
 
 dialog.charactersheet .buttonrow {
@@ -298,11 +430,37 @@ dialog.charactersheet .buttonrow {
 .combattable {
     display: flex;
     flex-direction: column;
+    padding: 1rem;
+    border: 4px double var(--sidebar-accent-color);
 
     animation: flyin 1.2s ease forwards;
     opacity: 0;
     transform: scale(2);
     filter: blur(4px);
+}
+
+.combattable table caption {
+    text-align: left;
+    font-weight: bold;
+    font-family: var(--font-heading);
+    letter-spacing: 0.03em;
+}
+
+.combattable table {
+    border-collapse: collapse;
+}
+
+.combattable table td {
+    padding: 0.3rem 0.6rem;
+    border-bottom: 1px solid var(--sidebar-accent-color);
+}
+
+.combattable table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.combattable table tbody tr:nth-child(even) {
+    background: rgba(43, 29, 20, 0.06);
 }
 
 div.combattable>div:first-child {
@@ -313,16 +471,72 @@ div.combattable>div:first-child {
     justify-content: space-between;
 }
 
+div.combattable>div:first-child>div:not(:last-child) {
+    padding-right: 0.75rem;
+    border-right: 1px solid var(--sidebar-accent-color);
+}
+
+/* The foe's name -- a plain, unclassed <div> in the combat template */
+div.combattable>div:first-child>div:nth-child(2) {
+    font-family: var(--font-heading);
+    font-size: large;
+    letter-spacing: 0.03em;
+    color: var(--link-color);
+    text-align: center;
+}
+
+.foeVigour {
+    font-weight: bold;
+    font-size: large;
+    color: var(--link-color);
+    font-variant-numeric: tabular-nums;
+    background: rgba(43, 29, 20, 0.08);
+    border: 1px solid var(--sidebar-accent-color);
+    border-radius: 2px;
+    padding: 0.1rem 0.4rem;
+}
+
 div.rollstatus {
     margin-top: 0.5rem;
     text-align: center;
     height: 2rem;
 }
 
-.combattable table caption {
-    text-align: left;
-    font-weight: bold;
+/* Cascade the combat row's contents in after the outer box has mostly
+   arrived, rather than popping in all at once with it. */
+@keyframes combatItemIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+div.combattable>div:first-child>div {
+    animation: combatItemIn 0.4s ease both;
+}
+
+div.combattable>div:first-child>div:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+div.combattable>div:first-child>div:nth-child(2) {
+    animation-delay: 0.65s;
+}
+
+div.combattable>div:first-child>div:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+div.rollstatus {
+    animation: combatItemIn 0.4s ease both;
+    animation-delay: 0.95s;
+}
+
+
 
 @media (max-width:640px) {
     :root {
