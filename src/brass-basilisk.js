@@ -9,6 +9,7 @@ import { DefaultStory } from "./defaultstory"
 import { Player } from "./core/player"
 import { TurnToLinksPlugin } from "./plugins/turntolinksplugin"
 import { AttributePhrasePlugin } from "./plugins/attributephraseplugin"
+import { SaveLoadPlugin } from "./plugins/saveloadplugin"
 
 
 try {
@@ -26,6 +27,8 @@ try {
     player.addPlugin(new AttributePhrasePlugin)
 
     player.addPlugin(new TurnToLinksPlugin)
+
+    player.addPlugin(new SaveLoadPlugin)
 
     player.start()
 } catch (e) {

@@ -418,6 +418,46 @@ dialog.charactersheet .buttonrow {
     margin-top: 1rem;
 }
 
+/* Save / Load
+   Piggybacks on dialog.charactersheet for the shared dialog chrome
+   (border, background, heading, paragraph, buttonrow); only the slot
+   list itself needs its own layout. */
+dialog.saveload .saveslotlist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+dialog.saveload .saveslot {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--character-sheet-border-color);
+    border-radius: 2px;
+}
+
+dialog.saveload .saveslotlabel {
+    flex-grow: 1;
+    text-align: left;
+}
+
+dialog.saveload .saveslot button {
+    font-size: medium;
+    padding: 0.25rem 0.75rem;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+dialog.saveload .saveunavailable {
+    font-style: italic;
+}
+
 /* Combat */
 @keyframes flyin {
     to { 

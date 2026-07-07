@@ -81,6 +81,7 @@
  * @property {HTMLButtonElement} backButton
  * @property {HTMLButtonElement} forwardButton
  * @property {HTMLButtonElement} restartButton
+ * @property {HTMLButtonElement} saveLoadButton
  * @property {Function} disableNavLinks
  * @property {Function} enableNavLinks
  * @property {AttachHandlerFunc} attachNavLinksHandler
@@ -116,6 +117,14 @@
  */
 
 /**
+ * @typedef {Object} SaveSlotInfo
+ * @property {Number} slot
+ * @property {Boolean} empty
+ * @property {string} [passageName]
+ * @property {string} [savedAt] ISO timestamp
+ */
+
+/**
  * @typedef {Object} PlayerProxy
  * @property {Function} addScanner
  * @property {AddTransformerFunction} addTransformer
@@ -127,6 +136,10 @@
  * @property {Function} getGlobalState
  * @property {Function} preventNavigation
  * @property {Function} allowNavigation
+ * @property {(slot: number) => boolean} saveGame
+ * @property {(slot: number) => boolean} loadGame
+ * @property {() => SaveSlotInfo[]} getSaveSlots
+ * @property {() => boolean} isSaveAvailable
  * @property {View} view
  */
 

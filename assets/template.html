@@ -53,6 +53,7 @@
                 <button id="backButton" title="Go back" disabled="true">&LeftTeeArrow;</button>
                 <button id="forwardButton" title="Go forward" disabled="true">&RightTeeArrow;</button>
                 <button id="restartButton" title="Restart">&olarr;</button>
+                <button id="saveLoadButton" title="Save / Load">&#128190;</button>
             </div>
         </section>
         <section class="content">
@@ -98,6 +99,24 @@
                 <button type="submit" id="csDone">Done</button>
             </div>
         </form>
+    </dialog>
+    <dialog id="saveLoad" class="charactersheet saveload">
+        <h2>Save / Load</h2>
+        <p>
+            Save your progress into one of the slots below, or load a
+            previous save to pick up where you left off. Saving again
+            into a slot replaces whatever was there before.
+        </p>
+        <p class="saveunavailable hidden">
+            Saving isn't available in this browser right now, so
+            progress can't be saved or loaded here.
+        </p>
+        <div class="saveslotlist">
+
+        </div>
+        <div class="buttonrow">
+            <button type="button" id="slClose">Close</button>
+        </div>
     </dialog>
     <script src="../src/brass-basilisk.js"></script>
 </body>

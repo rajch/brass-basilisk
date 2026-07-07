@@ -103,6 +103,13 @@ export class DefaultView {
         return document.getElementById('restartButton')
     }
 
+    /**
+     * @returns {HTMLButtonElement}
+     */
+    get saveLoadButton () {
+        return document.getElementById('saveLoadButton')
+    }
+
     disableNavLinks () {
         this.#contentelement.querySelectorAll('a.link')
             .forEach((element) => {

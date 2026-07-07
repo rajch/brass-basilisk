@@ -31,6 +31,14 @@ export class Player {
     #addplugin
     /** @type {Function} */
     #getplugin
+    /** @type {Function} */
+    #savegame
+    /** @type {Function} */
+    #loadgame
+    /** @type {Function} */
+    #getsaveslots
+    /** @type {Function} */
+    #issaveavailable
     
     /** @type {Function} */
     #start
@@ -322,6 +330,157 @@ export class Player {
             }
         }
 
+        /// Save / restore
+        ///
+        /// Everything that defines "where the player is" lives in
+        /// navStack, stackPosition and globalState -- all plain,
+        /// JSON-serialisable data (see the contract noted above navStack
+        /// .push). Saving is just snapshotting those three things;
+        /// loading is just replacing them and re-running the same
+        /// finishNavigation() step that back/forward/restart already
+        /// use to redraw the current passage and let plugins rebuild
+        /// their UI from state.
+        const SAVE_SCHEMA_VERSION = 1
+        const SAVE_SLOT_COUNT = 3
+        const SAVE_KEY_PREFIX = 'bb-save'
+
+        // Turns the story name into something safe to use in a
+        // localStorage key, so two differently-named stories hosted
+        // under the same origin never collide.
+        const storyKeyFragment = (story.name ?? 'untitled')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-+|-+$)/g, '') || 'untitled'
+
+        const saveStorageKey = (slot) => `${SAVE_KEY_PREFIX}:${storyKeyFragment}:${slot}`
+
+        // localStorage can throw (privacy mode, sandboxed iframes, some
+        // file:// setups) even just on access, not only when full. This
+        // checks once whether it's safe to use at all.
+        const storageIsAvailable = () => {
+            const testKey = '__bb_storage_test__'
+            try {
+                window.localStorage.setItem(testKey, '1')
+                window.localStorage.removeItem(testKey)
+                return true
+            } catch (e) {
+                return false
+            }
+        }
+
+        this.#issaveavailable = () => storageIsAvailable()
+
+        this.#savegame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            const data = {
+                schemaVersion: SAVE_SCHEMA_VERSION,
+                storyName: story.name,
+                savedAt: new Date().toISOString(),
+                passageName: navStack[stackPosition]?.passageName,
+                stackPosition,
+                navStack,
+                globalState
+            }
+
+            try {
+                window.localStorage.setItem(saveStorageKey(slot), JSON.stringify(data))
+                return true
+            } catch (e) {
+                console.log(`Could not save to slot ${slot}: ${e}`)
+                return false
+            }
+        }
+
+        this.#loadgame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            let raw
+            try {
+                raw = window.localStorage.getItem(saveStorageKey(slot))
+            } catch (e) {
+                console.log(`Could not read slot ${slot}: ${e}`)
+                return false
+            }
+
+            if (!raw) {
+                return false
+            }
+
+            let data
+            try {
+                data = JSON.parse(raw)
+            } catch (e) {
+                console.log(`Save in slot ${slot} is corrupt and could not be read: ${e}`)
+                return false
+            }
+
+            // A save only makes sense against the story it was made
+            // from. A mismatch here (different story, or a save made
+            // by a future/older version of this format) is refused
+            // rather than partially applied.
+            if (data.schemaVersion !== SAVE_SCHEMA_VERSION || data.storyName !== story.name) {
+                console.log(`Save in slot ${slot} does not match this story and was not loaded`)
+                return false
+            }
+
+            const restoredFrame = data.navStack?.[data.stackPosition]
+            if (!restoredFrame || !story.getPassageByName(restoredFrame.passageName)) {
+                console.log(`Save in slot ${slot} points at a passage that no longer exists and was not loaded`)
+                return false
+            }
+
+            navStack.splice(0, navStack.length, ...data.navStack)
+            stackPosition = data.stackPosition
+            globalState = data.globalState ?? {}
+
+            // A save always resumes as a normal, navigable passage. If
+            // navigation had been blocked (e.g. a defeat screen) at the
+            // moment of saving, that's re-derived from state as usual
+            // when finishNavigation() re-scans the passage below.
+            this.#allownavigation()
+
+            finishNavigation()
+            return true
+        }
+
+        this.#getsaveslots = () => {
+            const slots = []
+
+            for (let slot = 0; slot < SAVE_SLOT_COUNT; slot++) {
+                let raw
+                try {
+                    raw = window.localStorage.getItem(saveStorageKey(slot))
+                } catch (e) {
+                    slots.push({ slot, empty: true })
+                    continue
+                }
+
+                if (!raw) {
+                    slots.push({ slot, empty: true })
+                    continue
+                }
+
+                try {
+                    const data = JSON.parse(raw)
+                    slots.push({
+                        slot,
+                        empty: false,
+                        passageName: data.passageName,
+                        savedAt: data.savedAt
+                    })
+                } catch (e) {
+                    slots.push({ slot, empty: true })
+                }
+            }
+
+            return slots
+        }
+
         // Plugin Management
         const plugins = {}
 
@@ -358,6 +517,10 @@ export class Player {
                 getGlobalState: this.#stategetglobal,
                 preventNavigation: this.#preventnavigation,
                 allowNavigation: this.#allownavigation,
+                saveGame: this.#savegame,
+                loadGame: this.#loadgame,
+                getSaveSlots: this.#getsaveslots,
+                isSaveAvailable: this.#issaveavailable,
                 view: view
             })
         }
@@ -401,5 +564,44 @@ export class Player {
      */
     start () {
         this.#start()
+    }
+
+    /**
+     * Save the current game into the given slot (0-based). Overwrites
+     * whatever was previously in that slot.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the save succeeded
+     */
+    saveGame (slot) {
+        return this.#savegame(slot)
+    }
+
+    /**
+     * Load a game previously saved into the given slot (0-based). If
+     * the slot is empty, corrupt, or doesn't match the current story,
+     * this does nothing and returns false; the current game continues
+     * unaffected.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the load succeeded
+     */
+    loadGame (slot) {
+        return this.#loadgame(slot)
+    }
+
+    /**
+     * @returns {SaveSlotInfo[]} one entry per save slot, in order
+     */
+    getSaveSlots () {
+        return this.#getsaveslots()
+    }
+
+    /**
+     * @returns {Boolean} whether save/load can be used at all in this
+     * browser environment
+     */
+    isSaveAvailable () {
+        return this.#issaveavailable()
     }
 }
