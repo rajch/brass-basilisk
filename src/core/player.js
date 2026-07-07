@@ -257,10 +257,16 @@ export class Player {
             clearAfterCurrent()
 
             // This is the only operation that can push state on  the
-            // navigation stack. All other operations restore from it
+            // navigation stack. All others restore from it.
+            // Note: this is a shallow copy, not a deep clone. 
+            // Callers of setCurrentState are expected to treat the 
+            // values they store as immutable (clone before mutating 
+            // in place) so that old stack frames can safely keep 
+            // sharing references to them.
             navStack.push({
                 passageName,
-                state: structuredClone(currentState)
+                //state: structuredClone(currentState)
+                state: { ...currentState }
             })
             stackPosition = navStack.length - 1
 
