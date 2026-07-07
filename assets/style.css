@@ -169,6 +169,11 @@ section.content p {
     margin-bottom: 1rem;
 }
 
+section.content p.passagename {
+    text-align: center;
+    font-weight: bold;
+}
+
 section.content a.link,
 section.content a.link:visited,
 section.content a.stronglink,

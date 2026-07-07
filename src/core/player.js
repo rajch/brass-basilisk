@@ -41,7 +41,7 @@ export class Player {
     #getsaveslots
     /** @type {Function} */
     #issaveavailable
-    
+
     /** @type {Function} */
     #start
 
@@ -164,7 +164,10 @@ export class Player {
         const renderPassage = (passage) => {
             scanPassage(passage)
 
-            contentElement.innerHTML = transformPassageBody(passage.body)
+            const passageBodyHTML = transformPassageBody(passage.body)
+            const passageNameHTML = `<p class="passagename">${passage.name}</p>`
+
+            contentElement.innerHTML = `${passageNameHTML}${passageBodyHTML}`
 
             view.attachNavLinksHandler(linkClickedToNavigate, this.#blocklinks)
         }
@@ -324,7 +327,7 @@ export class Player {
         }
 
         /// This can be attached to link click events
-        function linkClickedToNavigate (e) {
+        function linkClickedToNavigate(e) {
             const linkElement = e.target
             const destPassageName = linkElement.getAttribute('data-destination')
             if (destPassageName) {
@@ -461,7 +464,7 @@ export class Player {
                 console.log(`Could not delete slot ${slot}: ${e}`)
                 return false
             }
-            
+
             return true
         }
 
@@ -573,14 +576,14 @@ export class Player {
      * Add a plugin to the player. The order of adding is important.
      * @param {BBPlugin} plugin 
      */
-    addPlugin (plugin) {
+    addPlugin(plugin) {
         this.#addplugin(plugin)
     }
 
     /**
      * Start playing the story.
      */
-    start () {
+    start() {
         this.#start()
     }
 
@@ -591,7 +594,7 @@ export class Player {
      * @param {Number} slot
      * @returns {Boolean} true if the save succeeded
      */
-    saveGame (slot) {
+    saveGame(slot) {
         return this.#savegame(slot)
     }
 
@@ -604,7 +607,7 @@ export class Player {
      * @param {Number} slot
      * @returns {Boolean} true if the load succeeded
      */
-    loadGame (slot) {
+    loadGame(slot) {
         return this.#loadgame(slot)
     }
 
@@ -615,14 +618,14 @@ export class Player {
      * @param {Number} slot
      * @returns {Boolean} true if the delete succeeded
      */
-    deleteGame (slot) {
+    deleteGame(slot) {
         return this.#deletegame(slot)
     }
 
     /**
      * @returns {SaveSlotInfo[]} one entry per save slot, in order
      */
-    getSaveSlots () {
+    getSaveSlots() {
         return this.#getsaveslots()
     }
 
@@ -630,7 +633,7 @@ export class Player {
      * @returns {Boolean} whether save/load can be used at all in this
      * browser environment
      */
-    isSaveAvailable () {
+    isSaveAvailable() {
         return this.#issaveavailable()
     }
 }
