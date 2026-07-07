@@ -138,6 +138,7 @@
  * @property {Function} allowNavigation
  * @property {(slot: number) => boolean} saveGame
  * @property {(slot: number) => boolean} loadGame
+ * @property {(slot: number) => boolean} deleteGame
  * @property {() => SaveSlotInfo[]} getSaveSlots
  * @property {() => boolean} isSaveAvailable
  * @property {View} view

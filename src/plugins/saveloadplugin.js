@@ -97,7 +97,16 @@ export class SaveLoadPlugin extends BBPlugin {
             }
         })
 
-        row.append(label, saveButton, loadButton)
+        const deleteButton = document.createElement('button')
+        deleteButton.type = 'button'
+        deleteButton.textContent = 'Delete'
+        deleteButton.disabled = slotInfo.empty
+        deleteButton.addEventListener('click', () => {
+            this.player.deleteGame(slotInfo.slot)
+            this.#refresh()
+        })
+
+        row.append(label, saveButton, loadButton, deleteButton)
 
         return row
     }

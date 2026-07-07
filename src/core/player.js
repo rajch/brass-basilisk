@@ -36,6 +36,8 @@ export class Player {
     /** @type {Function} */
     #loadgame
     /** @type {Function} */
+    #deletegame
+    /** @type {Function} */
     #getsaveslots
     /** @type {Function} */
     #issaveavailable
@@ -448,6 +450,21 @@ export class Player {
             return true
         }
 
+        this.#deletegame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            try {
+                window.localStorage.removeItem(saveStorageKey(slot))
+            } catch (e) {
+                console.log(`Could not delete slot ${slot}: ${e}`)
+                return false
+            }
+            
+            return true
+        }
+
         this.#getsaveslots = () => {
             const slots = []
 
@@ -519,6 +536,7 @@ export class Player {
                 allowNavigation: this.#allownavigation,
                 saveGame: this.#savegame,
                 loadGame: this.#loadgame,
+                deleteGame: this.#deletegame,
                 getSaveSlots: this.#getsaveslots,
                 isSaveAvailable: this.#issaveavailable,
                 view: view
@@ -588,6 +606,17 @@ export class Player {
      */
     loadGame (slot) {
         return this.#loadgame(slot)
+    }
+
+    /**
+     * Delete a game previously saved into the given slot (0-based). If
+     * the slot is empty, this does nothing and returns false.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the delete succeeded
+     */
+    deleteGame (slot) {
+        return this.#deletegame(slot)
     }
 
     /**
