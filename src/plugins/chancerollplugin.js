@@ -6,8 +6,8 @@ import { BBScannerPlugin } from "../core/plugin";
 
 import '../core/types'
 
-const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e\.(.*?)(?:\n|$)/
-const actionRegEx = /If you roll (?:a )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
+const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e[\.:](.*?)(?:\n|$)/
+const actionRegEx = /If you (?:roll (?:a )|score )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
 
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -91,7 +91,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
 
                 let result = `<div class="chancerollarea">${introStatement}.`
                 if (chanceroll.restOfParagraph !== '') {
-                    result = result + ` <span style="color: green;">${chanceroll.restOfParagraph}</span>\n`
+                    result = result + ` <span>${chanceroll.restOfParagraph}</span>\n`
                 }
                 result = result + '</div>'
 

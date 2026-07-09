@@ -70,6 +70,9 @@
 
     --dice-size: 50px;
     --dice-translatez: ;
+
+    /* -- Chance rolls -- */
+    --chanceroll-color: #4f7a68;
 }
 
 * {
@@ -661,6 +664,28 @@ div.rollstatus {
     border: var(--sidebar-accent-color) 4px solid;
     font-weight: bold;
     font-style: italic;
+}
+
+/* Chance Roll */
+.chancerollarea {
+    font-size: x-large;
+    font-weight: bold;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    color: var(--chanceroll-color);
+}
+
+/* If there is any untreated text on the roll line,
+   it should look like normal content. */
+.chancerollarea>span {
+    color: var(--content-color);
+    font-weight: normal;
+}
+
+/* For tabulated roll results, hidden ones should 
+   not take up vertical space. */
+.cr-result.hidden {
+    display: none;
 }
 
 @media (max-width:640px) {
