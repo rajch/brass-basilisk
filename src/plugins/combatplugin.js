@@ -55,7 +55,10 @@ export class CombatPlugin extends BBScannerPlugin {
         const updateFightArea = (message) => {
             const contentarea = player.view.content
             const rollstatusarea = contentarea.querySelector('.fightarea .rollstatus')
-            rollstatusarea.textContent = message
+            // rollstatusarea.textContent = message
+            const newStatus = document.createElement('span')
+            newStatus.textContent = message
+            rollstatusarea.replaceChildren(newStatus)
             const foevigourarea = contentarea.querySelector('.fightarea .foeVigour')
             foevigourarea.textContent = this.#combat.foeVigour
         }
@@ -120,13 +123,13 @@ export class CombatPlugin extends BBScannerPlugin {
 
                 const combat = this.#combat
                 const areacontent = this.#won
-                    ? `You defeated ${combat.foe} here.`
+                    ? `<span class="combatresult">You defeated ${combat.foe} here.</span>`
                         + (combat.destinations.winGoTo
                             ? `\n[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]\n`
                             : ''
                         )
                     : this.#lost
-                        ? `You were killed by ${combat.foe} in combat.`
+                        ? `<span class="combatresult">You were killed by ${combat.foe} here.</span>`
                             + (
                                 combat.destinations.loseGoTo
                                     ? `\n[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]\n`
@@ -150,29 +153,9 @@ export class CombatPlugin extends BBScannerPlugin {
     scan (passage) {
         const passageBody = passage.body
 
-        let combat
         const combatMatch = passageBody.match(combatRegex)
         if (combatMatch) {
-            // Check if there is old state
-            const state = this.getCurrentState()
-            if (state?.defeated) {
-                // Player had won earlier
-                this.#won = true
-                this.#lost = false
-                return true
-            } else if (state?.playerdefeated) {
-                // Player had lost earlier
-                this.#won = false
-                this.#lost = true
-                this.player.preventNavigation()
-                return true
-            }
-
-            // Player has neither won nor lost. Time to fight.
-            this.#won = false
-            this.#lost = false
-
-            combat = {
+            const combat = {
                 foe: combatMatch[1].trim(),
                 foeVigour: parseInt(combatMatch[2]),
                 numberOfDice: combatMatch[3],
@@ -213,13 +196,32 @@ export class CombatPlugin extends BBScannerPlugin {
             // If that paragraph could not be parsed, put it into
             // the combat object for restoring during transform.
             if (!combat.destinations.fleeTo
-                && !combat.destinations.winGoToTo
+                && !combat.destinations.winGoTo
                 && !combat.destinations.loseGoTo
             ) {
                 combat.lastParagragh = combatMatch[5]
             }
 
             this.#combat = combat
+
+            // First, check if there is old state
+            const state = this.getCurrentState()
+            if (state?.defeated) {
+                // Player had won earlier
+                this.#won = true
+                this.#lost = false
+                return true
+            } else if (state?.playerdefeated) {
+                // Player had lost earlier
+                this.#won = false
+                this.#lost = true
+                this.player.preventNavigation()
+                return true
+            }
+
+            // Player has neither won nor lost. Time to fight.
+            this.#won = false
+            this.#lost = false
 
             this.#diceboard.setDice(combat.numberOfDice)
             this.#diceboard.show('combat')

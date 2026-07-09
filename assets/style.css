@@ -536,6 +536,8 @@ div.combattable>div:first-child>div:nth-child(2) {
 }
 
 .foeVigour {
+    display: inline-block;
+    text-align: center;
     font-weight: bold;
     font-size: large;
     color: var(--link-color);
@@ -544,12 +546,37 @@ div.combattable>div:first-child>div:nth-child(2) {
     border: 1px solid var(--sidebar-accent-color);
     border-radius: 2px;
     padding: 0.1rem 0.4rem;
+    width: 2.5rem;
 }
 
 div.rollstatus {
     margin-top: 0.5rem;
     text-align: center;
     height: 2rem;
+}
+
+@keyframes combatPop {
+  0% {
+    opacity: 0;
+    transform: translateY(-15px) scale(0.85);
+    filter: brightness(2); /* Makes it flash slightly brighter on entry */
+  }
+  50% {
+    opacity: 1;
+    /* Scale slightly past 1 (1.05) to give it a "squish/impact" effect */
+    transform: translateY(2px) scale(1.05); 
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+}
+
+div.rollstatus>span {
+    display: inline-block;
+    animation: combatPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    font-weight: bold;
 }
 
 /* Cascade the combat row's contents in after the outer box has mostly
@@ -586,7 +613,17 @@ div.rollstatus {
     animation-delay: 0.95s;
 }
 
+.fightarea {
+    text-align: center;
+}
 
+.fightarea .combatresult {
+    display: inline-block;
+    padding: 1rem;
+    border: var(--sidebar-accent-color) 4px solid;
+    font-weight: bold;
+    font-style: italic;
+}
 
 @media (max-width:640px) {
     :root {
