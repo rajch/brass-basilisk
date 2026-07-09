@@ -44,6 +44,8 @@
 /**
  * @typedef Story
  * @property {string} name
+ * @property {string} [ifid] a stable GUID assigned by Twine when the story was created;
+ * absent on hand-authored/non-Twine-published tw-storydata
  * @property {FuncStringPassage} getPassageByName
  * @property {FuncVoidPassage} getStartPassage
  */

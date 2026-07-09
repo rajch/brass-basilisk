@@ -463,6 +463,11 @@ dialog.saveload .saveunavailable {
     font-style: italic;
 }
 
+dialog.saveload .saveloaderror {
+    font-weight: bold;
+    font-style: italic;
+}
+
 /* Combat */
 @keyframes flyin {
     to { 

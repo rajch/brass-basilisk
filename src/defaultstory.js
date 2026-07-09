@@ -9,6 +9,8 @@ export class DefaultStory {
     #storyname
     /** @type {string} */
     #startnodepid
+    /** @type {string} */
+    #ifid
 
     constructor() {
         const storyelement = document.querySelector('tw-storydata')
@@ -19,10 +21,22 @@ export class DefaultStory {
         this.#storyelement  = storyelement
         this.#storyname = storyelement.getAttribute('name')
         this.#startnodepid = storyelement.getAttribute('startnode')
+        // Twine always writes this onto a published story: a GUID
+        // generated once when the story is created, and stable across
+        // renames and re-exports (unlike name). Not present on
+        // hand-rolled tw-storydata such as our own test fixtures.
+        this.#ifid = storyelement.getAttribute('ifid') || undefined
     }
 
     get name () {
         return this.#storyname
+    }
+
+    /**
+     * @returns {string|undefined}
+     */
+    get ifid () {
+        return this.#ifid
     }
 
     /**

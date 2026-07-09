@@ -46,11 +46,14 @@ export class AttributePhrasePlugin extends BBScannerPlugin {
         let result = false
 
         // First check for death. All else is secondary.
+        // If death happens, nothing else needs to be
+        // done.
         if (passageBody.match(deadPhraseRegex)) {
             this.#charactersheet.psi = 0
             this.#charactersheet.agility = 0
             this.#charactersheet.vigour = 0
 
+            this.setCurrentState({ acted: true })
             return true
         }
 

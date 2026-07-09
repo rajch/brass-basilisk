@@ -103,17 +103,22 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         const currentState = this.getCurrentState()
 
         if (!currentState || !currentState.sheet) {
-
             this.#dialog.showModal()
+            return
+        }
 
-        } else {
+        this.#currentSheet.vigour = currentState.sheet.vigour
+        this.#currentSheet.agility = currentState.sheet.agility
+        this.#currentSheet.psi = currentState.sheet.psi
 
-            this.#currentSheet.vigour = currentState.sheet.vigour
-            this.#currentSheet.agility = currentState.sheet.agility
-            this.#currentSheet.psi = currentState.sheet.psi
+        this.#refreshdisplay()
 
-            this.#refreshdisplay()
-
+        // Re-derived every render (initial visit, back/forward, page
+        // reload, or a loaded save) rather than relying solely on the
+        // one-off side effect in the vigour setter below, which only
+        // fires at the moment vigour actually changes to zero.
+        if (this.#currentSheet.vigour <= 0) {
+            this.player.preventNavigation()
         }
     }
 
@@ -156,7 +161,10 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
 
         // Handle the death case
-        if (value === 0 ) {
+        // <= rather than === 0: a phrase that decreases VIGOUR by more
+        // than the character currently has overshoots straight past
+        // zero into negative territory, and should still count as dead.
+        if (value <= 0 ) {
             this.player.preventNavigation()
         }
     }

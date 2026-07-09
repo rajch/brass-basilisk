@@ -159,7 +159,6 @@ export class CombatPlugin extends BBScannerPlugin {
                 // Player had won earlier
                 this.#won = true
                 this.#lost = false
-                this.player.allowNavigation()
                 return true
             } else if (state?.playerdefeated) {
                 // Player had lost earlier
@@ -234,7 +233,13 @@ export class CombatPlugin extends BBScannerPlugin {
         }
 
         this.#diceboard.hide('combat')
-        this.player.allowNavigation()
+        // No allowNavigation() here: this scanner's job is only to
+        // manage blocking for *its own* concern (active/lost combat).
+        // Unconditionally allowing here would override a legitimate
+        // block set by another plugin (e.g. the player being dead from
+        // something other than combat) on every single render of a
+        // non-combat passage. Player-level per-render reset already
+        // handles the "nothing is blocking" default case.
         return false
     }
 }

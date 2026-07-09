@@ -162,6 +162,17 @@ export class Player {
         // of this process, hyperlinks are also generated.
         // Finally, hyperlinks are connected to navigation. 
         const renderPassage = (passage) => {
+            // Default to "allowed" for every render. Scanners are the
+            // only thing that can then block navigation again, based
+            // on current state. This makes blocking a positive, always
+            // re-derived fact about where the player currently is,
+            // rather than something a plugin has to remember to undo --
+            // which is what previously let a "player is dead" block
+            // silently disappear on reload/back-forward/a loaded save,
+            // once the plugin that first set it had already recorded
+            // that it had "acted" and so didn't run that logic again.
+            this.#allownavigation()
+
             scanPassage(passage)
 
             const passageBodyHTML = transformPassageBody(passage.body)
@@ -345,14 +356,24 @@ export class Player {
         /// finishNavigation() step that back/forward/restart already
         /// use to redraw the current passage and let plugins rebuild
         /// their UI from state.
-        const SAVE_SCHEMA_VERSION = 1
+        // Bumped from 1 to 2 with the addition of storyIfid below --
+        // a deliberate clean cutover rather than a migration, since
+        // the feature is brand new. Any v1 saves are simply refused.
+        const SAVE_SCHEMA_VERSION = 2
         const SAVE_SLOT_COUNT = 3
         const SAVE_KEY_PREFIX = 'bb-save'
 
-        // Turns the story name into something safe to use in a
-        // localStorage key, so two differently-named stories hosted
-        // under the same origin never collide.
-        const storyKeyFragment = (story.name ?? 'untitled')
+        // Prefer the story's ifid for identity: it's a GUID Twine
+        // assigns once when a story is created and never changes, so
+        // saves survive the story being renamed or re-exported. Only
+        // falls back to name for hand-authored/non-Twine tw-storydata
+        // that has no ifid at all.
+        const storyIdentityFragment = story.ifid ?? story.name ?? 'untitled'
+
+        // Turns the story identity into something safe to use in a
+        // localStorage key, so two different stories hosted under the
+        // same origin never collide.
+        const storyKeyFragment = storyIdentityFragment
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-+|-+$)/g, '') || 'untitled'
@@ -383,6 +404,7 @@ export class Player {
             const data = {
                 schemaVersion: SAVE_SCHEMA_VERSION,
                 storyName: story.name,
+                storyIfid: story.ifid,
                 savedAt: new Date().toISOString(),
                 passageName: navStack[stackPosition]?.passageName,
                 stackPosition,
@@ -427,8 +449,19 @@ export class Player {
             // A save only makes sense against the story it was made
             // from. A mismatch here (different story, or a save made
             // by a future/older version of this format) is refused
-            // rather than partially applied.
-            if (data.schemaVersion !== SAVE_SCHEMA_VERSION || data.storyName !== story.name) {
+            // rather than partially applied. Prefer comparing ifid
+            // when both sides have one -- it's stable across renames,
+            // where name isn't -- and fall back to name otherwise.
+            if (data.schemaVersion !== SAVE_SCHEMA_VERSION) {
+                console.log(`Save in slot ${slot} was made by an incompatible version and was not loaded`)
+                return false
+            }
+
+            const identityMatches = story.ifid && data.storyIfid
+                ? data.storyIfid === story.ifid
+                : data.storyName === story.name
+
+            if (!identityMatches) {
                 console.log(`Save in slot ${slot} does not match this story and was not loaded`)
                 return false
             }

@@ -17,6 +17,9 @@ export class SaveLoadPlugin extends BBPlugin {
     #list
     /** @type {HTMLElement} */
     #unavailableMessage
+    /** @type {HTMLElement} */
+    #saveloaderrorMessage
+
 
     constructor() {
         super('saveload')
@@ -25,7 +28,7 @@ export class SaveLoadPlugin extends BBPlugin {
     /**
      * @param {PlayerProxy} player
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
         const openButton = player.view.saveLoadButton
@@ -34,6 +37,7 @@ export class SaveLoadPlugin extends BBPlugin {
         this.#dialog = dialog
         this.#list = dialog.querySelector('.saveslotlist')
         this.#unavailableMessage = dialog.querySelector('.saveunavailable')
+        this.#saveloaderrorMessage = dialog.querySelector('.saveloaderror')
 
         const closeButton = dialog.querySelector('#slClose')
         closeButton?.addEventListener('click', () => dialog.close())
@@ -49,7 +53,7 @@ export class SaveLoadPlugin extends BBPlugin {
      * is opened, and again after a save so the new timestamp shows up
      * immediately.
      */
-    #refresh () {
+    #refresh() {
         if (!this.player.isSaveAvailable()) {
             this.#list.replaceChildren()
             this.#unavailableMessage?.classList.remove('hidden')
@@ -57,6 +61,7 @@ export class SaveLoadPlugin extends BBPlugin {
         }
 
         this.#unavailableMessage?.classList.add('hidden')
+        this.#saveloaderrorMessage?.classList.add('hidden')
 
         const slots = this.player.getSaveSlots()
         const rows = slots.map((slotInfo) => this.#buildRow(slotInfo))
@@ -68,7 +73,7 @@ export class SaveLoadPlugin extends BBPlugin {
      * @param {SaveSlotInfo} slotInfo
      * @returns {HTMLElement}
      */
-    #buildRow (slotInfo) {
+    #buildRow(slotInfo) {
         const row = document.createElement('div')
         row.className = 'saveslot'
 
@@ -82,7 +87,12 @@ export class SaveLoadPlugin extends BBPlugin {
         saveButton.type = 'button'
         saveButton.textContent = 'Save'
         saveButton.addEventListener('click', () => {
-            this.player.saveGame(slotInfo.slot)
+            const saved = this.player.saveGame(slotInfo.slot)
+            if (!saved) {
+                this.#saveloaderrorMessage?.classList.remove('hidden')
+                this.#saveloaderrorMessage.textContent = "Could not save."
+                return
+            }
             this.#refresh()
         })
 
@@ -92,9 +102,12 @@ export class SaveLoadPlugin extends BBPlugin {
         loadButton.disabled = slotInfo.empty
         loadButton.addEventListener('click', () => {
             const loaded = this.player.loadGame(slotInfo.slot)
-            if (loaded) {
-                this.#dialog.close()
+            if (!loaded) {
+                this.#saveloaderrorMessage?.classList.remove('hidden')
+                this.#saveloaderrorMessage.textContent = "Could not load."
+                return
             }
+            this.#dialog.close()
         })
 
         const deleteButton = document.createElement('button')
