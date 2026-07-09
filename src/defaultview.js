@@ -26,6 +26,7 @@ export class DefaultView {
         const titleElement = document.getElementById('storyTitle')
         if (titleElement) {
             titleElement.textContent = value
+            titleElement.setAttribute('title', value)
         }
     }
 

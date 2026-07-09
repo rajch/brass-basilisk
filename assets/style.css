@@ -58,6 +58,18 @@
        equal the sidebar palette today. -- */
     --character-sheet-border-color: var(--sidebar-accent-color);
     --character-sheet-backdrop-color: rgba(43, 29, 20, 0.75);
+
+    /* -- Dice -- */
+    --dice-background-color: #e8dcc0;
+    --dice-dot-color: #3b2a1a;
+    --dice-color: #3b2a1a;
+    --dice-1-background-color: #efe0bb;
+    --dice-2-background-color: #4a5f4e;
+    /* --roll-button-background-color: green;
+    --roll-button-color: white; */
+
+    --dice-size: 50px;
+    --dice-translatez: ;
 }
 
 * {
@@ -144,9 +156,11 @@ section.sidebar-1 .content {
 }
 
 section.sidebar-1 .toolbar button {
-    font-size: xx-large;
+    font-size: large;
     padding: 0.5rem;
     margin: 0.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
 }
 
 section.sidebar-2 {
@@ -191,29 +205,18 @@ section.content a.link.navblocked:visited {
 }
 
 h1.storyTitle {
-    word-break: break-all;
     font-family: var(--font-heading);
     color: var(--sidebar-accent-color);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
     text-shadow: var(--heading-emboss-shadow);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 
 /* Dice */
-:root {
-    --dice-background-color: #e8dcc0;
-    --dice-dot-color: #3b2a1a;
-    --dice-color: #3b2a1a;
-    --dice-1-background-color: #efe0bb;
-    --dice-2-background-color: #4a5f4e;
-    --roll-button-background-color: green;
-    --roll-button-color: white;
-
-    --dice-size: 50px;
-    --dice-translatez: ;
-}
-
 .dice,
 .dice .side,
 .dice .side svg {
@@ -293,9 +296,9 @@ h1.storyTitle {
     column-gap: 16px;
 }
 
-.diceboard {
+/* .diceboard {
     margin: 1rem 0;
-}
+} */
 
 /* .dicerollbutton {
     margin: 0.25rem;
@@ -305,6 +308,36 @@ h1.storyTitle {
     background-color: var(--roll-button-background-color);
     color: var(--roll-button-color);
 } */
+.diceboard {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid var(--sidebar-border-color);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.diceboard .buttonsarea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.diceboard label.rollresultlabel {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: center;
+    max-width: 14rem;
+    font-size: small;
+    min-height: 1rem;
+}
+
 
 /* Character Sheet */
 
@@ -350,6 +383,7 @@ h1.storyTitle {
         transform: scale(1.2);
         box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.9);
     }
+
     100% {
         transform: scale(1);
         box-shadow: 0 0 0 0.5rem rgba(184, 134, 11, 0);
@@ -470,11 +504,11 @@ dialog.saveload .saveloaderror {
 
 /* Combat */
 @keyframes flyin {
-    to { 
+    to {
         filter: blur(0);
         transform: scale(1);
         opacity: 1;
-      }
+    }
 }
 
 .combattable {
@@ -556,21 +590,24 @@ div.rollstatus {
 }
 
 @keyframes combatPop {
-  0% {
-    opacity: 0;
-    transform: translateY(-15px) scale(0.85);
-    filter: brightness(2); /* Makes it flash slightly brighter on entry */
-  }
-  50% {
-    opacity: 1;
-    /* Scale slightly past 1 (1.05) to give it a "squish/impact" effect */
-    transform: translateY(2px) scale(1.05); 
-    filter: brightness(1.2);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-    filter: brightness(1);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.85);
+        filter: brightness(2);
+        /* Makes it flash slightly brighter on entry */
+    }
+
+    50% {
+        opacity: 1;
+        /* Scale slightly past 1 (1.05) to give it a "squish/impact" effect */
+        transform: translateY(2px) scale(1.05);
+        filter: brightness(1.2);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+    }
 }
 
 div.rollstatus>span {
@@ -586,6 +623,7 @@ div.rollstatus>span {
         opacity: 0;
         transform: translateY(8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -686,7 +724,7 @@ div.rollstatus {
         display: inline-block;
         width: unset;
     }
-    
+
     .sidebar-1 .charactersheet>div>label:first-child {
         font-weight: unset;
         text-align: unset;
