@@ -131,7 +131,7 @@ const parseToken = (stream, state) => {
     }
 
     // Detect chance roll
-    const chanceRollRE = /^(?:[Rr]oll|[Tt]hrow) (?:\d+|one|two|three) di(?:c?)e\./
+    const chanceRollRE = /^(?:[Rr]oll|[Tt]hrow) (?:1|01|2|02|3|03|one|two|three) di(?:c?)e[\.:]/
     if (stream.match(chanceRollRE, true)) {
         return "variable-3 strong"
     }
