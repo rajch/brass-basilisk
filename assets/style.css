@@ -73,6 +73,10 @@
 
     /* -- Chance rolls -- */
     --chanceroll-color: #4f7a68;
+
+    /* -- Attribute phrases -- */
+    --attribute-phrase-color: var(--chanceroll-color);
+    --dead-phrase-color: #8b4a3a;
 }
 
 * {
@@ -158,12 +162,19 @@ section.sidebar-1 .content {
     flex-grow: 1;
 }
 
+section.sidebar-1 .toolbar {
+    display: flex;
+}
+
 section.sidebar-1 .toolbar button {
     font-size: large;
     padding: 0.5rem;
     margin: 0.25rem;
     width: 2.75rem;
     height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center
 }
 
 section.sidebar-2 {
@@ -687,6 +698,18 @@ div.rollstatus {
 .cr-result.hidden {
     display: none;
 }
+
+/* Attribute phrases */
+.attrphrase {
+    color: var(--attribute-phrase-color);
+    font-weight: bold;
+    font-style: italic;
+}
+
+.attrphrase.dead {
+    color: var(--dead-phrase-color);   
+}
+
 
 @media (max-width:640px) {
     :root {

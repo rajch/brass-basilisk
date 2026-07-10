@@ -23,20 +23,46 @@ export class AttributePhrasePlugin extends BBScannerPlugin {
      * 
      * @param {PlayerProxy} player 
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
         this.#charactersheet = player.getPlugin('charactersheet')
         if (!this.#charactersheet) {
             throw new Error('Attribute Phrase plugin requires Character Sheet plugin')
         }
+
+        this.player.addTransformer(
+            /**
+             * @param {string} input 
+             */
+            (input) => {
+                if (!this.active) {
+                    return input
+                }
+
+                let result = input
+                if(result.match(deadPhraseRegex)) {
+                    result = result.replace(deadPhraseRegex, `<p><span class="attrphrase dead">You are dead.<span></p>`)
+                }
+
+                const phraseMatch = result.match(phraseRegex)
+                if(phraseMatch) {
+                    result = result.replace(
+                        phraseRegex,
+                        `<span class="attrphrase">Your $1 $2 $3.</span>`
+                    ).replace(/(\w)\s+\./g, '$1.')
+                }
+
+                return result
+            }
+        )
     }
 
     /**
      * 
      * @param {Passage} passage 
      */
-    scan (passage) {
+    scan(passage) {
         const currentState = this.getCurrentState()
         if (currentState && currentState.acted) {
             return true
