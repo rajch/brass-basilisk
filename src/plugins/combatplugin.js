@@ -7,8 +7,11 @@ import { BBScannerPlugin } from "../core/plugin";
 
 import '../core/types'
 
-const combatRegex = /\n+([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
-const combatRuleRegex = /score\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g
+//const combatRegex = /\n+([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
+const combatRegex = /(?:\n+|^)([A-Z][A-Z\s\-]*?[A-Z])\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+di(?:c)?e[\.:]\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
+// const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-\.:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g
+// const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-\.:]+\s)+?([Ll]oses?)\s+(\d+)\s+VIGOUR/g
+const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s*[:,;]?\s+(?:[\w;,\-\.:'"‘’“”]+\s)+?([Ll]oses?)\s+(\d+)\s+VIGOUR/g
 const destRegex = /[Ii]f .*?(FLEE|win|lose).*?turn to (\d{1,3})\./g
 
 export class CombatPlugin extends BBScannerPlugin {
@@ -169,9 +172,15 @@ export class CombatPlugin extends BBScannerPlugin {
                 combat.rules.push({
                     rangeLow: parseInt(ruleMatch[1]),
                     rangeHigh: parseInt(ruleMatch[2]),
-                    action: ruleMatch[3],
+                    action: ruleMatch[3].toLowerCase(),
                     turnAmount: parseInt(ruleMatch[4])
                 });
+            }
+
+            // If no rules could be parsed, no combat at all
+            if (combat.rules.length === 0) {
+                this.#diceboard.hide('combat')
+                return false        
             }
 
             // If there is a paragraph after the rules table

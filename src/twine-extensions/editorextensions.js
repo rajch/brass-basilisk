@@ -18,12 +18,13 @@ const expandRuleset = (compact) => {
 
     for (const rule of rules) {
         const [range, result, text] = rule.split(':');
-        const [low, high] = range.split('-');
+        let [low, high] = range.split('-');
+        high = high ?? low;
         const [target, amount] = result.split('-');
         const targetText = target === 'P'
             ? `You lose ${amount} VIGOUR`
             : `${foe} loses ${amount} VIGOUR`;
-        const scoreband = `${String(low).padStart(2, '0')}${high ? ' to ' + String(high).padStart(2, '0') : ''}`.padEnd(8, ' ')
+        const scoreband = `Score ${String(low).padStart(2, '0')}${high ? ' to ' + String(high).padStart(2, '0') : ''}`.padEnd(8, ' ')
         output += `${scoreband}    ${text}. ${targetText}\n`;
     }
 
@@ -89,6 +90,7 @@ const insertHardChanceRoll = (editor) => {
 }
 
 const parseToken = (stream, state) => {
+    console.dir(state)
     if (stream.eol()) {
         return null
     }
@@ -96,13 +98,15 @@ const parseToken = (stream, state) => {
     // Look for combat start at beginning of stream
     if (stream.sol()) {
         const combatStart = stream.match(
-            /^([A-Z]+)\s+VIGOUR\s+\d+/,
+            /^([A-Z][A-Z\s\-]*?[A-Z]+)\s+VIGOUR\s+\d+/,
             false
         )
         if (combatStart) {
             state.combatDetected = true
             state.foeName = combatStart[1]
-            stream.skipTo(' ')
+            // Skip until end of name
+            stream.match(/^([A-Z][A-Z\s\-]*?[A-Z])(?=\s+VIGOUR)/, true)
+            // stream.skipTo(' ')
             return "string strong"
         }
     }
