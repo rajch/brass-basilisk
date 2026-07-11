@@ -7,7 +7,8 @@ import { BBScannerPlugin } from "../core/plugin";
 import '../core/types'
 
 const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e[\.:](.*?)(?:\n|$)/
-const actionRegEx = /If you (?:roll (?:a )|score )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
+//const actionRegEx = /If you (?:roll (?:a )|score )?(\d{1,2})( or(?: a)? | to |)(\d{0,2}),([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
+const actionRegEx = /If you (?:roll |score )(?:an? )?(\d{1,2})( or(?: an?)? | to |)(\d{0,2})[,:]([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g
 
 export class ChanceRollPlugin extends BBScannerPlugin {
     /** @type {DiceBoardPlugin} */
@@ -23,7 +24,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
      * 
      * @param {PlayerProxy}} player 
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
         this.#diceboard = player.getPlugin('diceboard')
@@ -120,7 +121,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
      * @param {Passage} passage 
      * @returns {Boolean}
      */
-    scan (passage) {
+    scan(passage) {
         const passageBody = passage.body
 
         const match = passageBody.match(chanceRegEx)
@@ -149,7 +150,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
             const chanceAction = {
                 rangeStart: destMatch[1],
                 rangeEnd: destMatch[3],
-                rangeOperator: destMatch[2].trim().toLocaleLowerCase(),
+                rangeOperator: destMatch[2].trim().substring(0, 2).toLowerCase(),
                 sentence: destMatch[4],
                 destination: destMatch[5]
             }
@@ -162,6 +163,7 @@ export class ChanceRollPlugin extends BBScannerPlugin {
             chanceroll.restOfParagraph = restOfParagraph
         }
 
+        console.dir(chanceroll)
         this.#chanceroll = chanceroll
 
         this.#diceboard.setDice(numdice)
@@ -176,8 +178,19 @@ export class ChanceRollPlugin extends BBScannerPlugin {
     }
 }
 
-const rollInRange = (action, rollResult) => {
-    return (!action.rangeEnd && rollResult == action.rangeStart)
-        || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
-        || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
-}
+
+const rollInRange =
+    /**
+     *  @param {ChanceAction} action
+     *  @param {Number} rollResult
+     *  @returns {boolean}
+     */
+    (action, rollResult) => {
+        if (action.rangeOperator == 'or') {
+            return (rollResult == action.rangeStart || rollResult == action.rangeEnd)
+        }
+
+        return (!action.rangeEnd && rollResult == action.rangeStart)
+            || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
+            || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
+    }

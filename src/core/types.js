@@ -167,3 +167,11 @@
  * @property {Action} action 
  * */
 
+/**
+ * @typedef {Object} ChanceAction
+ * @property {Number} rangeStart
+ * @property {Number} rangeEnd
+ * @property {string} rangeOperator
+ * @property {string} sentence
+ * @property {string} destination
+ */
