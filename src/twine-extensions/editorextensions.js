@@ -141,7 +141,7 @@ const parseToken = (stream, state) => {
     }
 
     // Detect attribute phrases
-    const phraseRE = /^Your (?:VIGOUR|AGILITY|PSI) (?:(?:is restored)|(?:increases by)|(?:decreases by)|(?:reduces by))(?: \d{1,2})?\./
+    const phraseRE = /^Your (VIGOUR|AGILITY|PSI) (?:(is restored)\.|(increases by|decreases by|reduces by) (\d{1,2})\.)/
     if (stream.match(phraseRE, true)) {
         return "variable-3 strong em"
     }
