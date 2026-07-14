@@ -151,6 +151,12 @@ const parseToken = (stream, state) => {
         return "variable-3 strong em"
     }
 
+    // Detect stat check rolls
+    const statCheckRE = /(?:Roll|Throw) (1|2|one|two) di(?:c)?e,? and try to (?:roll|score) (equal to or less than|less than or equal to|less than) your(?: current)? (AGILITY|PSI). If you succeed, turn to (\d{1,3}). If you fail, turn to (\d{1,3})./
+    if(stream.match(statCheckRE, true)) {
+        return "variable-3 em"
+    }
+
     // Detect VIGOUR, AGILITY, PSI
     if (stream.match(/^(?:VIGOUR)|(?:AGILITY)|(?:PSI)|(?:FLEE)/, true)) {
         return "keyword strong"
