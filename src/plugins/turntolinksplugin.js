@@ -21,7 +21,7 @@ export class TurnToLinksPlugin extends BBPlugin {
          * @param {string} text 
          */
         const transformTurnTo = (text) => {
-            return text.replaceAll(/([Tt]urn to )(\d{1,3})/g, '[[$1 $2-&gt;$2]]')
+            return text.replaceAll(/(turn to )(\d{1,3})/ig, '[[$1 $2-&gt;$2]]')
         }
 
         player.addTransformer(transformTurnTo)
