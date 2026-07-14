@@ -10,6 +10,7 @@ import { Player } from "./core/player"
 import { TurnToLinksPlugin } from "./plugins/turntolinksplugin"
 import { AttributePhrasePlugin } from "./plugins/attributephraseplugin"
 import { SaveLoadPlugin } from "./plugins/saveloadplugin"
+import { StatCheckRollPlugin } from "./plugins/statcheckrollplugin"
 
 
 try {
@@ -25,6 +26,8 @@ try {
     player.addPlugin(new ChanceRollPlugin)
 
     player.addPlugin(new AttributePhrasePlugin)
+
+    player.addPlugin(new StatCheckRollPlugin)
 
     player.addPlugin(new TurnToLinksPlugin)
 

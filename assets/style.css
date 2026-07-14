@@ -77,6 +77,9 @@
     /* -- Attribute phrases -- */
     --attribute-phrase-color: var(--chanceroll-color);
     --dead-phrase-color: #8b4a3a;
+
+    /* -- Stat check rolls -- */
+    --stat-check-roll-color: var(--chanceroll-color);
 }
 
 * {
@@ -708,6 +711,15 @@ div.rollstatus {
 
 .attrphrase.dead {
     color: var(--dead-phrase-color);   
+}
+
+/* Stat check rolls */
+.statcheckarollarea {
+    color: var(--stat-check-roll-color);
+}
+
+.statcheckarollarea .hidden {
+    display: none;
 }
 
 

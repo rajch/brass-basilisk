@@ -91,7 +91,6 @@
  * @property {TransformerFunc} transformParagraphs
  * @property {(name: string) => HTMLDivElement} getToolPanel
  * @property {(name: string) => HTMLDialogElement} getDialog
- * @property 
  */
 
 /**
@@ -174,4 +173,13 @@
  * @property {string} rangeOperator
  * @property {string} sentence
  * @property {string} destination
+ */
+
+/**
+ * @typedef {Object} StatCheckRoll
+ * @property {Number} numDice
+ * @property {string} operator  Can be < or <=
+ * @property {string} stat  Can be PSI or AGILITY
+ * @property {Number} successGoTo
+ * @property {Number} failGoTo
  */
