@@ -1,49 +1,66 @@
 'use strict';
 
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { WebSocketServer } from 'ws'; // The only lightweight dep needed for reload, or skip completely
 import { watch } from 'chokidar';
-import server from 'alive-server';
-
-const watcher = watch(	[
-		'src/*.js',
-		'assets/template.html',
-		'assets/style.css',
-		'assets/sampledata.html'
-	],
-	{
-		disableGlobbing: false,
-		awaitWriteFinish: true
-	}
-);
-
 import bt from './buildtools.mjs';
 
-console.log('Setting up watcher...')
-watcher.on('change', async () => {
-	await bt.buildSample(false);
+const args = process.argv.join(' ');
+const transpileToES5 = /\s--es5(\s|$)/.test(args);
+
+// 1. Core Native HTTP Server
+const PORT = 8181;
+const server = http.createServer((req, res) => {
+	// Always serve out/sample.html for your Twine testing environment
+	const filePath = path.join('out', 'sample.html');
+	
+	fs.readFile(filePath, 'utf8', (err, content) => {
+		if (err) {
+			res.writeHead(500, { 'Content-Type': 'text/plain' });
+			res.end('Error loading sample.html. Did it build successfully?');
+			return;
+		}
+		
+		// Inject a tiny, clean client-side reload script on the fly
+		const injectScript = `
+			<script>
+				const ws = new WebSocket('ws://' + location.host);
+				ws.onmessage = (msg) => { if (msg.data === 'reload') location.reload(); };
+			</script>
+		`;
+		
+		res.writeHead(200, { 'Content-Type': 'text/html' });
+		res.end(content + injectScript);
+	});
 });
 
-const es5OptPos = process.argv.findIndex((value) => value.toLowerCase() === '--es5');
-const transpileToES5 = es5OptPos > -1 ? true : false;
+// 2. Ultra-lightweight WebSocket server for live reload trigger
+const wss = new WebSocketServer({ server });
+let sockets = [];
+wss.on('connection', (ws) => {
+	sockets.push(ws);
+	ws.on('close', () => sockets = sockets.filter(s => s !== ws));
+});
 
-console.log('Building sample.html...')
-await async function() {
+// 3. File Watcher & Orchestration
+const watcher = watch(
+	['src/*.js', 'assets/template.html', 'assets/style.css', 'assets/sampledata.html'],
+	{ awaitWriteFinish: true }
+);
+
+console.log('Performing baseline build...');
+await bt.buildSample(false, transpileToES5);
+
+watcher.on('change', async () => {
+	console.log('Change detected! Recompiling...');
 	await bt.buildSample(false, transpileToES5);
-}();
+	
+	// Trigger browser refresh via websockets
+	sockets.forEach(ws => ws.send('reload'));
+});
 
-var params = {
-	port: 8181, // Set the server port. Defaults to 8080.
-	host: "0.0.0.0", // Set the address to bind to. Defaults to 0.0.0.0 or process.env.IP.
-	root: "out/", // Set root directory that's being served. Defaults to cwd.
-	open: false, // When false, it won't load your browser by default.
-	ignore: 'node_modules,scripts', // comma-separated string for paths to ignore
-	file: "", // When set, serve this file (server root relative) for every 404 (useful for single-page applications)
-	wait: 1000, // Waits for all changes, before reloading. Defaults to 0 sec.
-	// mount: [['/components', './node_modules']], // Mount a directory to a route.
-	logLevel: 2, // 0 = errors only, 1 = some, 2 = lots
-	// middleware: [function(req, res, next) { next(); }], // Takes an array of Connect-compatible middleware that are injected into the server middleware stack
-	mimetypes: { 'application/wasm': ['.wasm'], 'text/css': ['.css'] }, // Set extended MIME types,
-	index: 'sample.html' // By default send supports "index.html" files, to disable this set false or to supply a new index pass a string or an array in preferred order 
-};
-
-console.log('Development server ready.')
-server.start(params);
+server.listen(PORT, '0.0.0.0', () => {
+	console.log(`Development server ready at http://localhost:${PORT}`);
+});

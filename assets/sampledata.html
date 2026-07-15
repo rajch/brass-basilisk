@@ -1,80 +1,81 @@
 <tw-storydata name="Sample Story" startnode="1" ifid="64493351-8350-4664-A6E9-D909BC684E12">
-    <tw-passagedata pid="1" name="Start" tags="tag1 tag2">
-        Some content.
-        Lots of content on this page, but very little on the [[Next-1]].
-        Fear not, though. All will be well. 
-        
-        You could turn to 100 if you want immediate action.
-    </tw-passagedata>
-    <tw-passagedata pid="2" name="Next-1" tags="tag1 tag2">
-        Some more content.
-        Although, one surmises, there will be [[even more->Next-2]].
-    </tw-passagedata>
-    <tw-passagedata pid="3" name="Next-2" tags="tag1 tag2 tag3">
-        Even more content
-        As promised. Perhaps you would like to [[return|Next-1]]?
-        Or [[Start again at the beginning->Start]]?
-        Or [[99&lt;-Go on to 99]]?
-        
-        Maybe turn to 99.
-    </tw-passagedata>
-    <tw-passagedata pid="4" name="99">
-        You are confused.
+<tw-passagedata pid="1" name="Start" tags="tag1 tag2">
+Some content.
+Lots of content on this page, but very little on the [[Next-1]].
+Fear not, though. All will be well. 
 
-        Roll three dice. If you roll 12 to 18, you should [[go back to optimism->Next-1]]. If you roll 1 to 10, you should turn to 100. If you roll 11, you are stunned and need to roll again.
-    </tw-passagedata>
-    <tw-passagedata pid="5" name="100" tags="tag1 tag2 tag3">
-        True to form, it is time for a boss fight.
+You could turn to 100 if you want immediate action.
+</tw-passagedata>
+<tw-passagedata pid="2" name="Next-1" tags="tag1 tag2">
+Some more content.
+Although, one surmises, there will be [[even more->Next-2]].
+</tw-passagedata>
+<tw-passagedata pid="3" name="Next-2" tags="tag1 tag2 tag3">
+Even more content
+As promised. Perhaps you would like to [[return|Next-1]]?
+Or [[Start again at the beginning->Start]]?
+Or [[99&lt;-Go on to 99]]?
 
-        BOSS VIGOUR 12
+Maybe turn to 99.
+</tw-passagedata>
+<tw-passagedata pid="4" name="99">
+You are confused.
 
-        Roll two dice:
-        score 2 to 5 You are hit and lose 3 VIGOUR
-        score 6 to 12 The Boss loses 3 VIGOUR
-        
-        If you FLEE, turn to 99. If you win the fight, turn to 200.
+Roll three dice. If you roll 12 to 18, you should [[go back to optimism->Next-1]]. If you roll 1 to 10, you should turn to 100. If you roll 11, you are stunned and need to roll again.
+</tw-passagedata>
+<tw-passagedata pid="5" name="100" tags="tag1 tag2 tag3">
+True to form, it is time for a boss fight.
 
-        If the boss is defeated, you will have the option to [[go back to the start->Start]].
-    </tw-passagedata>
-    <tw-passagedata pid="6" name="200">
-        The fight has taken a lot out of you mentally.
+BOSS VIGOUR 12
 
-        Your PSI decreases by 2.
+Roll two dice:
 
-        Do you go on (turn to 203)?
-        Or do you invoke Kung Fu healing (turn to 201)?
-        Or do you go to a proper allopathic hospital (turn to 202)?
-    </tw-passagedata>
-    <tw-passagedata pid="7" name="201">
-        You rapidly move through three moves of Kung Fu healing.
+score 2 to 5 You are hit and lose 3 VIGOUR
+score 6 to 12 The Boss loses 3 VIGOUR
 
-        Your VIGOUR increases by 10.
+If you FLEE, turn to 99. If you win the fight, turn to 200.
 
-        But at a small cost to your Chi.
+If the boss is defeated, you will have the option to [[go back to the start->Start]].
+</tw-passagedata>
+<tw-passagedata pid="6" name="200">
+The fight has taken a lot out of you mentally.
 
-        Your PSI reduces by 1.
+Your PSI decreases by 2.
 
-        Turn to 203.
+Do you go on (turn to 203)?
+Or do you invoke Kung Fu healing (turn to 201)?
+Or do you go to a proper allopathic hospital (turn to 202)?
+</tw-passagedata>
+<tw-passagedata pid="7" name="201">
+You rapidly move through three moves of Kung Fu healing.
 
-        Or, [[return to the beginning->Start]].
-    </tw-passagedata>
-    <tw-passagedata pid="7" name="202">
-        You go to L H Hiranandani Hospital.
+Your VIGOUR increases by 10.
 
-        The doctors there treat you properly.
+But at a small cost to your Chi.
 
-        Your VIGOUR is restored.
+Your PSI reduces by 1.
 
-        Your PSI is restored.
+Turn to 203.
 
-        Turn to 203.
+Or, [[return to the beginning->Start]].
+</tw-passagedata>
+<tw-passagedata pid="7" name="202">
+You go to L H Hiranandani Hospital.
 
-        Or, [[return to the beginning->Start]].
-    </tw-passagedata>
-    <tw-passagedata pid="8" name="203" tags="happyending">
-        You have, finally, reached the end.
-    </tw-passagedata>
-    <style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
-        .content p:nth-of-type(2) { color:red !important; }
-    </style>
+The doctors there treat you properly.
+
+Your VIGOUR is restored.
+
+Your PSI is restored.
+
+Turn to 203.
+
+Or, [[return to the beginning->Start]].
+</tw-passagedata>
+<tw-passagedata pid="8" name="203" tags="happyending">
+You have, finally, reached the end.
+</tw-passagedata>
+<style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">
+.content p:nth-of-type(2) { color:red !important; }
+</style>
 </tw-storydata>
