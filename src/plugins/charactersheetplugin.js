@@ -6,8 +6,6 @@ import '../core/types'
 export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     /** @type CharacterSheet */
     #currentSheet
-    /** @type CharacterSheet */
-    #globalSheet
 
     /** @type {HTMLLabelElement} */
     #vigourlabel
@@ -23,20 +21,20 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     constructor() {
         super('charactersheet')
 
-        this.#globalSheet = {
-            vigour: 0,
-            agility: 0,
-            psi: 0
-        }
+        this.#currentSheet = { vigour: 0, agility: 0, psi: 0 }
+    }
 
-        this.#currentSheet = structuredClone(this.#globalSheet)
+
+    /** @type CharacterSheet */
+    get #maxSheet() {
+        return this.player.getGlobalState(this.name)?.sheet ?? { vigour: 0, agility: 0, psi: 0 }
     }
 
     /**
      * 
      * @param {PlayerProxy} player 
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
         const element = player.view.getToolPanel('charactersheet')
@@ -64,7 +62,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         const agilityInput = dialog.querySelector('#csAgility')
         const psiInput = dialog.querySelector('#csPsi')
 
-        function rollNewSheet () {
+        function rollNewSheet() {
             vigourInput.valueAsNumber = Math.floor(Math.random() * 12) + 20
             agilityInput.valueAsNumber = Math.floor(Math.random() * 6) + 3
             psiInput.valueAsNumber = Math.floor(Math.random() * 6) + 3
@@ -79,11 +77,11 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         })
 
         dialog.addEventListener('close', (e) => {
-            this.#globalSheet.vigour = vigourInput.valueAsNumber
-            this.#globalSheet.agility = agilityInput.valueAsNumber
-            this.#globalSheet.psi = psiInput.valueAsNumber
-
-            this.#currentSheet = structuredClone(this.#globalSheet)
+            this.#currentSheet = {
+                vigour: vigourInput.valueAsNumber,
+                agility: agilityInput.valueAsNumber,
+                psi: psiInput.valueAsNumber
+            }
 
             this.setGlobalState({
                 sheet: this.#currentSheet
@@ -95,7 +93,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         this.#dialog = dialog
     }
 
-    scan (passage) {
+    scan(passage) {
         /**
          * @returns {CharacterSheet}
          */
@@ -129,7 +127,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      *
      * @param {HTMLLabelElement} label
      */
-    #flash (label) {
+    #flash(label) {
         label.classList.remove('stat-flash')
         // Trick to force the browser to restart a CSS animation
         void label.offsetWidth
@@ -140,7 +138,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @returns {Number|null}
      */
-    get vigour () {
+    get vigour() {
         return this.#currentSheet.vigour
     }
 
@@ -150,9 +148,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @param {Number} value 
      */
-    set vigour (value) {
-        if (value > this.#globalSheet.vigour) {
-            value = this.#globalSheet.vigour
+    set vigour(value) {
+        if (value > this.#maxSheet.vigour) {
+            value = this.#maxSheet.vigour
         }
 
         this.#currentSheet.vigour = value
@@ -164,7 +162,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         // <= rather than === 0: a phrase that decreases VIGOUR by more
         // than the character currently has overshoots straight past
         // zero into negative territory, and should still count as dead.
-        if (value <= 0 ) {
+        if (value <= 0) {
             this.player.preventNavigation()
         }
     }
@@ -173,7 +171,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @returns {Number|null}
      */
-    get agility () {
+    get agility() {
         return this.#currentSheet.agility
     }
 
@@ -183,9 +181,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @param {Number} value 
      */
-    set agility (value) {
-        if (value > this.#globalSheet.agility) {
-            value = this.#globalSheet.agility
+    set agility(value) {
+        if (value > this.#maxSheet.agility) {
+            value = this.#maxSheet.agility
         }
 
         this.#currentSheet.agility = value
@@ -198,7 +196,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @returns {Number|null}
      */
-    get psi () {
+    get psi() {
         return this.#currentSheet.psi
     }
 
@@ -208,9 +206,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      * 
      * @param {Number} value 
      */
-    set psi (value) {
-        if(value > this.#globalSheet.psi) {
-            value = this.#globalSheet.psi
+    set psi(value) {
+        if (value > this.#maxSheet.psi) {
+            value = this.#maxSheet.psi
         }
 
         this.#currentSheet.psi = value
