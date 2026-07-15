@@ -2,191 +2,236 @@
 
 ## Introduction
 
-This is a guide to the Brass Basilisk [story format](https://twinery.org/reference/en/getting-started/basic-concepts.html#story-formats) for [Twine/Twee](https://twinery.org/). This story format was made to easily create and play stories resembling the classic [Golden Dragon Fantasy Gamebooks](https://gamebooks.org/Series/14).
+Welcome to **Brass Basilisk**, a specialized story format for [Twine/Twee](https://twinery.org/). This format is designed specifically to let you easily create and play interactive adventures resembling the classic [Golden Dragon Fantasy Gamebooks](https://gamebooks.org/Series/14).
 
+In these stories, the reader *is* the hero. Each adventure takes the player through a branching narrative peppered with tactical decisions, pure chance, and deadly combat—all governed by simulated dice rolls. 
 
-In these stories, the reader/player *is* the hero. Each story takes the player through a rollicking adventure, peppered with branching decisions, situations involving pure chance, and combat. Dice rolls are used for all these mechanics. The story format provides ways for authors to write them into their stories, and for players to play them.
+One of the core design goals of Brass Basilisk is **zero special markup or code**. You write your stories entirely in plain text. The engine automatically detects mechanics like dice rolls, stat changes, and combat by listening for specific linguistic patterns in your prose. 
 
-One goal of the Brass Basilisk story format is to prevent the use of special markup or code. Stories are written in plain text - mechanics like dice rolls and combat are detected from patterns in the text. 
+While stories are traditionally written in the second person ("You open the door..."), this is a stylistic choice rather than a strict engine rule.
 
-The stories are usually told in second person, although this is not a strict rule.
+## Game Mechanics
 
-## Game mechanics
+Stories are composed using standard Twine/Twee passages. A player's progress and physical state are tracked using three core statistics:
 
-Stories are composed using normal Twine/Twee _passages_. Player progress and prowess in a story are tracked through three statistics:
+* **VIGOUR**: Represents physical strength, fitness, and the general will to survive. If VIGOUR drops to 0, the player dies and the game is over.
+* **PSI**: Represents psychic sensitivity and willpower.
+* **AGILITY**: Represents nimbleness, speed, and manual dexterity.
 
-* VIGOUR - represents strength, fitness and general will to survive. If it drops to 0, the story is over.
-* PSI - represents psychic sensitivity and will power.
-* AGILITY - represents nimbleness, speed and dexterity.
+### Character Generation & Progression
+Stat scores are determined at the very beginning of a game via automated dice rolls:
+* **Starting VIGOUR**: Rolled using $2d6 + 20$ (resulting in a range of 22–32).
+* **Starting PSI & AGILITY**: Rolled using $1d6 + 3$ (resulting in a range of 4–9).
 
-The scores for every game are decided at the beginning by rolling dice: starting VIGOUR is calculated by rolling two dice and adding 20 to the result (22 - 32), PSI and AGILITY by rolling one die and adding 3 (4-9). As the story progresses, these scores are used to decide outcome. VIGOUR plays the main role in combat, and both PSI and agility can affect which direction the story goes. 
+As the story progresses, these scores dictate the player's fate. VIGOUR acts as your health pool during combat, while PSI and AGILITY checks are used to bypass traps or unlock hidden narrative paths.
 
-Story direction can be affected by:
+## Authoring Stories
 
-* direct player decisions, such as "If you choose the left fork, turn to 10. If the right, turn to 20."
-* PSI or AGILITY checks, such as "Roll two dice. If you score less than your AGILITY, turn to 30."
-* chance rolls, such as "Roll one die. If you score 1 to 2, turn to 40. If you score 3 to 6, turn to 50."
-* scripted actions, such as "You VIGOUR decreases by 2."
-* combat, described in detail below.
+You can author Brass Basilisk stories using the official Twine desktop/browser tool, or via any standard text editor using the Twee format. 
 
-Stories can, and often will, end in player death. This can happen if the player goes down certain paths, or because their VIGOUR reaches 0. Fortunately, the story format offers the facility to save and restore up to three game instances. It also offers the facility to backtrack and change decisions (but not combat outcomes).
+Because the engine relies entirely on natural language processing to trigger mechanics, **you must follow the formatting rules strictly.** If a wording pattern is slightly off, the engine will not throw an error or warning; it will simply render your phrase as plain text, quietly skipping the fight, roll, or stat change you intended to trigger.
 
-## Authoring stories
+> ⚠️ **The Golden Rule:** Copy the language patterns detailed below exactly. Unless explicitly stated otherwise, assume capitalization, spacing, and punctuation are rigid.
 
-[Stories](https://twinery.org/cookbook/terms/terms_stories.html) can be written using the Twine tool, or using any text editor with the Twee format. As mentioned above, they are composed using [passages](https://twinery.org/cookbook/terms/terms_passages.html). There are some rules, over and above the standard Twine/Twee ones, for the Brass Basilisk story format.
+### Passage Naming
+Passage names must be **positive integers ranging from 1 to 999**. 
 
-### Passage naming
-
-In Brass Basilisk, passage names should positive numbers, currently limited to be from 1 to 999. You can author passages with non-numeric names, but they will not be usable from mechanics like attribute checks, chance rolls or combat. A notable exception is: Brass Basilisk stories usually start with a passage traditionally named BACKGROUND, which introduces the setting of the story, and ends with the words "Turn to 1."
+You can create passages with non-numeric names, but the engine's automated mechanics (like attribute checks and combat rewards) will not be able to target them. 
+* **The Exception:** Your story should begin with a passage named `BACKGROUND` to introduce the setting. This passage must end with the exact phrase: `Turn to 1.`
 
 ### Connecting Passages
+Passages are primarily connected using standard Twine links. If you write the phrase `"turn to PAGE"` (where PAGE is a number between 1 and 999) anywhere in your text, the engine will automatically convert it into a functional link. This pattern is case-insensitive (`TURN TO 10`, `turn to 10`, and `Turn to 10` all work).
 
-Passages are connected using Twine links. You can create a link by including the pattern "turn to PAGE" anywhere in the passage text, where PAGE is a number from 1 to 999. The format will automatically translate that pattern (written in any casing, UPPER, lower or Proper) to a link, provided the destination passage exists.
+For advanced linking, Brass Basilisk supports four explicit bracket forms:
 
-Brass Basilisk also supports the standard Twine bracket forms:
+| Syntax | Result |
+| :--- | :--- |
+| `[[Text->Target]]` | A standard link displaying "Text", pointing to passage "Target". |
+| `[[Text\|Target]]` | Identical to the arrow syntax, using a pipe character. |
+| `[[Target]]` | A standard link using the passage name as the clickable text. |
+| `[[Target<-Text]]` | An **unblockable** link displaying "Text", pointing to "Target". |
 
-|Syntax|Result|
-|---|---|
-|[[Text->Target]]|A normal link reading "Text", going to passage named "Target"|
-[[Text\|Target]]|Same as above, using a pipe instead of an arrow|
-|[[Target]]|A normal link, using "Target" as both the text and the destination passage name|
-|[[Target<-Text]]|An _unblockable_(see below) link reading "Text", going to passage named "Target"|
+#### Navigation Blocking
+In certain scenarios—such as when combat is initiated or when a player's VIGOUR hits 0—the engine will **block** standard player navigation, turning regular links unclickable. The *only* links that remain functional during a block are **unblockable links** (`[[Target<-Text]]`). Use these to direct players to "Game Over" screens or forced combat resolutions.
 
-This form can be used to link to passages whose names are not numbers between 1 and 999, which cannot be done using the "turn to PAGE" pattern.
+---
 
-In certain situations, the story format may _block_ player navigation;i.e.; the links become unclickable. This can happen when combat is initiated, or when player VIGOUR drops to 0. The only links that will work in such situations are the ones created using the fourth bracket  form shown above (arrow pointing left, destination written first).
+## Mechanics Syntax
 
-### Inserting mechanics
+### 1. Chance Rolls
+Chance rolls handle non-combat moments that hinge entirely on luck—like searching a dark room or dodging a sudden trap. Triggering a chance roll forces a visual diceboard to overlay on the player's screen. 
 
-Brass Basilisk turns ordinary-looking prose into game mechanics — combat, chance rolls outcomes, stat changes, links — without any special markup. That's the good news. The catch is *how* it does this: it reads your passage text looking for very specific, exact phrasings or _patterns_. If the wording matches, the mechanic works. If it's off, **the mechanic simply doesn't happen — no error, no warning, nothing.** The passage just renders as plain text and the game quietly carries on without the fight, the dice roll, or the stat change that was meant to trigger.
+#### Syntax Rules
+* **Single Paragraph Constraint:** The rolling instruction *and* every possible outcome must sit together on **one single line** with no hard returns/line breaks.
+* **Limit:** Only **one** chance roll is allowed per passage. If multiple are present, only the first will be parsed.
 
-**The golden rule throughout this guide: copy the patterns exactly, including capitalization and punctuation, unless a section below tells you the engine is now flexible about it.**
-
-The rest of the guide provides details of currently recognized mechanics.
-
-## Mechanics list
-
-### Chance rolls
-
-Chance rolls are for moments that aren't combat but still hinge on a die roll — searching a room, dodging a trap, testing your luck. A chance roll detected in text will cause a diceboard to appear while playing the story. There should be only one chance roll in a passage; if there are multiple, only the first valid one will be detected.
-
-Everything for a chance roll — the instruction to roll, *and every possible outcome* — must sit on **one single line** (one paragraph, no line breaks in the middle). The pattern is:
-
->  Roll _N_ dice: If you score a _NUM_, You win: turn to _NNN_. If you score _LOW_ to _HIGH_, turn to _NNN_.
-
-#### Details
-
-- Start with `Roll` or `Throw`, then the number of dice as a word or digit, then `dice` or `die`, then a period or colon with **no space** before it.
-  - The dice count(_N_ in the pattern above) must be one the engine recognizes: `0`, `1`, `one`, `2`, `two`, `3`, `three`. If the word isn't recognized, the *entire* chance-roll block is ignored — no dice board appears at all.
-- This must be followed by one or more _outcome sentences_. Each outcome sentence must start with `If you ` (**I** must be capital), followed by either `roll` or `score` followed by a _number or a range article_, followed by a either a comma or a colon, followed by a sentence that ends in `turn to NNN`. 
-  - After `roll` or `score`, an article is optional and flexible: `roll 7`, `roll a 7`, `roll an 8` and `roll 9 to 12` all work , as do `score 5` and `score a 5` etc.
-  - Give a single number (`If you score 5, ...`), or a range using `to` or `or` (`If you score 2 to 6, ...` / `If you score 2 or 6, ...`). 
-  - **`or` and `to` mean different things, and it matters:** `If you score 2 to 6, ...` matches *any* roll from 2 through 6 inclusive. `If you score 2 or 6, ...` matches *only* an exact roll of 2 or an exact roll of 6 — nothing in between. Pick the one that actually matches what you mean.
-  - To send the player to a specific passage for a given outcome, put `turn to <number>` right before the closing period of that same sentence, with **no period in between**. 
-
-#### Example
-
-Worked example from the sample story, with the chance roll prose in **bold**:
-
->  Somewhere ahead, water drips in a slow, patient rhythm. The left-hand floor looks recently disturbed.
->
->  **Roll two dice: If you score 2 to 5, you press on too quickly and turn to 3. If you score 6 to 12, you notice the loose flagstone in time and turn to 4.**
-
-### Actions
-
-Actions, or scripted actions, are parts of the narrative that affect the player's statistics. Simply by visiting a passage that contains one or more actions, statistics may increase or decrease. This happens only once in a gameplay session: if the player ever re-visits the passage, their statistics will not be adjusted again.
-
-Each action must sit on **one single paragraph**. The pattern is:
-
->  Your STATISTIC VERB AMOUNT
-
-Where:
-
-- STATISTIC is VIGOUR, PSI or AGILITY, written in all caps.
-- VERB is either 'is restored' followed by a period, or 'increases by', 'decreases by' or 'reduces by' followed by NUMBER followed by a period.
-
-The effect is pretty much what the sentence describes. The 'is restored' verb will cause the statistic's value to be restored to what it was at the beginning of the game.
-
-There is another special pattern which becomes a special action, which is:
-
-> You are dead.
-
-Exactly the captilization, spacing, and punctuation shown, in a paragraph by itself. This ends the story then and there by bringing all statistics down to 0.
-
-There can be multiple actions in a single passage. They will all be acted upon.
-
-#### Details
-
-- The sentence must be exactly: `Your <ATTRIBUTE> <verb phrase> <number>.` followed immediately by a line break — **except** for `is restored`, which takes no number at all.
-- `<ATTRIBUTE>` must be one of `VIGOUR`, `AGILITY`, or `PSI`, in capitals.
-- `<verb phrase>` must be exactly one of: `increases by`, `decreases by`, `reduces by`, or `is restored`.
-- **A number is required** for `increases by`, `decreases by`, and `reduces by` — `Your VIGOUR increases by.` with the number left off will prevent the sentence from being recognized as an action.
-- **`is restored` cannot be followed by a number.** `Your VIGOUR is restored.` works; `Your VIGOUR is restored 5.` will prevent the sentence from being recognized as an action.
-- Spacing here is strict — exactly one space between each word, including before the number. `Your  VIGOUR increases by 3.` (double space) and `Your VIGOUR increases by  3.` both fail to match. This is intentionally stricter than the other mechanics, since a stat change happens automatically as soon as the passage renders, with no dice roll or click from the player to confirm it — a forgiving pattern here risks a subtle, un-signposted misfire.
-- The period must be followed immediately by a line break, with **no trailing space** after the period.
-- If a `decreases by` or `reduces by` sentence brings VIGOUR down to zero or below, that on its own ends the story the same way a lost fight or a `You are dead.` sentence does — the passage becomes a permanent dead end, with no message beyond whatever your own prose said. This only applies to VIGOUR; AGILITY and PSI have no equivalent effect.
-
-#### Example
-
-Worked example from the sample story's reward passage, with action phrases shown here in **bold**:
-
->  The troll goes down hard, and the chamber falls quiet but for your own breathing. Wedged behind where it fell, half-buried in old bones, is a small hoard: a few coins gone green with age, and a stoppered vial that still catches the torchlight.
->
->  **Your VIGOUR increases by 3.**
->
->  You drink the vial's contents. It tastes of frost and copper, and the ache in your skull fades to nothing.
->
->  **Your PSI is restored.**
-
-
-Another worked example from the sample story's trap ending, with the death action in **bold**:
-
-> The flagstone tips beneath your boot. Below it there is no floor at all, only a black drop and, faintly, the glint of old spikes.
->
-> **You are dead.**
->
-> Anndon Weir will tell stories about the stranger who went down into the stones and never came up.
-
-### Combat
-
-Combat is exactly what it sounds like - fierce conflict with an unrelenting foe. Dice rolls determine the damage dealt to either the player's VIGOUR or the enemy's - until one reaches zero, or until the player (if given the option) chooses to FLEE.
-
-Combat is written across multiple paragraphs, with blank pragraphs in between. The pattern is:
-
->  _FOENAME_ VIGOUR _FOEVIGOUR_
->
->  Roll _NUMBER_ dice:
->
->  score _LOW_ to _HIGH_ you lose _N_ VIGOUR
->  score _LOW_ to _HIGH_ _FOENAME_ loses N VIGOUR
->
-> If you win, turn to NNN. If you lose, turn to NNN. If you FLEE, turn to NNN.
-
-#### Details
-The elements are as follows:
-
-* A line naming the foe and its starting VIGOUR: _FOENAME_ (has to be written in all capital letters — spaces and hyphens in the name are fine, nothing else is) followed by "VIGOUR" (written exactly as shown, in all caps), and _FOEVIGOUR_ (a number).
-* A blank line.
-* A line saying how many dice to roll: Roll _NUMBER_ dice: . Here, _NUMBER_ must be 1 or 2, which can also be written as "one" or "two" (both a colon and a period work; singular die is also fine). Letter casing should be exactly as shown.
-* One or more rule rows, one per line, each in the shape: Score _LOW_ to _HIGH_ (where _LOW_ and _HIGH_ are numbers; they may be the same number), followed by one or more spaces, followed by a sentence that must end in  "lose _N_ VIGOUR" or "loses _N_ VIGOUR", **with no punctuation at the end**. The word "lose" indicates that a combat dice roll score that falls between _LOW_ and _HIGH_ will cause the **player**'s VIGOUR to be reduced by _N_. The words "loses" in the same position will cause the **enemy**'s VIGOUR to be reduced by _N_, in the same situation.
-* A blank line.
-* Optionally, a single line describing what happens if the player wins, loses or flees. Letter casing should be exactly as shown, especially the word FLEE, which needs to be in all caps. At the minimum, you should provide a sentence for the "win" destination. A FLEE destination is optional: if you leave it out, the player will not be given the option to flee during combat.
-* When a player navigates to a passage containing the combat mechanic, all links on that page (except a link to FLEE, if the combat allows it) will become unclickable, and the player will not be able to move on until combat finishes. If the player's VIGOUR drops to 0 or below, the game is over then and there.
-
-#### Example
-
-Worked example from the sample story's troll fight:
+#### The Pattern
+```text
+Roll N dice: If you score a NUM, You win: turn to NNN. If you score LOW to HIGH, turn to NNN.
 
 ```
-The thing at the far end of the chamber rises to its full height, and you realize it is not a shadow at all.
 
-CAVE TROLL VIGOUR 14
+* **The Trigger:** Must start with `Roll` or `Throw`, followed by a recognized number (`1`, `2`, `one`, or `two`), followed by `die` or `dice`, followed immediately by a period or colon (**no space before the punctuation**).
+* **The Outcomes:** Each outcome must be its own sentence starting with a capital **I** (`If you...`).
+* You can use `roll` or `score`.
+* Articles are flexible: `roll 7`, `roll a 7`, or `roll an 8` are all acceptable.
+* For ranges, use `to` (inclusive range) or `or` (discrete numbers). *Example:* `2 to 6` checks for 2, 3, 4, 5, and 6. `2 or 6` checks *only* for an exact 2 or an exact 6.
+* The sentence must end immediately with `turn to <number>.` with no trailing punctuation inside the link phrase.
 
-Roll two dice:
+#### Example
 
-score 2 to 6 you lose 2 VIGOUR
-score 7 to 12 the troll loses 3 VIGOUR
+> Somewhere ahead, water drips in a slow, patient rhythm. The left-hand floor looks recently disturbed.
+>
+> Roll two dice: If you score 2 to 5, you press on too quickly and turn to 3. If you score 6 to 12, you notice the loose flagstone in time and turn to 4.
 
-If you win, turn to 6. If you FLEE, turn to 7.
+### 2. Stat Check Rolls
+
+Stat check rolls handle moments where the hero's survival hinges on their innate capabilities rather than pure luck or raw combat—such as balancing across a crumbling ledge using **AGILITY** or resisting a mental assault using **PSI**.
+
+#### Syntax Rules
+
+* **Single Paragraph Constraint:** The entire instruction, the condition, and both the success and failure outcomes must sit together on **one single line** with no hard returns/line breaks.
+* **Limit:** Only **one** stat check roll is allowed per passage.
+
+#### The Pattern
+
+```text
+Roll N dice, and try to score less than your AGILITY. If you succeed, turn to NNN. If you fail, turn to NNN.
+
 ```
 
+#### Details
+
+* **The Trigger:** Must start with `Roll` or `Throw`, followed by a recognized number (`1`, `2`, `one`, or `two`), followed by `die` or `dice`. A comma immediately after `die` or `dice` is optional.
+* **The Condition:** Must include the phrase `and try to`, followed by either `roll` or `score`.
+* **The Target Operator:** The engine allows a few natural variations here. You can write:
+  * `less than`
+  * `less than or equal to`
+  * `equal to or less than`
+* **The Attribute:** Must be followed by `your` (or `your current`), and then the targeted statistic, which must be in **ALL CAPS** (`AGILITY` or `PSI`).
+* **The Outcomes:** You must provide exactly two resolution sentences following the check:
+* **Success:** Must be exactly `If you succeed, turn to <number>.`
+* **Failure:** Must be exactly `If you fail, turn to <number>.`
+* ⚠️ **Strict Rule:** Both resolution sentences must use proper sentence capitalization (`If`) and end with standard periods.
+
+
+#### Example
+
+> The narrow stone bridge slick with moss stretches across the chasm. A strong gust of wind threatens to take you off your feet.
+>
+> Throw two dice, and try to roll equal to or less than your AGILITY. If you succeed, turn to 82. If you fail, turn to 104.
+
+---
+
+### 3. Stat Actions
+
+Actions dynamically alter a player's statistics the moment they visit a passage. To prevent infinite loops, an action will only trigger **once per gameplay session**; if a player backtracks to this passage later, their stats will remain unchanged.
+
+#### Syntax Rules
+
+* **Single Paragraph Constraint:** Every individual stat action must occupy **its own isolated paragraph**.
+* **Spacing Strictest:** There must be *exactly* one space between each word. Double spaces will cause the action to fail silently.
+* **Line Ending:** The terminating period must be followed immediately by a line break, with **no trailing whitespace**.
+
+#### The Pattern
+
+```text
+Your STATISTIC VERB AMOUNT.
+
+```
+
+* **STATISTIC** must be typed in all-caps: `VIGOUR`, `PSI`, or `AGILITY`.
+* **VERB AMOUNT** options include:
+* `increases by <number>.`
+* `decreases by <number>.`
+* `reduces by <number>.`
+* `is restored.` *(Note: `is restored` must **never** be followed by a number).*
+
+
+#### Instant Death
+
+To instantly kill a player via narrative event, place this exact phrase on its own isolated paragraph:
+
+```text
+You are dead.
+
+```
+
+This instantly drops all statistics to 0 and permanently freezes navigation. If a standard `decreases by` action reduces a player's VIGOUR to 0 or less, it achieves this exact same effect.
+
+#### Examples
+
+> The troll goes down hard, and the chamber falls quiet but for your own breathing. Wedged behind where it fell, half-buried in old bones, is a small hoard.
+> Your VIGOUR increases by 3.
+> You drink the vial's contents. It tastes of frost and copper, and the ache in your skull fades to nothing.
+> Your PSI is restored.
+
+---
+
+### 4. Combat
+
+Combat represents a fierce, tactical conflict with an unrelenting foe. During combat, simulated dice rolls dynamically deduct points from either the player's VIGOUR or the enemy's VIGOUR until one reaches zero, or until the player chooses to **FLEE** (if the author permits it).
+
+#### Syntax Rules
+
+* **Multi-Paragraph Structure:** Unlike other mechanics, combat spans multiple paragraphs separated by standard blank lines.
+* **Navigation Lock:** The moment a player enters a combat passage, all standard links on the page are **blocked** (unclickable). The player cannot leave the passage until combat resolves, unless a `FLEE` link is explicitly provided.
+* **Instant Death:** If the player's VIGOUR drops to 0 or below during a round, the game ends immediately.
+
+#### The Pattern
+
+```text
+[Narrative prose intro]
+
+FOENAME VIGOUR FOEVIGOUR
+
+Roll NUMBER dice:
+
+score LOW to HIGH you lose N VIGOUR
+score LOW to HIGH description loses N VIGOUR
+
+If you win, turn to NNN. If you lose, turn to NNN. If you FLEE, turn to NNN.
+
+```
+
+#### Details
+
+* **The Enemy Header:** Must be a single line containing the `FOENAME` (written in **ALL CAPS**; spaces and hyphens are allowed, but no other special characters), followed by the exact word `VIGOUR`, followed by a numeric starting value (`FOEVIGOUR`).
+* **The Roll Trigger:** Followed by a blank line, this line must read exactly `Roll NUMBER dice:` (or `die:`). `NUMBER` can be `1`, `2`, `one`, or `two`. Standard sentence casing applies.
+* **The Rule Rows:** Placed immediately below the roll trigger, you must provide one or more outcome rows (one per line):
+* Each row starts with the word `score`, followed by the `LOW to HIGH` range.
+* To damage the **player**, the sentence must end with the exact phrase `you lose N VIGOUR`.
+* To damage the **enemy**, the sentence must end with `loses N VIGOUR` (e.g., `the troll loses 3 VIGOUR`).
+* ⚠️ **Strict Rule:** Do **not** put a period or any punctuation at the end of a rule row.
+
+
+* **The Resolution Line:** Followed by a blank line, this optional line dictates where the player goes when the fight ends.
+* You must use the exact casing shown (`If you win...`, `If you lose...`, `If you FLEE...`).
+* The word **FLEE** must be in all-caps.
+* At a minimum, you must provide a `win` destination.
+* The `FLEE` destination is optional. If omitted, the player will not be given an option to escape the combat interface.
+
+
+
+#### Example
+
+Here is how a standard combat passage should look in your editor:
+
+> The thing at the far end of the chamber rises to its full height, and you realize it is not a shadow at all.
+>
+> CAVE TROLL VIGOUR 14
+>
+> Roll two dice:
+>
+> score 2 to 6 you lose 2 VIGOUR  
+> score 7 to 12 the troll loses 3 VIGOUR
+>
+> If you win, turn to 6. If you FLEE, turn to 7.
+
+## Wrapping Up
+
+Authoring stories in **Brass Basilisk** is all about leaning into the rhythm of classic fantasy gamebooks. By eliminating complex code markup, you are free to focus entirely on the narrative, the choices, and the tension of the dice. Just keep the **Golden Rule** of exact pattern phrasing in mind as you draft your passages, and let the engine handle the heavy lifting.
+
+Now that you know how to structure your text, manage statistics, test your player's attributes, and build deadly encounters, you have everything you need to forge your own adventure.
+
+*May the dice always roll in your favor.*
