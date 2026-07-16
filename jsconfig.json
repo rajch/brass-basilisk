@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "checkJs": true,           /* Type-check all JavaScript files */
+    "strict": true,            /* Enable strict mode (requires explicit JSDoc) */
+    "strictNullChecks": false, /* Disable null checks, because creating initially empty fields in classes is a pain otherwise */
+    "target": "es2022"         /* Should this be more modern? */
+  },
+  "include": ["src/**/*"],      /* Only actual source code to be type checked, not build scripts etc. */
+  "exclude": ["src/twine-extensions/*"] /* Minus twine extensions, which use CodeMirror types at run time */
+}

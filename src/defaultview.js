@@ -2,6 +2,9 @@
 
 import './core/types'
 
+/**
+ * @implements {IView}
+ */
 export class DefaultView {
     /** @type {HTMLElement} */
     #contentelement
@@ -13,6 +16,7 @@ export class DefaultView {
         }
     }
 
+    /** @type {string} */
     get title () {
         const titleElement = document.getElementById('storyTitle')
         if (!titleElement) {
@@ -22,6 +26,9 @@ export class DefaultView {
         return titleElement.textContent
     }
 
+    /**
+     * @param {string} value 
+     */
     set title (value) {
         const titleElement = document.getElementById('storyTitle')
         if (titleElement) {
@@ -30,15 +37,10 @@ export class DefaultView {
         }
     }
 
-    /**
-     * 
-     * @returns {HTMLElement}
-     */
+    /** @type {HTMLElement} */
     get content () {
         return this.#contentelement
     }
-
-
 
     /**
      * 
@@ -73,44 +75,48 @@ export class DefaultView {
     }
 
     /**
-     * Hides all elements that match the selector 
+     * Hides all elements that match the selector under
+     * the content element
      * @param {string} selector 
      */
     hideSelectedContent (selector) {
         this.#contentelement.querySelectorAll(selector)
             .forEach((item) => {
-                this.hide(item)
+                this.hide(/** @type {HTMLElement} */(item))
             })
     }
 
     /**
-     * @returns {HTMLButtonElement}
+     * @type {HTMLButtonElement}
      */
     get backButton () {
-        return document.getElementById('backButton')
+        return /** @type {HTMLButtonElement}  */(document.getElementById('backButton'))
     }
 
     /**
-     * @returns {HTMLButtonElement}
+     * @type {HTMLButtonElement}
      */
     get forwardButton () {
-        return document.getElementById('forwardButton')
+        return /** @type {HTMLButtonElement}  */(document.getElementById('forwardButton'))
     }
 
     /**
-     * @returns {HTMLButtonElement}
+     * @type {HTMLButtonElement}
      */
     get restartButton () {
-        return document.getElementById('restartButton')
+        return /** @type {HTMLButtonElement}  */(document.getElementById('restartButton'))
     }
 
     /**
-     * @returns {HTMLButtonElement}
+     * @type {HTMLButtonElement}
      */
     get saveLoadButton () {
-        return document.getElementById('saveLoadButton')
+        return /** @type {HTMLButtonElement} */(document.getElementById('saveLoadButton'))
     }
 
+    /**
+     * Blocks navigation for all blockable links in the content area
+     */
     disableNavLinks () {
         this.#contentelement.querySelectorAll('a.link')
             .forEach((element) => {
@@ -118,6 +124,9 @@ export class DefaultView {
             })
     }
 
+    /**
+     * Removes navigation block for all blockable links in the content area
+     */
     enableNavLinks () {
         this.#contentelement.querySelectorAll('a.link')
             .forEach((element) => {
@@ -126,7 +135,7 @@ export class DefaultView {
     }
 
     /**
-     * 
+     * Attaches a click handler to all Brass Basilisk links in the content area 
      * @param {EventFunc} handler A click handler function
      * @param {boolean} blockLinks Whether blockable links should be set to blocked
      */
@@ -151,6 +160,7 @@ export class DefaultView {
 
     /**
      * Transforms Twine links
+     * 
      *   [[Text->Target]], [[Text|Target]], [[Target]] to regular links,
      *   [[Target<-Text]] to unblockable links
      * 
@@ -181,7 +191,8 @@ export class DefaultView {
      * 
      * In the default implementation, this looks for a div with the 
      * specified classname under section.sidebar-1
-     * @param {*} panelName 
+     * @param {string} panelName 
+     * @returns {HTMLDivElement}
      */
     getToolPanel (panelName) {
         return document.querySelector(`section.sidebar-1 div.${panelName}`)
@@ -193,9 +204,10 @@ export class DefaultView {
      * In the default implementation, this looks for a dialog with
      * the specified id.
      * 
-     * @param {*} dialogId
+     * @param {string} dialogId
+     * @returns {HTMLDialogElement}
      */
     getDialog (dialogId) {
-        return document.getElementById(dialogId)
+        return /** @type {HTMLDialogElement}*/(document.getElementById(dialogId))
     }
 }

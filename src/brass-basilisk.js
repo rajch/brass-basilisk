@@ -50,7 +50,7 @@ try {
     const errorText = document.createElement('div')
     errorText.style.width = '100%'
     errorText.style.textAlign = 'center'
-    errorText.textContent = e
+    errorText.textContent = String(e)
 
     errorScreen.appendChild(errorText)
     document.body.appendChild(errorScreen)

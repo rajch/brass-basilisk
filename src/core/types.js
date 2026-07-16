@@ -1,6 +1,13 @@
 'use strict'
 
 /**
+ * @typedef {Object} IPassage
+ * @property {string} pid
+ * @property {string} name
+ * @property {string} body
+ */
+
+/**
  * @callback FuncVoidString
  * @returns {string}
  */
@@ -17,21 +24,20 @@
  * @returns {void}
  */
 
-
 /**
  * @callback FuncVoidPassage
- * @returns {Passage}
+ * @returns {IPassage}
  */
 
 /**
  * @callback FuncStringPassage
  * @param {string} passageName
- * @returns {Passage}
+ * @returns {IPassage}
  */
 
 /**
  * @callback ScannerFunc
- * @param {Passage} passage
+ * @param {IPassage} passage
  * @returns {void}
  */
 
@@ -42,7 +48,7 @@
  */
 
 /**
- * @typedef Story
+ * @typedef IStory
  * @property {string} name
  * @property {string} [ifid] a stable GUID assigned by Twine when the story was created;
  * absent on hand-authored/non-Twine-published tw-storydata
@@ -69,12 +75,22 @@
  * @returns {HTMLElement}
  */
 
+/**
+ * @callback FuncStringHTMLDivElement
+ * @param {string} name
+ * @returns {HTMLDivElement}
+ */
 
 /**
- * @typedef {Object} View
+ * @callback FuncStringHTMLDialogElement
+ * @param {string} name
+ * @returns {HTMLDialogElement}
+ */
+
+/**
+ * @typedef {Object} IView
  * @property {string} title
  * @property {HTMLElement} content
- * @property {FuncStringVoid} setContent
  * @property {FuncHTMLElementVoid} hide
  * @property {FuncHTMLElementVoid} show
  * @property {FuncHTMLElementVoid} disable
@@ -89,8 +105,15 @@
  * @property {AttachHandlerFunc} attachNavLinksHandler
  * @property {TransformerFunc} transformLinks
  * @property {TransformerFunc} transformParagraphs
- * @property {(name: string) => HTMLDivElement} getToolPanel
- * @property {(name: string) => HTMLDialogElement} getDialog
+ * @property {FuncStringHTMLDivElement} getToolPanel
+ * @property {FuncStringHTMLDialogElement} getDialog
+ */
+
+/**
+ * @typedef {Object} IPlugin
+ * @property {string} name
+ * @property {PlayerProxy} player
+ * @property {(player: PlayerProxy) => void} init
  */
 
 /**
@@ -102,13 +125,20 @@
  */
 
 /**
+ * @typedef {Object} CombatDestinations
+ * @property {string} fleeTo
+ * @property {string} loseGoTo
+ * @property {string} winGoTo
+ */
+
+/**
  * @typedef {Object} Combat
  * @property {string} foe
  * @property {number} foeVigour
- * @property {number} numberOfDice
+ * @property {string} numberOfDice
  * @property {CombatRule[]} rules
- * @property {boolean} flee
- * @property {string|null} fleeTo
+ * @property {CombatDestinations} destinations
+ * @property {string} lastParagragh
  */
 
 
@@ -119,35 +149,35 @@
 
 /**
  * @typedef {Object} SaveSlotInfo
- * @property {Number} slot
- * @property {Boolean} empty
+ * @property {number} slot
+ * @property {boolean} empty
  * @property {string} [passageName]
  * @property {string} [savedAt] ISO timestamp
  */
 
+
 /**
  * @typedef {Object} PlayerProxy
- * @property {Function} addScanner
- * @property {AddTransformerFunction} addTransformer
- * @property {Function} addPlugin
- * @property {Function} getPlugin
- * @property {Function} setCurrentState
- * @property {Function} getCurrentState
- * @property {Function} setGlobalState
- * @property {Function} getGlobalState
- * @property {Function} preventNavigation
- * @property {Function} allowNavigation
+ * @property {(scannerfunc: ScannerFunc) => void} addScanner
+ * @property {(trasformerFunc: TransformerFunc) => void} addTransformer
+ * @property {(plugin: IPlugin) => void} addPlugin
+ * @property {(pluginname: string) => IPlugin} getPlugin
+ * @property {(key: string, value: any) => void} setCurrentState
+ * @property {(key: string) => any} getCurrentState
+ * @property {(key: string, value: any) => void} setGlobalState
+ * @property {(key: string) => any} getGlobalState
+ * @property {() => void} preventNavigation
+ * @property {() => void} allowNavigation
  * @property {(slot: number) => boolean} saveGame
  * @property {(slot: number) => boolean} loadGame
  * @property {(slot: number) => boolean} deleteGame
  * @property {() => SaveSlotInfo[]} getSaveSlots
  * @property {() => boolean} isSaveAvailable
- * @property {View} view
+ * @property {IView} view
  */
 
 /**
  * @typedef {Object} CharacterSheet
- * @property {string} name
  * @property {Number} vigour
  * @property {Number} agility
  * @property {Number} psi
@@ -168,18 +198,31 @@
 
 /**
  * @typedef {Object} ChanceAction
- * @property {Number} rangeStart
- * @property {Number} rangeEnd
+ * @property {number} rangeStart
+ * @property {number} rangeEnd
  * @property {string} rangeOperator
  * @property {string} sentence
  * @property {string} destination
  */
 
 /**
+ * @typedef {Object} ChanceRoll
+ * @property {string} numDice
+ * @property {ChanceAction[]} actions
+ * @property {string} restOfParagraph
+ */
+
+/**
  * @typedef {Object} StatCheckRoll
- * @property {Number} numDice
+ * @property {string} numDice
  * @property {string} operator  Can be < or <=
- * @property {string} stat  Can be PSI or AGILITY
- * @property {Number} successGoTo
- * @property {Number} failGoTo
+ * @property {"agility" | "psi"} stat  Can be AGILITY or PSI
+ * @property {string} successGoTo
+ * @property {string} failGoTo
+ */
+
+/**
+ * @typedef {Object} DiceRollEventDetail
+ * @property {number} total The sum total of the results
+ * @property {number[]} rolls An array containing the individual die results
  */

@@ -1,10 +1,22 @@
 'use strict'
 
+/**
+ * @implements {IPassage}
+ */
 export class Passage {
+    /** @type {string} */
     #pid
+    /** @type {string} */
     #name
+    /** @type {string} */
     #body
 
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} name 
+     * @param {string} body 
+     */
     constructor(id, name, body) {
         this.#pid = id
         this.#name = name
@@ -30,20 +42,5 @@ export class Passage {
      */
     get body() {
         return this.#body
-    }
-
-    static FromElement (passageElement) {
-        const pid = passageElement.getAttribute('pid')
-        const name = passageElement.getAttribute('name')
-        let body = passageElement.innerHTML
-
-        /* Ours is a text and paragraph based DSL.
-         *  The body should end in a paragraph break.
-        */
-        if (!body.endsWith('\n')) {
-            body = body + '\n'
-        }
-
-        return new Passage(pid, name, body)
     }
 }

@@ -7,18 +7,19 @@ import '../core/types'
 export class DiceBoardPlugin extends BBScannerPlugin {
     /** @type {number} */
     #numdice = 0
-    /** @type {Function} */
+    /** @type {(message: string) => void} */
     #updatelabel
-    /** @type {Function} */
+    /** @type {(numdice: string) => void} */
     #setdice
-    /** @type {Function} */
+    /** @type {(results: number[]) => void} */
     #setresults
-    /** @type {Function} */
+    /** @type {() => void} */
     #hide
-    /** @type {Function} */
+    /** @type {() => void} */
     #show
-    /** @type {Number} */
+    /** @type {number} */
     #currentresult = 0
+    /** @type {Record<string,boolean|undefined>} */
     #hidestack = {}
 
     constructor() {
@@ -29,7 +30,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * 
      * @param {PlayerProxy} player 
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
         // This should move to renderer interface
@@ -37,8 +38,10 @@ export class DiceBoardPlugin extends BBScannerPlugin {
 
         const rollArea = element.querySelector('div.rollarea')
         const rollButton = element.querySelector('button.dicerollbutton')
+        /** @type {HTMLElement} */
         const rollResultLabel = element.querySelector('label.rollresultlabel')
 
+        /** @type {Record<number, string>} */
         const diceRotationMap = {
             1: 'rotateX(0deg) rotateY(0deg)',
             2: 'rotateX(0deg) rotateY(-90deg)',
@@ -48,7 +51,14 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             6: 'rotateX(90deg) rotateY(0deg)'
         }
 
+        /**
+         * 
+         * @param {number} dieNum 
+         * @param {number} score 
+         * @returns {void}
+         */
         const setDieTo = (dieNum, score) => {
+            /** @type {HTMLElement} */
             const dice = rollArea.querySelector(`div.dice-${dieNum}`)
             dice.style.transform = diceRotationMap[score]
         }
@@ -56,8 +66,6 @@ export class DiceBoardPlugin extends BBScannerPlugin {
         this.#updatelabel = (message) => {
             rollResultLabel.innerText = message
         }
-
-        const self = this
 
         /**
          * 
@@ -115,16 +123,16 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             rollDice()
         })
 
-        this.#setdice = (number) => {
-            number = matchMap[number] ?? 1
+        this.#setdice = (numdice) => {
+            const numberofdice = matchMap[numdice] ?? 1
 
-            this.#numdice = number
+            this.#numdice = numberofdice
 
             rollArea.innerHTML = ''
 
             let dieStr = ''
-            for (let i = 0; i < number; i++) {
-                dieStr = dieStr + dieTemplate.replace('{{n}}', i)
+            for (let i = 0; i < numberofdice; i++) {
+                dieStr = dieStr + dieTemplate.replace('{{n}}', String(i))
             }
 
             const templ = document.createElement('template')
@@ -134,14 +142,10 @@ export class DiceBoardPlugin extends BBScannerPlugin {
             rollArea.append(...result)
         }
 
-        /**
-         * 
-         * @param {number[]} results 
-         */
         this.#setresults = (results) => {
             const resultscount = results.length
             if (this.#numdice !== resultscount) {
-                this.#setdice(resultscount)
+                this.#setdice(String(resultscount))
             }
             let totalresults = 0
             for (let i = 0; i < results.length; i++) {
@@ -164,9 +168,14 @@ export class DiceBoardPlugin extends BBScannerPlugin {
         this.#hide()
     }
 
-    scan (passage) {
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns {boolean}
+     */
+    scan(passage) {
         this.#hide()
-        this.#setdice(0)
+        this.#setdice('0')
         this.#updatelabel('')
         this.#hidestack = {}
 
@@ -181,7 +190,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * @param {string} owner The plugin which wants to hide the diceboard
      * @returns {void}
      */
-    hide (owner) {
+    hide(owner) {
         if (!owner) {
             throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
         }
@@ -204,7 +213,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * 
      * @param {*} owner The plugin which wants to show the diceboard
      */
-    show (owner) {
+    show(owner) {
         if (!owner) {
             throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
         }
@@ -223,7 +232,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * @param {string} number
      * @returns {boolean}
      */
-    validateDice (number) {
+    validateDice(number) {
         return matchMap[number]
             ? true
             : false
@@ -232,10 +241,10 @@ export class DiceBoardPlugin extends BBScannerPlugin {
     /**
      * Sets up the diceboard to show and roll the specified number of dice.
      * 
-     * @param {Number} number Number of dice 
+     * @param {string} numdice`` Number of dice 
      */
-    setDice (number) {
-        this.#setdice(number)
+    setDice(numdice) {
+        this.#setdice(numdice)
     }
 
     /**
@@ -244,7 +253,7 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * 
      * @param {Number[]} results 
      */
-    setResults (results) {
+    setResults(results) {
         this.#setresults(results)
     }
 
@@ -253,11 +262,12 @@ export class DiceBoardPlugin extends BBScannerPlugin {
      * 
      * @returns {Number}
      */
-    get currentResult () {
+    get currentResult() {
         return this.#currentresult
     }
 }
 
+/** @type {Record<string,number>} */
 const matchMap = {
     "0": 0,
     "1": 1,

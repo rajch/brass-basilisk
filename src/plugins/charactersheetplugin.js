@@ -25,9 +25,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
     }
 
 
-    /** @type CharacterSheet */
+    /** @type {CharacterSheet} */
     get #maxSheet() {
-        return this.player.getGlobalState(this.name)?.sheet ?? { vigour: 0, agility: 0, psi: 0 }
+        return this.player?.getGlobalState(this.name)?.sheet ?? { vigour: 0, agility: 0, psi: 0 }
     }
 
     /**
@@ -43,11 +43,19 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         this.#agilitylabel = element.querySelector('label.agility')
         this.#psilabel = element.querySelector('label.psi')
 
-        this.#refreshdisplay = (vigour, agility, psi) => {
-            this.#vigourlabel.textContent = vigour ?? this.#currentSheet?.vigour
-            this.#agilitylabel.textContent = agility ?? this.#currentSheet?.agility
-            this.#psilabel.textContent = psi ?? this.#currentSheet?.psi
-        }
+
+        this.#refreshdisplay =
+            /**
+             * 
+             * @param {number} vigour 
+             * @param {number} agility 
+             * @param {number} psi 
+             */
+            (vigour, agility, psi) => {
+                this.#vigourlabel.textContent = String(vigour ?? this.#currentSheet?.vigour)
+                this.#agilitylabel.textContent = String(agility ?? this.#currentSheet?.agility)
+                this.#psilabel.textContent = String(psi ?? this.#currentSheet?.psi)
+            }
 
         // Restart the .stat-flash animation on a label, even if it's
         // already mid-flash from a rapid prior change.
@@ -59,7 +67,9 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         const dialog = player.view.getDialog('characterSheet') //document.getElementById('characterSheet')
         /** @type {HTMLInputElement} */
         const vigourInput = dialog.querySelector('#csVigour')
+        /** @type {HTMLInputElement} */
         const agilityInput = dialog.querySelector('#csAgility')
+        /** @type {HTMLInputElement} */
         const psiInput = dialog.querySelector('#csPsi')
 
         function rollNewSheet() {
@@ -93,6 +103,11 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         this.#dialog = dialog
     }
 
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns 
+     */
     scan(passage) {
         /**
          * @returns {CharacterSheet}
@@ -102,7 +117,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
 
         if (!currentState || !currentState.sheet) {
             this.#dialog.showModal()
-            return
+            return true
         }
 
         this.#currentSheet.vigour = currentState.sheet.vigour
@@ -118,6 +133,8 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         if (this.#currentSheet.vigour <= 0) {
             this.player.preventNavigation()
         }
+
+        return true
     }
 
     /**
@@ -154,7 +171,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         }
 
         this.#currentSheet.vigour = value
-        this.#vigourlabel.textContent = value
+        this.#vigourlabel.textContent = String(value)
         this.#flash(this.#vigourlabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
 
@@ -187,7 +204,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         }
 
         this.#currentSheet.agility = value
-        this.#agilitylabel.textContent = value
+        this.#agilitylabel.textContent = String(value)
         this.#flash(this.#agilitylabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }
@@ -212,7 +229,7 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
         }
 
         this.#currentSheet.psi = value
-        this.#psilabel.textContent = value
+        this.#psilabel.textContent = String(value)
         this.#flash(this.#psilabel)
         this.setCurrentState({ sheet: structuredClone(this.#currentSheet) })
     }

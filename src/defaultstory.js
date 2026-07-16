@@ -2,6 +2,9 @@
 
 import { Passage } from "./core/passage"
 
+/**
+ * @implements {IStory}
+ */
 export class DefaultStory {
     /** @type {HTMLElement} */
     #storyelement
@@ -13,12 +16,13 @@ export class DefaultStory {
     #ifid
 
     constructor() {
+        /** @type {HTMLElement}  */
         const storyelement = document.querySelector('tw-storydata')
         if (!storyelement) {
             throw new Error('could not find story')
         }
 
-        this.#storyelement  = storyelement
+        this.#storyelement = storyelement
         this.#storyname = storyelement.getAttribute('name')
         this.#startnodepid = storyelement.getAttribute('startnode')
         // Twine always writes this onto a published story: a GUID
@@ -28,14 +32,17 @@ export class DefaultStory {
         this.#ifid = storyelement.getAttribute('ifid') || undefined
     }
 
-    get name () {
+    /**
+     * @type {string}
+     */
+    get name() {
         return this.#storyname
     }
 
     /**
-     * @returns {string|undefined}
+     * @type {string|undefined}
      */
-    get ifid () {
+    get ifid() {
         return this.#ifid
     }
 
@@ -44,7 +51,8 @@ export class DefaultStory {
      * @param {string} name 
      * @returns {Passage|null}
      */
-    getPassageByName (name) {
+    getPassageByName(name) {
+        /** @type {HTMLElement} */
         const passageElement = this.#storyelement?.querySelector(`tw-passagedata[name="${name}"]`)
         if (!passageElement) {
             return
@@ -55,12 +63,13 @@ export class DefaultStory {
 
     /**
      * 
-     * @returns {Passage|null}
+     * @returns {IPassage|null}
      */
-    getStartPassage () {
+    getStartPassage() {
+        /** @type {HTMLElement} */
         const passageElement = this.#storyelement?.querySelector(`tw-passagedata[pid="${this.#startnodepid}"]`)
         if (!passageElement) {
-            return
+            return null
         }
 
         return fromElement(passageElement)
@@ -70,7 +79,7 @@ export class DefaultStory {
 
 /**
  * 
- * @param {HTMLElement} passageElement 
+ * @param {HTMLElement|null} passageElement 
  * @returns {Passage}
  */
 const fromElement = (passageElement) => {

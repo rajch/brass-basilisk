@@ -12,7 +12,7 @@ export class TurnToLinksPlugin extends BBPlugin {
 
     /**
      * 
-     * @param {import("./plugin").PlayerProxy} player 
+     * @param {PlayerProxy} player 
      */
     init(player) {
 

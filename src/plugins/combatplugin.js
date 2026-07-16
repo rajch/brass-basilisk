@@ -2,15 +2,11 @@
 
 import { CharacterSheetPlugin } from "./charactersheetplugin";
 import { DiceBoardPlugin } from "./diceboardplugin";
-import { Passage } from "../core/passage";
 import { BBScannerPlugin } from "../core/plugin";
 
 import '../core/types'
 
-//const combatRegex = /\n+([A-Z\s]+)\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+dice:\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
 const combatRegex = /(?:\n+|^)([A-Z][A-Z\s\-]*?[A-Z])\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+di(?:c)?e[\.:]\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/
-// const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-\.:]+\s)+?(loses?)\s+(\d+)\s+VIGOUR/g
-// const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s+(?:[\w;,\-\.:]+\s)+?([Ll]oses?)\s+(\d+)\s+VIGOUR/g
 const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s*[:,;]?\s+(?:[\w;,\-\.:'"‘’“”]+\s)+?([Ll]oses?)\s+(\d+)\s+VIGOUR/g
 const destRegex = /[Ii]f .*?(FLEE|win|lose).*?turn to (\d{1,3})\./g
 
@@ -19,35 +15,38 @@ export class CombatPlugin extends BBScannerPlugin {
     #diceboard
     /** @type {CharacterSheetPlugin} */
     #charactersheet
+    /** @type {Combat} */
     #combat
+    /** @type {boolean} */
     #won
+    /** @type {boolean} */
     #lost
-    // #element
-    // #foenamelabel
-    // #foevigourlabel
 
     constructor() {
         super('meleecombat')
-
     }
 
     /**
      * 
      * @param {PlayerProxy} player 
      */
-    init (player) {
+    init(player) {
         super.init(player)
 
-        this.#diceboard = player.getPlugin('diceboard')
+        this.#diceboard = /** @type {DiceBoardPlugin} */ (player.getPlugin('diceboard'))
         if (!this.#diceboard) {
             throw new Error('Combat plugin requires the Dice Board plugin')
         }
 
-        this.#charactersheet = player.getPlugin('charactersheet')
+        this.#charactersheet = /** @type {CharacterSheetPlugin} */ (player.getPlugin('charactersheet'))
         if (!this.#charactersheet) {
             throw new Error('Combat plugin requires the Character Sheet plugin')
         }
 
+        /**
+         * 
+         * @param {string} message 
+         */
         const replaceFightArea = (message) => {
             updateFightArea(message)
             const contentarea = player.view.content
@@ -55,18 +54,24 @@ export class CombatPlugin extends BBScannerPlugin {
             fightarea.textContent = ''
         }
 
-        const updateFightArea = (message) => {
-            const contentarea = player.view.content
-            const rollstatusarea = contentarea.querySelector('.fightarea .rollstatus')
-            // rollstatusarea.textContent = message
-            const newStatus = document.createElement('span')
-            newStatus.textContent = message
-            rollstatusarea.replaceChildren(newStatus)
-            const foevigourarea = contentarea.querySelector('.fightarea .foeVigour')
-            foevigourarea.textContent = this.#combat.foeVigour
-        }
+        /**
+         * 
+         * @param {string} message 
+         */
+        const updateFightArea =
+            (message) => {
+                const contentarea = player.view.content
+                const rollstatusarea = contentarea.querySelector('.fightarea .rollstatus')
+                // rollstatusarea.textContent = message
+                const newStatus = document.createElement('span')
+                newStatus.textContent = message
+                rollstatusarea.replaceChildren(newStatus)
+                const foevigourarea = contentarea.querySelector('.fightarea .foeVigour')
+                foevigourarea.textContent = String(this.#combat.foeVigour)
+            }
 
-        this.#diceboard.addEventListener('roll', (e) => {
+        this.#diceboard.addEventListener('roll', (evt) => {
+            const e = /** @type {CustomEvent<DiceRollEventDetail>} */ (evt)
             if (this.active) {
                 const rollscore = e.detail.total
                 const combat = this.#combat
@@ -89,7 +94,7 @@ export class CombatPlugin extends BBScannerPlugin {
                                 this.player.allowNavigation()
 
                                 contentarea.querySelectorAll('.combatwon').forEach((item) => {
-                                    player.view.show(item)
+                                    player.view.show(/** @type {HTMLElement} */(item))
                                 })
                             }
 
@@ -105,7 +110,7 @@ export class CombatPlugin extends BBScannerPlugin {
                                 this.#diceboard.hide('combat')
 
                                 contentarea.querySelectorAll('.combatlost').forEach((item) => {
-                                    player.view.show(item)
+                                    player.view.show(/** @type {HTMLElement} */(item))
                                 })
                             }
                         }
@@ -114,56 +119,56 @@ export class CombatPlugin extends BBScannerPlugin {
             }
         })
 
-        this.player.addTransformer(
-            /** 
-             * @params {String} 
-             * @returns {String} 
-             */
-            (input) => {
-                if (!this.active) {
-                    return input
-                }
+        this.player.addTransformer((input) => {
+            if (!this.active) {
+                return input
+            }
 
-                const combat = this.#combat
-                const areacontent = this.#won
-                    ? `<span class="combatresult">You defeated ${combat.foe} here.</span>`
-                        + (combat.destinations.winGoTo
-                            ? `\n[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]\n`
-                            : ''
-                        )
-                    : this.#lost
-                        ? `<span class="combatresult">You were killed by ${combat.foe} here.</span>`
-                            + (
-                                combat.destinations.loseGoTo
-                                    ? `\n[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]\n`
-                                    : ''
-                            )
-                        : formatCombat(combat)
-
-                const result = input.replace(
-                    combatRegex,
-                    `<div class="fightarea">${areacontent}</div>\n${combat.lastParagragh}\n`
+            const combat = this.#combat
+            const areacontent = this.#won
+                ? `<span class="combatresult">You defeated ${combat.foe} here.</span>`
+                + (combat.destinations.winGoTo
+                    ? `\n[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]\n`
+                    : ''
                 )
+                : this.#lost
+                    ? `<span class="combatresult">You were killed by ${combat.foe} here.</span>`
+                    + (
+                        combat.destinations.loseGoTo
+                            ? `\n[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]\n`
+                            : ''
+                    )
+                    : formatCombat(combat)
 
-                console.log('Combat transform:')
-                console.log(result)
+            const result = input.replace(
+                combatRegex,
+                `<div class="fightarea">${areacontent}</div>\n${combat.lastParagragh}\n`
+            )
 
-                return result
-            })
+            console.log('Combat transform:')
+            console.log(result)
+
+            return result
+        })
     }
 
-    /** @type {Passage} */
-    scan (passage) {
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns 
+     */
+    scan(passage) {
         const passageBody = passage.body
 
         const combatMatch = passageBody.match(combatRegex)
         if (combatMatch) {
+            /** @type {Combat} */
             const combat = {
                 foe: combatMatch[1].trim(),
                 foeVigour: parseInt(combatMatch[2]),
                 numberOfDice: combatMatch[3],
                 rules: [],
-                destinations: {},
+                destinations: { fleeTo: '', loseGoTo: '', winGoTo: '' },
                 lastParagragh: ''
             };
 
@@ -180,7 +185,7 @@ export class CombatPlugin extends BBScannerPlugin {
             // If no rules could be parsed, no combat at all
             if (combat.rules.length === 0) {
                 this.#diceboard.hide('combat')
-                return false        
+                return false
             }
 
             // If there is a paragraph after the rules table
@@ -265,7 +270,7 @@ const combatTemplate = '<div class="combattable"><div><div><table><caption>Rules
 const formatCombat = (combat) => {
     let result = combatTemplate
         .replace('{foe}', `You face ${combat.foe} in combat.`)
-        .replace('{foeVigour}', combat.foeVigour)
+        .replace('{foeVigour}', String(combat.foeVigour))
         .replace(
             '{rules}',
             combat.rules.reduce(

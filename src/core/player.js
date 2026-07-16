@@ -6,49 +6,48 @@ import './types'
 
 
 export class Player {
-    /** @type {Function} */
+    /** @type {(scannerfunc: ScannerFunc) => void} */
     #addscanner
-    /** @type {Function} */
+    /** @type {(trasformerFunc: TransformerFunc) => void} */
     #addtransformer
 
     /** @type {Boolean} */
     #blocklinks = false
-    /** @type {Function} */
+    /** @type {() => void} */
     #preventnavigation
-    /** @type {Function} */
+    /** @type {() => void} */
     #allownavigation
 
-    /** @type {Function} */
+    /** @type {(key: string, value: any) => void} */
     #stateset
-    /** @type {Function} */
+    /** @type {(key: string) => any} */
     #stateget
-    /** @type {Function} */
+    /** @type {(key: string, value: any) => void} */
     #statesetglobal
-    /** @type {Function} */
+    /** @type {(key: string) => any} */
     #stategetglobal
-    /** @type {Function} */
-
+    /** @type {(plugin: IPlugin) => void} */
     #addplugin
-    /** @type {Function} */
+    /** @type {(pluginname: string) => IPlugin} */
     #getplugin
-    /** @type {Function} */
+    /** @type {(slot: number) => boolean} */
     #savegame
-    /** @type {Function} */
+    /** @type {(slot: number) => boolean} */
     #loadgame
-    /** @type {Function} */
+    /** @type {(slot: number) => boolean} */
     #deletegame
-    /** @type {Function} */
+    /** @type {() => SaveSlotInfo[]} */
     #getsaveslots
-    /** @type {Function} */
+    /** @type {() => boolean} */
     #issaveavailable
 
-    /** @type {Function} */
+    /** @type {() => void} */
     #start
 
     /**
      * 
-     * @param {Story} story 
-     * @param {View} view 
+     * @param {IStory} story 
+     * @param {IView} view 
      */
     constructor(story, view) {
         if (!story) {
@@ -66,9 +65,11 @@ export class Player {
         // nothing. It is called when a new passage is about to be rendered
         // after successful navigation. Scanners are called in the order of
         // registration. They are implemented by BBScannerPlugins.
+
+        /** @type {ScannerFunc[]} */
         const scanners = []
 
-        const scanPassage = (passage) => {
+        const scanPassage = (/** @type {IPassage} */passage) => {
             for (let i = 0; i < scanners.length; i++) {
                 if (typeof scanners[i] === 'function') {
                     scanners[i](passage)
@@ -83,56 +84,51 @@ export class Player {
         // Transformation
         // A transformer is a function which takes a string and returns a
         // string. The assumption is that it will translate something in 
-        // the input into enencoded HTML. There are a few in-built ones,
+        // the input into unencoded HTML. There are a few in-built ones,
         // and more can be registered. Just as a passage is about to be
         // rendered, the passage body is piped through all transformers.
         // After the last one, a final sanitisation is done (TODO:), and 
         // the results are rendered.
+
+        /** @type {TransformerFunc[]} */
         const transformers = []
 
-        const transformPassageBody = (body) => {
-            let bodystr = body
+        const transformPassageBody =
+            /**
+             * 
+             * @param {string} body 
+             * @returns {string}
+             */
+            (body) => {
+                let bodystr = body
 
-            // Run the in-built HTML transformer first
-            // This will read and sanitise any HTML in
-            // the passage body. From this point, it's
-            // all unencoded HTML.
-            // We are not doing this any more for this
-            // particular format.
-            // bodystr = processHTML(bodystr)
+                // Run all registered transformers. In all
+                // of them, the result should contain text
+                // and unencoded HTML.
 
-            // Run all registered transformers. In all
-            // of them, the result should contain text
-            // and unencoded HTML.
+                // DEBUG: console.log('Transformation starts with:')
+                // DEBUG: console.log(bodystr)
 
-            console.log('Transformation starts with:')
-            console.log(bodystr)
-
-            for (let i = 0; i < transformers.length; i++) {
-                if (typeof transformers[i] === 'function') {
-                    bodystr = transformers[i](bodystr)
-                    console.log('Transformed:')
-                    console.log(bodystr)
+                for (let i = 0; i < transformers.length; i++) {
+                    if (typeof transformers[i] === 'function') {
+                        bodystr = transformers[i](bodystr)
+                        // DEBUG: console.log('Transformed:')
+                        // DEBUG: console.log(bodystr)
+                    }
                 }
+
+                // Run the view-provided link transformer
+                bodystr = view.transformLinks(bodystr)
+                // DEBUG: console.log('Transformed:')
+                // DEBUG: console.log(bodystr)
+
+                // Run the view-provided paragraph transformer
+                bodystr = view.transformParagraphs(bodystr)
+                // DEBUG: console.log('Transformed:')
+                // DEBUG: console.log(bodystr)
+
+                return bodystr
             }
-
-            // Run the in-built links transformer next
-            //bodystr = processTwineLinks(bodystr)
-
-            // Run the view-provided link transformer
-            bodystr = view.transformLinks(bodystr)
-            console.log('Transformed:')
-            console.log(bodystr)
-
-            // Run the in-built transformer to change
-            // newlines into <p> tags last.
-            // bodystr = addParagraphTags(bodystr)
-
-            // Run the view-provided paragraph transformer
-            bodystr = view.transformParagraphs(bodystr)
-
-            return bodystr
-        }
 
         this.#addtransformer = (transformerFunc) => {
             transformers.push(transformerFunc)
@@ -161,38 +157,49 @@ export class Player {
         // transformers, in the process becoming unencoded HTML. As part
         // of this process, hyperlinks are also generated.
         // Finally, hyperlinks are connected to navigation. 
-        const renderPassage = (passage) => {
-            // Default to "allowed" for every render. Scanners are the
-            // only thing that can then block navigation again, based
-            // on current state. This makes blocking a positive, always
-            // re-derived fact about where the player currently is,
-            // rather than something a plugin has to remember to undo --
-            // which is what previously let a "player is dead" block
-            // silently disappear on reload/back-forward/a loaded save,
-            // once the plugin that first set it had already recorded
-            // that it had "acted" and so didn't run that logic again.
-            this.#allownavigation()
+        const renderPassage =
+            /**
+             * 
+             * @param {IPassage} passage 
+             */
+            (passage) => {
+                // Default to "allowed" for every render. Scanners are the
+                // only thing that can then block navigation again, based
+                // on current state. This makes blocking a positive, always
+                // re-derived fact about where the player currently is,
+                // rather than something a plugin has to remember to undo --
+                // which is what previously let a "player is dead" block
+                // silently disappear on reload/back-forward/a loaded save,
+                // once the plugin that first set it had already recorded
+                // that it had "acted" and so didn't run that logic again.
+                this.#allownavigation()
 
-            scanPassage(passage)
+                scanPassage(passage)
 
-            const passageBodyHTML = transformPassageBody(passage.body)
-            const passageNameHTML = `<p class="passagename">${passage.name}</p>`
+                const passageBodyHTML = transformPassageBody(passage.body)
+                const passageNameHTML = `<p class="passagename">${passage.name}</p>`
 
-            contentElement.innerHTML = `${passageNameHTML}${passageBodyHTML}`
+                contentElement.innerHTML = `${passageNameHTML}${passageBodyHTML}`
 
-            view.attachNavLinksHandler(linkClickedToNavigate, this.#blocklinks)
-        }
+                view.attachNavLinksHandler(linkClickedToNavigate, this.#blocklinks)
+            }
 
         // This connects the navigation, defined below, to passage rendering.
         // As the final task of any navigation step, this function is called.
-        const navigateToPassage = (name) => {
-            const passage = story.getPassageByName(name)
-            if (passage) {
-                renderPassage(passage)
+        const navigateToPassage =
+            /**
+             * 
+             * @param {string} name 
+             */
+            (name) => {
+                const passage = story.getPassageByName(name)
+                if (passage) {
+                    renderPassage(passage)
+                }
             }
-        }
 
         // Navigation
+        /** @type {any[]} */
         const navStack = []
         let stackPosition = -1
 
@@ -223,7 +230,10 @@ export class Player {
         }
 
         /// Navigation state management
+
+        /** @type {Record<string,any>} */
         let currentState = {}
+        /** @type {Record<string,any>} */
         let globalState = {}
 
         this.#stateset = (key, value) => {
@@ -275,7 +285,7 @@ export class Player {
 
         /// This is what gets called when a player clicks a link, and
         /// boldly goes where she has never gone before.
-        const navigateNew = (passageName) => {
+        const navigateNew = (/** @type {string} */ passageName) => {
             // Moving to a "new" passage means, any navigation  after
             // the current position is no longer required. 
             clearAfterCurrent()
@@ -328,7 +338,6 @@ export class Player {
             currentState = {}
             globalState = {}
 
-            //const passageElement = storyElement?.querySelector(`tw-passagedata[pid="${startNodePid}"]`)
             const passage = story.getStartPassage()
             if (!passage) {
                 throw new Error('start passage not set')
@@ -338,8 +347,8 @@ export class Player {
         }
 
         /// This can be attached to link click events
-        function linkClickedToNavigate(e) {
-            const linkElement = e.target
+        function linkClickedToNavigate(/** @type {Event} */ e) {
+            const linkElement = /** @type {HTMLElement} */ (e.target)
             const destPassageName = linkElement.getAttribute('data-destination')
             if (destPassageName) {
                 navigateNew(destPassageName)
@@ -378,7 +387,7 @@ export class Player {
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/(^-+|-+$)/g, '') || 'untitled'
 
-        const saveStorageKey = (slot) => `${SAVE_KEY_PREFIX}:${storyKeyFragment}:${slot}`
+        const saveStorageKey = (/** @type {number} */slot) => `${SAVE_KEY_PREFIX}:${storyKeyFragment}:${slot}`
 
         // localStorage can throw (privacy mode, sandboxed iframes, some
         // file:// setups) even just on access, not only when full. This
@@ -535,20 +544,18 @@ export class Player {
         }
 
         // Plugin Management
+
+        /** @type {Record<string,IPlugin>} */
         const plugins = {}
 
         this.#getplugin = (pluginname) => {
             return plugins[pluginname]
         }
 
-        /**
-         * 
-         * @param {BBPlugin} plugin 
-         */
         this.#addplugin = (plugin) => {
             // Check for validity of plugin
-            if (!plugin instanceof BBPlugin) {
-                throw new Error(`${pluginname} is not a valid plugin`)
+            if (!(plugin instanceof BBPlugin)) {
+                throw new Error(`${plugin.name ?? "That"} is not a valid plugin`)
             }
 
             const pluginname = plugin.name
@@ -582,6 +589,11 @@ export class Player {
         // Start playing
         this.#start = function () {
             // Set up story styles
+            // NOTE: We are no longer processing story styles or javascript in Brass Basilisk.
+            //       If and when we do, it will be the responsibility of an IStory to extract
+            //       the styles, and an IView to render/use them. The following code is kept
+            //       commented here to remind us how it used to be done.
+            //
             // const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
             // storyStyleElement.removeAttribute('role')
             // storyStyleElement.removeAttribute('type')
