@@ -1,0 +1,133 @@
+:: StoryTitle
+The Silent House
+
+
+:: StoryData
+{
+  "ifid": "52E9A521-BA25-4223-9080-F296299C70EF",
+  "format": "Brass Basilisk",
+  "format-version": "0.1.3",
+  "start": "BACKGROUND",
+  "zoom": 1
+}
+
+
+:: 1 {"position":"625,175","size":"100,100"}
+You stand before the imposing, eerie house. A thick bell rope hangs beside the ancient but sturdy front door.
+
+To pull the bell rope, turn to 2.
+To knock on the door, turn to 3.
+To try the handle and push it open, turn to 4.
+
+
+:: 10 {"position":"575,850","size":"100,100"}
+You dart to the side to dodge past the rat. It snaps at you with its teeth but misses. However, its vicious claws manage to leave a deep gash across your arm.
+
+Your VIGOUR decreases by 2.
+
+As the rat scurries back into the shadows, you hurry down the hall. Turn to 12.
+
+
+:: 11 {"position":"450,850","size":"100,100"}
+As the rat rolls over and finally stops struggling, you stand tall and flourish your sword—as much to celebrate your victory as to shake the foul blood from the blade. But as you sheathe it, to your utter astonishment, the rat's corpse simply vanishes into thin air.
+
+Shaking your head in puzzlement, you proceed down the hall. Turn to 12.
+
+
+:: 12 {"position":"575,975","size":"100,100"}
+The corridor stretches out endlessly before you, your senses on high alert. Yet, something in the very air has changed. It has grown cooler, and strangely calm. The light, though dim and diffuse, takes on a softer, more mellow quality. An unseen weight in the atmosphere is making your eyelids droop... you are becoming incredibly sleepy...
+
+Roll one die, and try to roll less than or equal to your current PSI. If you succeed, turn to 14. If you fail, turn to 13.
+
+
+:: 13 {"position":"725,925","size":"100,100"}
+Unable to resist, you sit down with your back against the wall, and then slowly lie down.
+Lethargy spreads over you like a warm blanket. Any effort feels entirely unnecessary. Including the...effort to...breathe...
+
+You are dead.
+
+
+:: 14 {"position":"450,1050","size":"100,100"}
+You recognise the sensation of psychic pressure; a magical compulsion is trying to force you into a deep slumber.
+
+Gritting your teeth, you focus your will and push back against the enchantment. The mental fog clears from your mind, leaving you wide awake and sharply alert.
+
+Turn to 15.
+
+
+:: 15 {"position":"575,1175","size":"100,100"}
+And now, it is up to you to tell the rest of the story.
+
+
+
+:: 2 {"position":"650,300","size":"100,100"}
+You strike the door with your fist. The booming sound and the solid impact tell you that the wood is thick and strong. You knock several times, but there is no answer, and your hand is left aching.
+
+Your VIGOUR decreases by 2.
+
+Will you now pull the bell rope (turn to 3), or try to open the door (turn to 4)?
+
+
+:: 3 {"position":"375,300","size":"100,100"}
+A deep gong echoes from somewhere inside the house. After a moment, the door swings open with an ominous creak.
+
+Turn to 7.
+
+
+:: 4 {"position":"500,400","size":"100,100"}
+You try the handle, but the door is locked. You can always step back and pull the bell rope instead (turn to 3), or you can try your luck at picking the lock.
+
+Roll one die. If you roll 1 to 3, turn to 5. If you roll 4 to 6, turn to 6.
+
+
+:: 5 {"position":"375,500","size":"100,100"}
+You fail to pick the lock. Frustrated, you give up and pull the bell rope instead.
+
+Turn to 3.
+
+
+:: 6 {"position":"650,500","size":"100,100"}
+You successfully pick the lock. With a sharp click, it opens, and the door swings inward with an ominous creak.
+
+Turn to 7.
+
+
+:: 7 {"position":"275,675","size":"100,100"}
+No sooner do you step inside than the door slams shut behind you! You try the handle and push against the wood, but it will not budge. It seems your only option is to press onwards.
+
+You look around and find yourself standing in a great hall. Faint daylight from outside allows you to see the area immediately around the door, which is dusty and bare. The rest of the hall is shrouded in musty darkness.
+
+A chittering noise suddenly breaks the silence. You see a pair of red eyes glowing in the darkness of the hall.
+
+Turn to 8.
+
+
+:: 8 {"position":"575,650","size":"100,100"}
+Your sword is in your hand before you even realize it! A surge of adrenaline hits you as an enormous rat, the size of a boar, emerges from the darkness. Its eyes are wild, its teeth are razor-sharp, and thick drool oozes from the corners of its mouth.
+
+RAT VIGOUR 9
+
+Roll two dice:
+
+score 02 to 03 the rat bites your neck; lose 30 VIGOUR
+score 04 to 06 the rat hits you and you lose 3 VIGOUR
+score 07 to 11 the rat is hit and loses 3 VIGOUR
+score 12 to 12 you strike a killing blow, and the rat loses 9 VIGOUR
+
+If you win, turn to 11. If you lose, turn to 9. If you FLEE, turn to 10.
+
+
+:: 9 {"position":"725,650","size":"100,100"}
+The rat's razor-sharp teeth tear into your jugular. The last thing you feel is the utter terror as the giant rodent drains your blood.
+
+You are dead.
+
+
+:: BACKGROUND {"position":"500,175","size":"100,100"}
+Far beyond the city limits, just at the edge of the forest or perhaps a little way inside it, there is a house. No one remembers who built it, or when. No one can recall anyone ever living in it. No one knows why the forest hasn't swallowed it up, why it hasn't collapsed, or what might be inside. But everyone has thought about it.
+
+Over the years, there have been rumours about the house. There are tales of great treasure hidden inside, of grand rooms with luxurious carpets, gleaming chandeliers, and rich tapestries. There are whispers of faint voices and mysterious lights at night. And there are stories of people going there and never coming back. It is that last rumour that worries people the most.
+
+It has taken you years, but you have finally gathered the courage and the skill to brave the house. With a well-stocked pack on your back and your trusty sword at your side, you set out. The journey is long, taking you all day to reach your destination. As the sun dips below the western horizon, you reach the edge of the forest. The house is before you.
+
+NOW TURN TO 1.

@@ -1,0 +1,2789 @@
+<!doctypehtml><html lang=en><meta charset=UTF-8><meta content=width=device-width,initial-scale=1.0 name=viewport><title>Curse of the Silent House</title><style>:root{--sidebar-background-color:#2b1d14;--sidebar-color:#e8d9b5;--sidebar-accent-color:#b8860b;--sidebar-border-color:#8b6914;--content-background-color:#efe0bb;--content-color:#3b2a1a;--link-color:#a5720a;--button-background-color:linear-gradient(180deg,#c9a227,#8b6914);--button-color:#2b1d14;--button-border-color:#6b4f10;--emboss-shadow:inset 0 1px 0 #ffffff59,inset 0 -2px 2px #00000059;--font-body:Georgia,"Times New Roman",serif;--font-heading:"Palatino Linotype",Palatino,Georgia,serif;--heading-emboss-shadow:0 1px 0 #ffffff40,0 -1px 1px #0009;--page-texture:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");--character-sheet-border-color:var(--sidebar-accent-color);--character-sheet-backdrop-color:#2b1d14bf;--dice-background-color:#e8dcc0;--dice-dot-color:#3b2a1a;--dice-color:#3b2a1a;--dice-1-background-color:#efe0bb;--dice-2-background-color:#4a5f4e;--dice-size:50px;--dice-translatez: ;--chanceroll-color:#4f7a68;--attribute-phrase-color:var(--chanceroll-color);--dead-phrase-color:#8b4a3a;--stat-check-roll-color:var(--chanceroll-color);--rivet-highlight-color:#e6c667;--rivet-size:8px;--stat-value-background-color:#2b1d1414;--stat-label-background-color:#00000040;--saveslot-background-color:#00000014;--diceboard-recess-color:#00000026;--table-stripe-color:#2b1d140f;--dice-face-inset-shadow-color:#0000004d;--pulse-glow-color:#b8860be6;--pulse-glow-color-transparent:#b8860b00;--radius-small:2px;--radius-medium:5px;--radius-large:6px;--border-width-thin:1px;--border-width-medium:2px;--border-width-thick:4px;--dice-label-font-size:12px}*{box-sizing:border-box;font-family:var(--font-body);border:0;margin:0;padding:0}.hidden{visibility:hidden}button{border-radius:var(--radius-small);cursor:pointer;font-family:var(--font-body);background:var(--button-background-color);color:var(--button-color);border:var(--border-width-thin)solid var(--button-border-color);box-shadow:var(--emboss-shadow);margin:.25rem;padding:.5rem;font-weight:700}button:disabled{opacity:.3}tw-storydata{display:none}main{flex-direction:row;width:100vw;height:100vh;display:flex}section{display:inline-block}section.sidebar-1{background-color:var(--sidebar-background-color);color:var(--sidebar-color);border-right:var(--border-width-thick)double var(--sidebar-accent-color);flex-direction:column;min-width:18rem;max-width:18rem;padding:1.5rem;display:flex;position:relative}section.sidebar-1:before,section.sidebar-1:after{content:"";width:var(--rivet-size);height:var(--rivet-size);background:radial-gradient(circle at 35% 35%,var(--rivet-highlight-color),var(--sidebar-accent-color)70%);box-shadow:0 0 0 var(--border-width-thin)var(--sidebar-border-color);border-radius:50%;position:absolute}section.sidebar-1:before{top:.6rem;left:.6rem}section.sidebar-1:after{top:.6rem;right:.6rem}section.sidebar-1 .content{flex-grow:1}section.sidebar-1 .toolbar{display:flex}section.sidebar-1 .toolbar button{justify-content:center;align-items:center;width:2.75rem;height:2.75rem;margin:.25rem;padding:.5rem;font-size:large;display:inline-flex}section.sidebar-2{display:none}section.content{background-color:var(--content-background-color);background-image:var(--page-texture);color:var(--content-color);font-family:var(--font-body);flex-grow:1;padding:2.5rem;overflow-y:scroll}section.content p{margin-bottom:1rem;font-size:x-large;line-height:1.25}section.content p.passagename{text-align:center;font-weight:700}section.content a.link,section.content a.link:visited,section.content a.stronglink,section.content a.stronglink:visited{cursor:pointer;color:var(--link-color);font-weight:700;text-decoration:none}section.content a.link.navblocked,section.content a.link.navblocked:visited{pointer-events:none;text-decoration:line-through}h1.storyTitle{font-family:var(--font-heading);color:var(--sidebar-accent-color);text-shadow:var(--heading-emboss-shadow);-webkit-line-clamp:2;line-clamp:2;text-align:center;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}.dice,.dice .side,.dice .side svg{width:var(--dice-size);height:var(--dice-size)}.dice{transform-style:preserve-3d;transition:transform 2s;position:relative;transform:matrix(1,0,0,1,0,0)}.side{border:var(--border-width-medium)solid var(--sidebar-accent-color);border-radius:var(--radius-medium);box-shadow:inset 0 0 5px var(--dice-face-inset-shadow-color);font-size:var(--dice-label-font-size);background:var(--dice-background-color);color:var(--dice-color);justify-content:center;align-items:center;font-weight:700;display:flex;position:absolute}.side svg circle{fill:var(--dice-dot-color)}.dice-1 .side{background-color:var(--dice-1-background-color)}.dice-2 .side{background-color:var(--dice-2-background-color);color:var(--content-background-color)}.dice-2 .side svg circle{fill:var(--content-background-color)}.one{transform:rotateY(0deg)translateZ(calc(var(--dice-size)/2))}.two{transform:rotateY(90deg)translateZ(calc(var(--dice-size)/2))}.three{transform:rotateY(180deg)translateZ(calc(var(--dice-size)/2))}.four{transform:rotateY(-90deg)translateZ(calc(var(--dice-size)/2))}.five{transform:rotateX(90deg)translateZ(calc(var(--dice-size)/2))}.six{transform:rotateX(-90deg)translateZ(calc(var(--dice-size)/2))}.rollarea{perspective:300px;flex-direction:row;column-gap:16px;margin:.25rem;display:flex}.diceboard{border:var(--border-width-thin)solid var(--sidebar-border-color);border-radius:var(--radius-large);background:var(--diceboard-recess-color);flex-direction:column;align-items:center;margin:1rem 0;padding:.75rem;display:flex}.diceboard .buttonsarea{flex-direction:column;align-items:center;margin-top:.25rem;display:flex}.diceboard label.rollresultlabel{-webkit-line-clamp:2;line-clamp:2;text-align:center;-webkit-box-orient:vertical;max-width:14rem;min-height:1rem;font-size:small;display:-webkit-box;overflow:hidden}.sidebar-1 .charactersheet{width:100%;padding:2rem}.sidebar-1 .charactersheet>div{height:2rem}.sidebar-1 .charactersheet>div>label{width:40%;display:inline-block}.sidebar-1 .charactersheet>div>label:first-child{text-align:right;font-variant-caps:small-caps;font-weight:700}.sidebar-1 .charactersheet>div>label.vigour,.sidebar-1 .charactersheet>div>label.agility,.sidebar-1 .charactersheet>div>label.psi{text-align:center;color:var(--sidebar-accent-color);font-variant-numeric:tabular-nums;background:var(--stat-label-background-color);border:var(--border-width-thin)solid var(--sidebar-border-color);border-radius:var(--radius-small);padding:.1rem .4rem;font-size:large;font-weight:700}@keyframes statFlash{0%{box-shadow:0 0 0 0 var(--pulse-glow-color);transform:scale(1.2)}to{box-shadow:0 0 0 .5rem var(--pulse-glow-color-transparent);transform:scale(1)}}.stat-flash{animation:.5s ease-out statFlash}dialog.charactersheet{border:var(--border-width-thick)double var(--character-sheet-border-color);background-color:var(--content-background-color);background-image:var(--page-texture);color:var(--content-color);font-family:var(--font-body);max-width:60%;margin:auto;padding:1rem}dialog.charactersheet::backdrop{background-color:var(--character-sheet-backdrop-color)}dialog.charactersheet h2{text-align:center;font-family:var(--font-heading);color:var(--link-color);letter-spacing:.05em;margin:0 auto 1rem}dialog.charactersheet p{text-align:justify;margin-bottom:.5rem}dialog.charactersheet div{flex-direction:row;align-items:baseline;width:100%;display:flex}dialog.charactersheet div label{text-align:right;font-weight:700;font-family:var(--font-body);width:50%;margin-right:.5rem;font-variant-caps:all-petite-caps}dialog.charactersheet div input{text-align:center;color:var(--link-color);background:var(--stat-value-background-color);border:var(--border-width-thin)solid var(--character-sheet-border-color);border-radius:var(--radius-small);width:50%;font-family:Courier New,Courier,monospace;font-size:large;font-weight:700;line-height:1.5}dialog.charactersheet .buttonrow{text-align:right;margin-top:1rem;display:block}dialog.saveload .saveslotlist{flex-direction:column;gap:.5rem;margin:1rem 0;display:flex}dialog.saveload .saveslot{background:var(--saveslot-background-color);border:var(--border-width-thin)solid var(--character-sheet-border-color);border-radius:var(--radius-small);flex-direction:row;justify-content:space-between;align-items:center;gap:.5rem;width:100%;padding:.5rem .75rem;display:flex}dialog.saveload .saveslotlabel{text-align:left;flex-grow:1}dialog.saveload .saveslot button{flex-shrink:0;margin:0;padding:.25rem .75rem;font-size:medium}dialog.saveload .saveunavailable{font-style:italic}dialog.saveload .saveloaderror{font-style:italic;font-weight:700}@keyframes flyin{to{filter:blur();opacity:1;transform:scale(1)}}.combattable{border:var(--border-width-thick)double var(--sidebar-accent-color);opacity:0;filter:blur(4px);flex-direction:column;padding:1rem;animation:1.2s forwards flyin;display:flex;transform:scale(2)}.combattable table caption{text-align:left;font-weight:700;font-family:var(--font-heading);letter-spacing:.03em}.combattable table{border-collapse:collapse}.combattable table td{border-bottom:var(--border-width-thin)solid var(--sidebar-accent-color);padding:.3rem .6rem}.combattable table tbody tr:last-child td{border-bottom:none}.combattable table tbody tr:nth-child(2n){background:var(--table-stripe-color)}div.combattable>div:first-child{flex-direction:row;justify-content:space-between;align-items:center;gap:.5rem;display:flex}div.combattable>div:first-child>div:not(:last-child){border-right:var(--border-width-thin)solid var(--sidebar-accent-color);padding-right:.75rem}div.combattable>div:first-child>div:nth-child(2){font-family:var(--font-heading);letter-spacing:.03em;color:var(--link-color);text-align:center;font-size:large}.foeVigour{text-align:center;color:var(--link-color);font-variant-numeric:tabular-nums;background:var(--stat-value-background-color);border:var(--border-width-thin)solid var(--sidebar-accent-color);border-radius:var(--radius-small);width:2.5rem;padding:.1rem .4rem;font-size:large;font-weight:700;display:inline-block}div.rollstatus{text-align:center;height:2rem;margin-top:.5rem}@keyframes combatPop{0%{opacity:0;filter:brightness(2);transform:matrix(.85,0,0,.85,0,-15)}50%{opacity:1;filter:brightness(1.2);transform:matrix(1.05,0,0,1.05,0,2)}to{filter:brightness();transform:matrix(1,0,0,1,0,0)}}div.rollstatus>span{font-weight:700;animation:.35s cubic-bezier(.175,.885,.32,1.275) forwards combatPop;display:inline-block}@keyframes combatItemIn{0%{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}div.combattable>div:first-child>div{animation:.4s both combatItemIn}div.combattable>div:first-child>div:first-child{animation-delay:.5s}div.combattable>div:first-child>div:nth-child(2){animation-delay:.65s}div.combattable>div:first-child>div:nth-child(3){animation-delay:.8s}div.rollstatus{animation:.4s .95s both combatItemIn}.fightarea{text-align:center}.fightarea .combatresult{border:var(--sidebar-accent-color)var(--border-width-thick)solid;padding:1rem;font-style:italic;font-weight:700;display:inline-block}.chancerollarea{color:var(--chanceroll-color);margin-bottom:1rem;font-size:x-large;font-weight:700;line-height:1.25}.chancerollarea>span{color:var(--content-color);font-weight:400}.cr-result.hidden{display:none}.attrphrase{color:var(--attribute-phrase-color);font-style:italic;font-weight:700}.attrphrase.dead{color:var(--dead-phrase-color)}.statcheckarollarea{color:var(--stat-check-roll-color)}.statcheckarollarea .hidden{display:none}@media (width<=640px){:root{--dice-size:25px}main{flex-direction:column}section{display:inline-block}section.sidebar-1{min-width:initial;max-width:initial;background-color:var(--sidebar-background-color);color:var(--sidebar-color);flex-flow:wrap;align-items:center;padding:.5rem;display:flex}.sidebar-1 h1{text-align:center;width:100%}.sidebar-1 .charactersheet{width:initial;padding:.5rem;font-size:small}.sidebar-1 .charactersheet>div{height:initial;margin-left:.5rem}section.sidebar-1 .toolbar{flex-direction:row;align-items:center;gap:1rem;display:flex}section.sidebar-1 .toolbar button{width:2rem;height:2rem;margin:.05rem;padding:.1rem;font-size:larger;display:inline}.sidebar-1 .charactersheet>div>label{width:unset;display:inline-block}.sidebar-1 .charactersheet>div>label:first-child{font-weight:unset;text-align:unset}section.sidebar-1 .diceboard{flex-direction:row;align-items:center;padding:0 1rem;display:flex}section.sidebar-1 .diceboard.hidden{visibility:hidden;display:flex!important}section.sidebar-1 .diceboard .rollarea{min-width:70px}section.sidebar-1 .diceboard label.rollresultlabel{display:none}div.combattable>div:first-child{flex-wrap:wrap}}</style></head><body><tw-storydata name="Curse of the Silent House" startnode="1" creator="Twine" creator-version="2.12.0" format="Brass Basilisk" format-version="0.1.3" ifid="5F7696DB-6CCB-4228-B230-3052727166A8" options="" tags="" zoom="1" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css"></style><script role="script" id="twine-user-script" type="text/twine-javascript"></script><tw-passagedata pid="1" name="BACKGROUND" tags="" position="100,100" size="100,100">Far beyond the city limits, where the windswept moors give way to the creeping shadows of the ancient forest—or perhaps just a little way inside it—stands a solitary house. No one knows who built it, nor when. No one can recall a single soul ever calling it home. The relentless woods have not reclaimed it, its timbers have not rotted, and its secrets remain locked within. Yet, it is a mystery that haunts the minds of all who know of it.
+
+Over the years, wild rumours have swirled around the dwelling. Tavern tales speak of hoarded treasure, of grand halls draped in rich tapestries and illuminated by gleaming crystal chandeliers. Locals whisper of phantom voices, eerie lights flickering in the dead of night, and foolish adventurers who crossed the threshold and never returned. It is this final rumour that chills the blood of even the bravest.
+
+It has taken years of hard training, but you have finally honed your skills and gathered your resolve to brave the house. With a well-stocked pack on your back and your trusty sword at your hip, you set out. The journey is long and arduous. As the sun dips below the western horizon, casting long, skeletal shadows through the trees, you finally reach the forest&#39;s edge. The house looms before you, silent and waiting.
+
+NOW TURN TO 1.</tw-passagedata><tw-passagedata pid="2" name="1" tags="" position="300,100" size="100,100">You stand in the shadow of the looming, unsettling house. Beside the heavy, ancient door hangs a thick, faded bell rope.
+
+If you knock upon the door, turn to 2.
+If you pull the bell rope, turn to 3.
+If you boldly try to open the  door, turn to 4.</tw-passagedata><tw-passagedata pid="3" name="2" tags="" position="475,25" size="100,100">You pound your fist against the heavy wood. The dull, booming thud tells you the door is incredibly solid. You knock repeatedly, but only silence greets you. Your knuckles throb painfully from the impact.
+
+Your VIGOUR decreases by 2.
+
+Will you now pull the faded bell rope (turn to 3), or try to push the door open (turn to 4)?</tw-passagedata><tw-passagedata pid="4" name="3" tags="" position="400,300" size="100,100">A deep, resonant gong echoes from somewhere deep within the house. After a tense, silent pause, the heavy door slowly swings inward with a long, ominous creak.
+
+Turn to 7.</tw-passagedata><tw-passagedata pid="5" name="4" tags="" position="575,175" size="100,100">You push against the heavy wood, but the door refuses to budge. It is firmly locked. You may, of course, step back and pull the faded bell rope (turn to 3). Alternatively, you can try your luck at picking the lock.
+
+Roll one die. If you roll 1 to 3, turn to 5. If you roll 4 to 6, turn to 6.</tw-passagedata><tw-passagedata pid="6" name="5" tags="" position="550,300" size="100,100">You fumble with the lock, but your tools slip uselessly against the mechanism. Cursing your luck, you step back and yank the bell rope in frustration.
+
+Turn to 3.</tw-passagedata><tw-passagedata pid="7" name="6" tags="" position="700,300" size="100,100">Your nimble fingers find the tumblers with ease. With a satisfying click, the mechanism gives way, and the heavy door swings inward with a long, ominous creak.
+
+Turn to 7.</tw-passagedata><tw-passagedata pid="8" name="7" tags="" position="500,500" size="100,100">No sooner have you stepped across the threshold than the heavy door slams shut behind you with a resounding crash! You pull and push at the handle, but the unyielding wood refuses to budge. Trapped inside, there is nothing for it but to press deeper into the house.
+
+You peer into the gloom and realize you are standing in a vast, echoing hall. Faint, grey light filtering from the outside illuminates the dusty, bare floorboards immediately around the entrance. Beyond that small pool of light, the rest of the great hall is swallowed by musty, impenetrable darkness.
+
+Then, a dry, chittering sound echoes from the shadows. Out of the blackness, a pair of malevolent red eyes locks onto you.
+
+Turn to 8.</tw-passagedata><tw-passagedata pid="9" name="8" tags="" position="700,525" size="100,100">Your sword leaps into your hand as if by magic! Your heart pounds with a mix of dread and excitement as a monstrous rat, easily the size of a wild boar, scuttles out from the shadows. Its eyes are fevered and bloodshot, its yellow teeth are bared, and thick, foul-smelling froth drips from its jaws.
+
+RAT VIGOUR 9
+
+Roll two dice:
+score 02 to 03  the rat bites your neck; lose 30 VIGOUR
+score 04 to 06  the rat hits you and you lose 3 VIGOUR
+score 07 to 11  the rat is hit and loses 3 VIGOUR
+score 12 to 12 you strike a killing blow, and the rat loses 9 VIGOUR
+
+If you win, turn to 11. If you lose, turn to 9. If you FLEE, turn to 10.</tw-passagedata><tw-passagedata pid="10" name="9" tags="" position="575,650" size="100,100">The monstrous rat lunges, its filthy teeth tearing into your jugular. Your vision fades to black as you feel the utter terror of the giant rodent draining the very life from your veins.
+
+You are dead.</tw-passagedata><tw-passagedata pid="11" name="10" tags="" position="700,650" size="100,100">You throw yourself to the side, desperately dodging past the snapping jaws of the beast. Its teeth miss your flesh, but its razor-sharp claws rake across your arm, leaving a deep, bleeding gash.
+
+Your VIGOUR decreases by 2.
+
+The giant rat hisses and melts back into the darkness. Shaking off the encounter, you press cautiously down the hall. Turn to 12.</tw-passagedata><tw-passagedata pid="12" name="11" tags="" position="825,650" size="100,100">The monstrous rat gives one final twitch, rolls onto its back, and lies still. You straighten up and flourish your sword, both to celebrate your hard-won victory and to flick the foul black blood from the steel. But as you slide it back into its scabbard, a bizarre sight stops you cold: the rat&#39;s carcass dissolves into the shadows, vanishing completely.
+
+Shaking your head in sheer puzzlement, you turn and proceed down the shadowy hall. Turn to 12.</tw-passagedata><tw-passagedata pid="13" name="12" tags="" position="575,850" size="100,100">You walk cautiously down the seemingly endless corridor, every sense on high alert. But as you advance, a subtle change creeps into the very air. The temperature drops, and an unnatural calm descends upon the hall. The dim, diffuse light takes on a strange, mellow haze that dances at the edges of your vision. A heavy, sweet lethargy seeps into your bones, clouding your mind... an overwhelming drowsiness is pulling you down...
+
+Roll one die, and try to roll less than or equal to your current PSI. If you succeed, turn to 14. If you fail, turn to 13.</tw-passagedata><tw-passagedata pid="14" name="14" tags="" position="575,975" size="100,100">You recognise the insidious touch of a psychic compulsion—an unseen mind or ancient spell is trying to lull you into an eternal slumber.
+
+Gritting your teeth, you marshal your mental strength and push back against the magical fog. The heavy lethargy shatters, and your mind snaps back into sharp, crystal clarity. You are wide awake and ready for whatever lies ahead.
+
+Turn to 15.
+</tw-passagedata><tw-passagedata pid="15" name="13" tags="" position="800,825" size="100,100">Your legs give way and you slump against the wall, eventually sliding down to lie upon the cold floor.
+
+The lethargy wraps around you like a heavy, suffocating blanket. Every movement feels like a monumental chore, and soon, even the simplest tasks seem entirely pointless. Including the effort to...draw...breath...
+
+You are dead.
+</tw-passagedata><tw-passagedata pid="16" name="15" tags="" position="700,1025" size="100,100">And now it is up to you to tell the rest of the story.
+</tw-passagedata></tw-storydata> <main><section class=sidebar-1><h1 class=storyTitle id=storyTitle></h1><div></div><div class="charactersheet content"><div><label>Vigour:</label><label class=vigour>0</label></div><div><label>Agility:</label><label class=agility>0</label></div><div><label>Psi:</label><label class=psi>0</label></div></div><div class=diceboard><div class=rollarea></div><div class=buttonsarea><button class=dicerollbutton>Roll</button><label class=rollresultlabel></label></div></div><div class=toolbar><button title="Go back"disabled id=backButton>↤</button><button title="Go forward"disabled id=forwardButton>↦</button><button id=restartButton title=Restart>↺</button><button title="Save / Load"id=saveLoadButton>💾</button></div></section><section class=content></section><sidebar class=sidebar-2> </sidebar></main><dialog class=charactersheet id=characterSheet><h2>Character Sheet</h2><p>Every story begins with you. You are a skilled adventurer, who has roamed far and wide. You have sought, you have fought, and you have always won.</p><p>Just how good you are is determined by the roll of dice. Vigour is your overall strength and resilience, Agility your nimbleness, and PSI your mental and paranormal capacity.</p><p>The dice have been rolled for you below. Select "Done" to accept or "Re-roll".</p><form method=dialog><fieldset><div><label for=csVigour>Vigour:</label><input disabled id=csVigour name=vigour type=number></div><div><label for=csAgility>Agility:</label><input disabled id=csAgility name=agility type=number></div><div><label for=csPsi>PSI:</label><input disabled id=csPsi name=psi type=number></div></fieldset><div class=buttonrow><button title="Begin your adventure"id=csDone>Done</button><button title="Roll again"id=csReRoll type=button>Re-Roll</button><button title="Load saved game"id=csLoad type=button>Load</button></div></form></dialog><dialog class="charactersheet saveload"id=saveLoad><h2>Save / Load</h2><p>Save your progress into one of the slots below, or load a previous save to pick up where you left off. Saving again into a slot replaces whatever was there before.</p><p class="saveunavailable hidden">Saving isn't available in this browser right now, so progress can't be saved or loaded here.</p><div class=saveslotlist></div><p class="saveloaderror hidden"aria-live=polite></p><div class=buttonrow><button id=slClose type=button>Close</button></div></dialog><script>'use strict';
+
+/**
+ * @implements {IPassage}
+ */
+class Passage {
+    /** @type {string} */
+    #pid
+    /** @type {string} */
+    #name
+    /** @type {string} */
+    #body
+
+    /**
+     * 
+     * @param {string} id 
+     * @param {string} name 
+     * @param {string} body 
+     */
+    constructor(id, name, body) {
+        this.#pid = id;
+        this.#name = name;
+        this.#body = body;
+    }
+
+    /**
+     * @returns {string}
+     */
+    get pid() {
+        return this.#pid
+    }
+
+    /**
+     * @returns {string}
+     */
+    get name() {
+        return this.#name
+    }
+
+    /**
+     * @returns {string}
+     */
+    get body() {
+        return this.#body
+    }
+}
+
+/**
+ * @implements {BBPlugin}
+ */
+class BBPlugin extends EventTarget {
+    /** @type {string} */
+    #name
+    /** @type {PlayerProxy|undefined} */
+    #player
+
+    /**
+     * 
+     * @param {string} pluginname 
+     */
+    constructor(pluginname) {
+        super();
+
+        this.#name = pluginname;
+    }
+
+    /**
+     * @returns {PlayerProxy|undefined}
+     */
+    get player() {
+        return this.#player
+    }
+
+    /**
+     * @returns {string}
+     */
+    get name() {
+        return this.#name
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        this.#player = player;
+    }
+
+}
+
+
+class BBScannerPlugin extends BBPlugin {
+    /** @type {Boolean} */
+    #active = false
+    /** @type {IPassage} */
+    #currentpassage
+    /** @type {(state: any) => void} */
+    #setcurrentstate
+    /** @type {() => any} */
+    #getcurrentstate
+
+    /**
+     * 
+     * @param {string} pluginname A unique name for the plugin
+     */
+    constructor(pluginname) {
+        super(pluginname);
+
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player The player proxy.
+     */
+    init(player) {
+        super.init(player);
+
+        const self = this;
+
+        this.#setcurrentstate = (state) => {
+            player.setCurrentState(
+                `${self.#currentpassage.name}-${self.name}`,
+                state
+            );
+        };
+
+        this.#getcurrentstate = () => {
+            return player.getCurrentState(
+                `${self.#currentpassage.name}-${self.name}`
+            ) ?? player.getGlobalState(`${self.name}`)
+        };
+
+        const realscan =
+            /**
+             * 
+             * @param {IPassage} passage
+             * @returns {void}
+             */
+            (passage) => {
+                self.#currentpassage = passage;
+
+                self.#active = self.scan(passage);
+            };
+
+        player.addScanner(realscan);
+    }
+
+    /**
+     * Returns the current passage, which is set during scanning.
+     * @returns {IPassage}
+     */
+    currentPassage() {
+        return this.#currentpassage
+    }
+
+    /**
+     * Saves any value or object as the current state. This state is 
+     * stored with reference to the current passage, and will be
+     * carried forward as the player navigates to new passages. A new
+     * state will replace, but not overwrite, an old state.
+     * 
+     * @param {any} value 
+     * @returns {void}
+     */
+    setCurrentState(value) {
+        this.#setcurrentstate(value);
+    }
+
+    /**
+     * Retrieves the current state from the top of the navigation stack.
+     * If there is no current state in that stack, will try to retrieve 
+     * the state from the global state automatically.
+     * 
+     * @returns {any}
+     */
+    getCurrentState() {
+        return this.#getcurrentstate()
+    }
+
+    /**
+     * Returns true if the plugin found something relevant 
+     * to it in the passage body, false otherwise.
+     * 
+     * @returns {boolean}
+     */
+    get active() {
+        return this.#active
+    }
+
+    /**
+     * Needs to be overridden in plugins. It should scan the
+     * passage body and perform any UI setup if needed. Then
+     * it should return true, to indicate that the plugin is
+     * active. 
+     * 
+     * If it finds nothing relevant it should reverse any UI
+     * changes, and return false.
+     * 
+     * @param {IPassage} passage 
+     * @returns {boolean}
+     */
+    scan(passage) {
+        throw new Error('the scan method must be overridden. Return true to mark the plugin as active')
+    }
+}
+
+class BBGlobalStatePlugin extends BBScannerPlugin {
+    /** @type {() => any} */
+    #getstate
+    /** @type {(state: any) => void} */
+    #setstate
+    /** @type {(state: any) => void} */
+    #setglobalstate
+
+    /**
+     * 
+     * @param {string} pluginname 
+     */
+    constructor(pluginname) {
+        super(pluginname);
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#getstate = () => {
+            return player.getCurrentState(
+                `${this.name}`
+            ) ?? player.getGlobalState(`${this.name}`)
+        };
+
+        this.#setstate = (state) => {
+            player.setCurrentState(
+                `${this.name}`,
+                state
+            );
+        };
+
+        this.#setglobalstate = (state) => {
+            player.setGlobalState(
+                `${this.name}`,
+                state
+            );
+        };
+    }
+
+    getCurrentState() {
+        return this.#getstate()
+    }
+
+    /**
+     * 
+     * @param {any} value 
+     */
+    setCurrentState(value) {
+        this.#setstate(value);
+    }
+
+    /**
+     * Saves any value or object as the global state. There is only one
+     * global state: any new value overwrites the old value.
+     * @param {any} state 
+     */
+    setGlobalState(state) {
+        this.#setglobalstate(state);
+    }
+}
+
+// Raises 'roll' event, with event.detail containing the total roll
+class DiceBoardPlugin extends BBScannerPlugin {
+    /** @type {number} */
+    #numdice = 0
+    /** @type {(message: string) => void} */
+    #updatelabel
+    /** @type {(numdice: string) => void} */
+    #setdice
+    /** @type {(results: number[]) => void} */
+    #setresults
+    /** @type {() => void} */
+    #hide
+    /** @type {() => void} */
+    #show
+    /** @type {number} */
+    #currentresult = 0
+    /** @type {Record<string,boolean|undefined>} */
+    #hidestack = {}
+
+    constructor() {
+        super('diceboard');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        // This should move to renderer interface
+        const element = player.view.getToolPanel('diceboard');
+
+        const rollArea = element.querySelector('div.rollarea');
+        const rollButton = element.querySelector('button.dicerollbutton');
+        /** @type {HTMLElement} */
+        const rollResultLabel = element.querySelector('label.rollresultlabel');
+
+        /** @type {Record<number, string>} */
+        const diceRotationMap = {
+            1: 'rotateX(0deg) rotateY(0deg)',
+            2: 'rotateX(0deg) rotateY(-90deg)',
+            3: 'rotateX(180deg) rotateY(0deg)',
+            4: 'rotateX(0deg) rotateY(90deg)',
+            5: 'rotateX(-90deg) rotateY(0deg)',
+            6: 'rotateX(90deg) rotateY(0deg)'
+        };
+
+        /**
+         * 
+         * @param {number} dieNum 
+         * @param {number} score 
+         * @returns {void}
+         */
+        const setDieTo = (dieNum, score) => {
+            /** @type {HTMLElement} */
+            const dice = rollArea.querySelector(`div.dice-${dieNum}`);
+            dice.style.transform = diceRotationMap[score];
+        };
+
+        this.#updatelabel = (message) => {
+            rollResultLabel.innerText = message;
+        };
+
+        /**
+         * 
+         * @param {Number[]} results 
+         * @param {Number} totalresults 
+         * @param {boolean} isOldRoll 
+         */
+        const updateResultsLabel = (results, totalresults, isOldRoll) => {
+            const resultsStr = results.reduce(
+                (finalValue, currentValue) => {
+                    finalValue = finalValue
+                        ? finalValue + '+' + currentValue
+                        : String(currentValue);
+                    return finalValue
+                },
+                ''
+            );
+            const verb = isOldRoll ? 'was' : 'is';
+            this.#updatelabel(`Your score ${verb} ${resultsStr} = ${totalresults}.`);
+        };
+
+        const rollDice = () => {
+            const number = this.#numdice;
+
+            const results = [];
+            let totalresults = 0;
+
+            for (let i = 0; i < number; i++) {
+                const result = Math.floor(Math.random() * 6) + 1;
+                results.push(result);
+                totalresults += result;
+
+                setDieTo(i, result);
+            }
+
+            updateResultsLabel(results, totalresults, false);
+
+            this.#currentresult = totalresults;
+
+            // Raises 'roll' event, with event.detail containing the total roll
+            this.dispatchEvent(
+                new CustomEvent(
+                    'roll',
+                    {
+                        detail: {
+                            total: totalresults,
+                            rolls: results
+                        }
+                    }
+                )
+            );
+        };
+
+        rollButton.addEventListener('click', (e) => {
+            rollDice();
+        });
+
+        this.#setdice = (numdice) => {
+            const numberofdice = matchMap[numdice] ?? 1;
+
+            this.#numdice = numberofdice;
+
+            rollArea.innerHTML = '';
+
+            let dieStr = '';
+            for (let i = 0; i < numberofdice; i++) {
+                dieStr = dieStr + dieTemplate.replace('{{n}}', String(i));
+            }
+
+            const templ = document.createElement('template');
+            templ.innerHTML = dieStr;
+            const result = templ.content.children;
+
+            rollArea.append(...result);
+        };
+
+        this.#setresults = (results) => {
+            const resultscount = results.length;
+            if (this.#numdice !== resultscount) {
+                this.#setdice(String(resultscount));
+            }
+            let totalresults = 0;
+            for (let i = 0; i < results.length; i++) {
+                totalresults += results[i];
+                setDieTo(i, results[i]);
+            }
+
+            updateResultsLabel(results, totalresults, true);
+            this.#currentresult = totalresults;
+        };
+
+        this.#hide = () => {
+            element.classList.add('hidden');
+        };
+
+        this.#show = () => {
+            element.classList.remove('hidden');
+        };
+
+        this.#hide();
+    }
+
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns {boolean}
+     */
+    scan(passage) {
+        this.#hide();
+        this.#setdice('0');
+        this.#updatelabel('');
+        this.#hidestack = {};
+
+        return true
+    }
+
+    /**
+     * Hides the diceboard from the UI. The calling plugin needs to specify
+     * its name in the owner parameter. The diceboard can be hidden only by
+     * the same plugin that showed it last.
+     * 
+     * @param {string} owner The plugin which wants to hide the diceboard
+     * @returns {void}
+     */
+    hide(owner) {
+        if (!owner) {
+            throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
+        }
+
+        if (this.#hidestack[owner]) {
+            this.#hide();
+            this.#hidestack[owner] = undefined;
+            console.log(`Dice hidden by ${owner}`);
+            return
+        }
+
+        console.log(`Dice NOT hidden by ${owner} `);
+    }
+
+    /**
+     * Makes the diceboard visible in the UI. The calling plugin needs to 
+     * specify its name in the owner parameter, because the diceboard can
+     * be required by multiple plugins. Only that plugin which last shows 
+     * the diceboard can hide it.
+     * 
+     * @param {*} owner The plugin which wants to show the diceboard
+     */
+    show(owner) {
+        if (!owner) {
+            throw new Error('please provide the name of the plugin that is trying to hide the diceboard')
+        }
+
+        this.#hidestack[owner] = true;
+        this.#show();
+
+        console.log(`Dice shown by ${owner}`);
+    }
+
+
+    /**
+     * Validates whether the string parameter would correctly translate to
+     * a non-zero number of dice.
+     *  
+     * @param {string} number
+     * @returns {boolean}
+     */
+    validateDice(number) {
+        return matchMap[number]
+            ? true
+            : false
+    }
+
+    /**
+     * Sets up the diceboard to show and roll the specified number of dice.
+     * 
+     * @param {string} numdice`` Number of dice 
+     */
+    setDice(numdice) {
+        this.#setdice(numdice);
+    }
+
+    /**
+     * Sets the current results of the diceboard, as specified. Also sets
+     * the number of dice.
+     * 
+     * @param {Number[]} results 
+     */
+    setResults(results) {
+        this.#setresults(results);
+    }
+
+    /**
+     * Returns the total score from the last roll.
+     * 
+     * @returns {Number}
+     */
+    get currentResult() {
+        return this.#currentresult
+    }
+}
+
+/** @type {Record<string,number>} */
+const matchMap = {
+    "0": 0,
+    "1": 1,
+    "one": 1,
+    "2": 2,
+    "two": 2,
+    "3": 3,
+    "three": 3,
+    "some": 3
+};
+
+const dieTemplate = `
+<div class="dice dice-{{n}}">
+    <div class="side one">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="10" fill="black" />
+    </svg>
+    </div>
+    <div class="side two">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side three">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="50" r="10" fill="black" />
+        <circle cx="50" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side four">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>
+    </div>
+    <div class="side five">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="50" cy="50" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+    <div class="side six">
+    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="25" cy="25" r="10" fill="black" />
+        <circle cx="75" cy="25" r="10" fill="black" />
+        <circle cx="25" cy="50" r="10" fill="black" />
+        <circle cx="75" cy="50" r="10" fill="black" />
+        <circle cx="25" cy="75" r="10" fill="black" />
+        <circle cx="75" cy="75" r="10" fill="black" />
+    </svg>    
+    </div>
+</div>`;
+
+const chanceRegEx = /(?:[Rr]oll|[Tt]hrow) (\S*?) di(?:c?)e[\.:](.*?)(?:\n|$)/;
+const actionRegEx = /If you (?:roll |score )(?:an? )?(\d{1,2})( or(?: an?)? | to |)(\d{0,2})[,:]([^\.\n]*?)(?: [Tt]urn to (\d{1,3}))?\./g;
+
+class ChanceRollPlugin extends BBScannerPlugin {
+    /** @type {DiceBoardPlugin} */
+    #diceboard
+    /** @type {ChanceRoll} */
+    #chanceroll
+
+    constructor() {
+        super('chancerollplugin');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#diceboard = /** @type {DiceBoardPlugin} */ (player.getPlugin('diceboard'));
+        if (!this.#diceboard) {
+            throw new Error('Chance Roll plugin requires the Dice Board plugin. Please add it first')
+        }
+
+        this.#diceboard.addEventListener('roll', (e) => {
+            if (!this.active) {
+                return
+            }
+
+            const evt = /** @type {CustomEvent<DiceRollEventDetail>} */ (e);
+            this.setCurrentState(evt.detail);
+
+            const rollResult = evt.detail.total;
+
+            const chanceroll = this.#chanceroll;
+            if (!chanceroll || !chanceroll.numDice) {
+                return
+            }
+
+            const view = this.player.view;
+
+            view.hideSelectedContent('p.cr-result');
+
+            /** @type {HTMLElement} */
+            let rowToShow;
+            for (let i = 0; i < chanceroll.actions.length; i++) {
+                const action = chanceroll.actions[i];
+                if (rollInRange(action, rollResult)) {
+                    console.log(`Going to show ${JSON.stringify(action)}`);
+                    rowToShow = view.content.querySelector(`p.chanceroll-result-${i}`);
+                    break;
+                }
+            }
+
+            if (rowToShow) {
+                view.show(rowToShow);
+            }
+        });
+
+        this.player.addTransformer((input) => {
+            if (!this.active) {
+                return input
+            }
+
+            const chanceroll = this.#chanceroll;
+
+            if (!chanceroll || !chanceroll.numDice) {
+                return input
+            }
+
+            const diceString = chanceroll.numDice == '1' || chanceroll.numDice === 'one'
+                ? `one die`
+                : `${chanceroll.numDice} dice`;
+
+            const currentState = this.getCurrentState();
+            const introStatement = currentState && currentState.total
+                ? `You had rolled ${diceString} for a result of ${currentState.total}`
+                : `Roll ${diceString}`;
+
+            let result = `<div class="chancerollarea">${introStatement}.`;
+            if (chanceroll.restOfParagraph !== '') {
+                result = result + ` <span>${chanceroll.restOfParagraph}</span>\n`;
+            }
+            result = result + '</div>';
+
+            for (let i = 0; i < chanceroll.actions.length; i++) {
+                const action = chanceroll.actions[i];
+                const ishidden = currentState && currentState.total
+                    ? rollInRange(action, currentState.total)
+                        ? ''
+                        : 'hidden'
+                    : 'hidden';
+
+                result = result + `<p class="cr-result chanceroll-result-${i} ${ishidden}">${action.sentence}`;
+                if (action.destination) {
+                    result = result.trimEnd() + ` [[Go to ${action.destination}|${action.destination}]]`;
+                }
+                result = result.trimEnd() + '.</p>';
+            }
+
+            return input.replace(chanceRegEx, result)
+        }
+        );
+    }
+
+    /**
+     * 
+     * @param {Passage} passage 
+     * @returns {Boolean}
+     */
+    scan(passage) {
+        const passageBody = passage.body;
+
+        const match = passageBody.match(chanceRegEx);
+
+        if (!match) {
+            this.#diceboard.hide('chanceroll');
+            return false
+        }
+
+        const numdice = match[1].trim().toLowerCase();
+        if (!this.#diceboard.validateDice(numdice)) {
+            this.#diceboard.hide('chanceroll');
+            return false
+        }
+
+        /** @type {ChanceRoll} */
+        const chanceroll = {
+            numDice: numdice,
+            actions: [],
+            restOfParagraph: ''
+        };
+
+        let restOfParagraph = match[2];
+
+        let destMatch;
+        while ((destMatch = actionRegEx.exec(match[2])) !== null) {
+            const chanceAction = {
+                rangeStart: parseInt(destMatch[1]),
+                rangeEnd: parseInt(destMatch[3]),
+                rangeOperator: destMatch[2].trim().substring(0, 2).toLowerCase(),
+                sentence: destMatch[4],
+                destination: destMatch[5]
+            };
+            chanceroll.actions.push(chanceAction);
+            restOfParagraph = restOfParagraph.replace(destMatch[0], '');
+        }
+
+        restOfParagraph = restOfParagraph.trim();
+        if (restOfParagraph !== '') {
+            chanceroll.restOfParagraph = restOfParagraph;
+        }
+
+        console.dir(chanceroll);
+        this.#chanceroll = chanceroll;
+
+        this.#diceboard.setDice(numdice);
+        this.#diceboard.show('chanceroll');
+
+        const currentState = this.getCurrentState();
+        if (currentState && Array.isArray(currentState.rolls)) {
+            this.#diceboard.setResults(currentState.rolls);
+        }
+
+        return true
+    }
+}
+
+const rollInRange =
+    /**
+     *  @param {ChanceAction} action
+     *  @param {Number} rollResult
+     *  @returns {boolean}
+     */
+    (action, rollResult) => {
+        if (action.rangeOperator == 'or') {
+            return (rollResult == action.rangeStart || rollResult == action.rangeEnd)
+        }
+
+        return (!action.rangeEnd && rollResult == action.rangeStart)
+            || (rollResult >= action.rangeStart && rollResult <= action.rangeEnd)
+            || (rollResult == action.rangeStart || rollResult == action.rangeEnd)
+    };
+
+/**
+ * Wires up the Save/Load dialog. Unlike most plugins, this one isn't
+ * a scanner -- it doesn't react to individual passages. It just gives
+ * the player a way to call Player#saveGame / Player#loadGame /
+ * Player#getSaveSlots (exposed on the player proxy) from a button and
+ * a small list UI.
+ */
+class SaveLoadPlugin extends BBPlugin {
+    /** @type {HTMLDialogElement} */
+    #dialog
+    /** @type {HTMLElement} */
+    #list
+    /** @type {HTMLElement} */
+    #unavailableMessage
+    /** @type {HTMLElement} */
+    #saveloaderrorMessage
+
+
+    constructor() {
+        super('saveload');
+    }
+
+    /**
+     * @param {PlayerProxy} player
+     */
+    init(player) {
+        super.init(player);
+
+        const openButton = player.view.saveLoadButton;
+        const dialog = player.view.getDialog('saveLoad');
+
+        this.#dialog = dialog;
+        this.#list = dialog.querySelector('.saveslotlist');
+        this.#unavailableMessage = dialog.querySelector('.saveunavailable');
+        this.#saveloaderrorMessage = dialog.querySelector('.saveloaderror');
+
+        const closeButton = dialog.querySelector('#slClose');
+        closeButton?.addEventListener('click', () => dialog.close());
+
+        openButton?.addEventListener('click', () => {
+            this.showDialog();
+        });
+    }
+
+    showDialog() {
+        this.#refresh();
+        this.#dialog?.showModal();
+    }
+
+    /**
+     * Rebuilds the slot list from scratch. Called whenever the dialog
+     * is opened, and again after a save so the new timestamp shows up
+     * immediately.
+     */
+    #refresh() {
+        if (!this.player.isSaveAvailable()) {
+            this.#list.replaceChildren();
+            this.#unavailableMessage?.classList.remove('hidden');
+            return
+        }
+
+        this.#unavailableMessage?.classList.add('hidden');
+        this.#saveloaderrorMessage?.classList.add('hidden');
+
+        const slots = this.player.getSaveSlots();
+        const rows = slots.map((slotInfo) => this.#buildRow(slotInfo));
+
+        this.#list.replaceChildren(...rows);
+    }
+
+    /**
+     * @param {SaveSlotInfo} slotInfo
+     * @returns {HTMLElement}
+     */
+    #buildRow(slotInfo) {
+        const row = document.createElement('div');
+        row.className = 'saveslot';
+
+        const label = document.createElement('span');
+        label.className = 'saveslotlabel';
+        label.textContent = slotInfo.empty
+            ? `Slot ${slotInfo.slot + 1}: empty`
+            : `Slot ${slotInfo.slot + 1}: ${slotInfo.passageName} — ${new Date(slotInfo.savedAt).toLocaleString()}`;
+
+        const saveButton = document.createElement('button');
+        saveButton.type = 'button';
+        saveButton.textContent = 'Save';
+        saveButton.addEventListener('click', () => {
+            const saved = this.player.saveGame(slotInfo.slot);
+            if (!saved) {
+                this.#saveloaderrorMessage?.classList.remove('hidden');
+                this.#saveloaderrorMessage.textContent = "Could not save.";
+                return
+            }
+            this.#refresh();
+        });
+
+        const loadButton = document.createElement('button');
+        loadButton.type = 'button';
+        loadButton.textContent = 'Load';
+        loadButton.disabled = slotInfo.empty;
+        loadButton.addEventListener('click', () => {
+            const loaded = this.player.loadGame(slotInfo.slot);
+            if (!loaded) {
+                this.#saveloaderrorMessage?.classList.remove('hidden');
+                this.#saveloaderrorMessage.textContent = "Could not load.";
+                return
+            }
+            this.#dialog.close();
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.textContent = 'Delete';
+        deleteButton.disabled = slotInfo.empty;
+        deleteButton.addEventListener('click', () => {
+            this.player.deleteGame(slotInfo.slot);
+            this.#refresh();
+        });
+
+        row.append(label, saveButton, loadButton, deleteButton);
+
+        return row
+    }
+}
+
+class CharacterSheetPlugin extends BBGlobalStatePlugin {
+    /** @type {SaveLoadPlugin} */
+    #saveloadPlugin
+
+    /** @type CharacterSheet */
+    #currentSheet
+
+    /** @type {HTMLLabelElement} */
+    #vigourlabel
+    /** @type {HTMLLabelElement} */
+    #agilitylabel
+    /** @type {HTMLLabelElement} */
+    #psilabel
+    /** @type {Function} */
+    #refreshdisplay
+    /** @type {HTMLDialogElement} */
+    #dialog
+
+    constructor() {
+        super('charactersheet');
+
+        this.#currentSheet = { vigour: 0, agility: 0, psi: 0 };
+    }
+
+
+    /** @type {CharacterSheet} */
+    get #maxSheet() {
+        return this.player?.getGlobalState(this.name)?.sheet ?? { vigour: 0, agility: 0, psi: 0 }
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#saveloadPlugin = /** @type {SaveLoadPlugin} */ (player.getPlugin('saveload'));
+        if (!this.#saveloadPlugin) {
+            throw new Error('Character Sheet plugin requires the Save/Load plugin')
+        }
+
+        const element = player.view.getToolPanel('charactersheet');
+
+        this.#vigourlabel = element.querySelector('label.vigour');
+        this.#agilitylabel = element.querySelector('label.agility');
+        this.#psilabel = element.querySelector('label.psi');
+
+
+        this.#refreshdisplay =
+            /**
+             * 
+             * @param {number} vigour 
+             * @param {number} agility 
+             * @param {number} psi 
+             */
+            (vigour, agility, psi) => {
+                this.#vigourlabel.textContent = String(vigour ?? this.#currentSheet?.vigour);
+                this.#agilitylabel.textContent = String(agility ?? this.#currentSheet?.agility);
+                this.#psilabel.textContent = String(psi ?? this.#currentSheet?.psi);
+            };
+
+        // Restart the .stat-flash animation on a label, even if it's
+        // already mid-flash from a rapid prior change.
+        for (const label of [this.#vigourlabel, this.#agilitylabel, this.#psilabel]) {
+            label.addEventListener('animationend', () => label.classList.remove('stat-flash'));
+        }
+
+        /** @type {HTMLDialogElement} */
+        const dialog = player.view.getDialog('characterSheet'); //document.getElementById('characterSheet')
+        /** @type {HTMLInputElement} */
+        const vigourInput = dialog.querySelector('#csVigour');
+        /** @type {HTMLInputElement} */
+        const agilityInput = dialog.querySelector('#csAgility');
+        /** @type {HTMLInputElement} */
+        const psiInput = dialog.querySelector('#csPsi');
+
+        function rollNewSheet() {
+            vigourInput.valueAsNumber = Math.floor(Math.random() * 12) + 20;
+            agilityInput.valueAsNumber = Math.floor(Math.random() * 6) + 3;
+            psiInput.valueAsNumber = Math.floor(Math.random() * 6) + 3;
+        }
+
+        rollNewSheet();
+
+        /** @type {HTMLButtonElement} */
+        const reRollButton = dialog.querySelector('#csReRoll');
+        reRollButton.addEventListener('click', (e) => {
+            rollNewSheet();
+        });
+
+        dialog.addEventListener('close', (e) => {
+            this.#currentSheet = {
+                vigour: vigourInput.valueAsNumber,
+                agility: agilityInput.valueAsNumber,
+                psi: psiInput.valueAsNumber
+            };
+
+            this.setGlobalState({
+                sheet: this.#currentSheet
+            });
+
+            this.#refreshdisplay();
+        });
+
+        const loadButton = dialog.querySelector('#csLoad');
+        loadButton.addEventListener('click', (e) => {
+            dialog.close();
+            this.#saveloadPlugin.showDialog();
+        });
+
+        this.#dialog = dialog;
+    }
+
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns 
+     */
+    scan(passage) {
+        /**
+         * @returns {CharacterSheet}
+         */
+
+        const currentState = this.getCurrentState();
+
+        if (!currentState || !currentState.sheet) {
+            this.#dialog.showModal();
+            return true
+        }
+
+        this.#currentSheet.vigour = currentState.sheet.vigour;
+        this.#currentSheet.agility = currentState.sheet.agility;
+        this.#currentSheet.psi = currentState.sheet.psi;
+
+        this.#refreshdisplay();
+
+        // Re-derived every render (initial visit, back/forward, page
+        // reload, or a loaded save) rather than relying solely on the
+        // one-off side effect in the vigour setter below, which only
+        // fires at the moment vigour actually changes to zero.
+        if (this.#currentSheet.vigour <= 0) {
+            this.player.preventNavigation();
+        }
+
+        return true
+    }
+
+    /**
+     * Restarts the .stat-flash animation on a stat's label, forcing a
+     * reflow so it retriggers even if the same stat just changed again
+     * before the previous flash finished.
+     *
+     * @param {HTMLLabelElement} label
+     */
+    #flash(label) {
+        label.classList.remove('stat-flash');
+        // Trick to force the browser to restart a CSS animation
+        void label.offsetWidth;
+        label.classList.add('stat-flash');
+    }
+
+    /**
+     * 
+     * @returns {Number|null}
+     */
+    get vigour() {
+        return this.#currentSheet.vigour
+    }
+
+    /**
+     * The current VIGOUR of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
+     * 
+     * @param {Number} value 
+     */
+    set vigour(value) {
+        if (value > this.#maxSheet.vigour) {
+            value = this.#maxSheet.vigour;
+        }
+
+        this.#currentSheet.vigour = value;
+        this.#vigourlabel.textContent = String(value);
+        this.#flash(this.#vigourlabel);
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) });
+
+        // Handle the death case
+        // <= rather than === 0: a phrase that decreases VIGOUR by more
+        // than the character currently has overshoots straight past
+        // zero into negative territory, and should still count as dead.
+        if (value <= 0) {
+            this.player.preventNavigation();
+        }
+    }
+
+    /**
+     * 
+     * @returns {Number|null}
+     */
+    get agility() {
+        return this.#currentSheet.agility
+    }
+
+    /**
+     * The current AGILITY of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
+     * 
+     * @param {Number} value 
+     */
+    set agility(value) {
+        if (value > this.#maxSheet.agility) {
+            value = this.#maxSheet.agility;
+        }
+
+        this.#currentSheet.agility = value;
+        this.#agilitylabel.textContent = String(value);
+        this.#flash(this.#agilitylabel);
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) });
+    }
+
+    /**
+     * 
+     * @returns {Number|null}
+     */
+    get psi() {
+        return this.#currentSheet.psi
+    }
+
+    /**
+     * The current PSI of the player. Setting it to a high value
+     * like 1000 resets it to its normal or initial value.
+     * 
+     * @param {Number} value 
+     */
+    set psi(value) {
+        if (value > this.#maxSheet.psi) {
+            value = this.#maxSheet.psi;
+        }
+
+        this.#currentSheet.psi = value;
+        this.#psilabel.textContent = String(value);
+        this.#flash(this.#psilabel);
+        this.setCurrentState({ sheet: structuredClone(this.#currentSheet) });
+    }
+}
+
+const combatRegex = /(?:\n+|^)([A-Z][A-Z\s\-]*?[A-Z])\s+VIGOUR\s+(\d+)\s*\n+\s*?[Rr]oll\s+(\w+)\s+di(?:c)?e[\.:]\n+\s*((?:[Ss]core\s+\d+\s+to\s+\d+[^\n]+\n\s*)+)(?:\n+(.*?)\n)/;
+const combatRuleRegex = /[Ss]core\s+(\d+)\s+to\s+(\d+)\s*[:,;]?\s+(?:[\w;,\-\.:'"‘’“”]+\s)+?([Ll]oses?)\s+(\d+)\s+VIGOUR/g;
+const destRegex = /[Ii]f .*?(FLEE|win|lose).*?turn to (\d{1,3})\./g;
+
+class CombatPlugin extends BBScannerPlugin {
+    /** @type {DiceBoardPlugin} */
+    #diceboard
+    /** @type {CharacterSheetPlugin} */
+    #charactersheet
+    /** @type {Combat} */
+    #combat
+    /** @type {boolean} */
+    #won
+    /** @type {boolean} */
+    #lost
+
+    constructor() {
+        super('meleecombat');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#diceboard = /** @type {DiceBoardPlugin} */ (player.getPlugin('diceboard'));
+        if (!this.#diceboard) {
+            throw new Error('Combat plugin requires the Dice Board plugin')
+        }
+
+        this.#charactersheet = /** @type {CharacterSheetPlugin} */ (player.getPlugin('charactersheet'));
+        if (!this.#charactersheet) {
+            throw new Error('Combat plugin requires the Character Sheet plugin')
+        }
+
+        /**
+         * 
+         * @param {string} message 
+         */
+        const replaceFightArea = (message) => {
+            updateFightArea(message);
+            const contentarea = player.view.content;
+            const fightarea = contentarea.querySelector('.fightarea .combattable>div:first-child');
+            fightarea.textContent = '';
+        };
+
+        /**
+         * 
+         * @param {string} message 
+         */
+        const updateFightArea =
+            (message) => {
+                const contentarea = player.view.content;
+                const rollstatusarea = contentarea.querySelector('.fightarea .rollstatus');
+                // rollstatusarea.textContent = message
+                const newStatus = document.createElement('span');
+                newStatus.textContent = message;
+                rollstatusarea.replaceChildren(newStatus);
+                const foevigourarea = contentarea.querySelector('.fightarea .foeVigour');
+                foevigourarea.textContent = String(this.#combat.foeVigour);
+            };
+
+        this.#diceboard.addEventListener('roll', (evt) => {
+            const e = /** @type {CustomEvent<DiceRollEventDetail>} */ (evt);
+            if (this.active) {
+                const rollscore = e.detail.total;
+                const combat = this.#combat;
+                const contentarea = player.view.content;
+
+                combat.rules.map((rule) => {
+                    if (rollscore >= rule.rangeLow &&
+                        rollscore <= rule.rangeHigh
+                    ) {
+                        if (rule.action === 'loses') {
+                            combat.foeVigour = combat.foeVigour - rule.turnAmount;
+                            updateFightArea(`You hit ${combat.foe} for ${rule.turnAmount} points.`);
+                            if (combat.foeVigour <= 0) {
+                                this.#won = true;
+                                this.#lost = false;
+                                replaceFightArea('You won!');
+                                this.#diceboard.hide('combat');
+                                this.setCurrentState({ defeated: true });
+                                this.#charactersheet.vigour = this.#charactersheet.vigour;
+                                this.player.allowNavigation();
+
+                                contentarea.querySelectorAll('.combatwon').forEach((item) => {
+                                    player.view.show(/** @type {HTMLElement} */(item));
+                                });
+                            }
+
+                        } else {
+                            const sheet = this.#charactersheet;
+                            sheet.vigour = sheet.vigour - rule.turnAmount;
+                            updateFightArea(`${combat.foe} hit you for ${rule.turnAmount} points.`);
+                            if (sheet.vigour <= 0) {
+                                this.#lost = true;
+                                this.#won = false;
+                                replaceFightArea(`You were killed by ${combat.foe}.`);
+                                this.setCurrentState({ playerdefeated: true });
+                                this.#diceboard.hide('combat');
+
+                                contentarea.querySelectorAll('.combatlost').forEach((item) => {
+                                    player.view.show(/** @type {HTMLElement} */(item));
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        this.player.addTransformer((input) => {
+            if (!this.active) {
+                return input
+            }
+
+            const combat = this.#combat;
+            const areacontent = this.#won
+                ? `<span class="combatresult">You defeated ${combat.foe} here.</span>`
+                + (combat.destinations.winGoTo
+                    ? `\n[[Go to ${combat.destinations.winGoTo}|${combat.destinations.winGoTo}]]\n`
+                    : ''
+                )
+                : this.#lost
+                    ? `<span class="combatresult">You were killed by ${combat.foe} here.</span>`
+                    + (
+                        combat.destinations.loseGoTo
+                            ? `\n[[Go to ${combat.destinations.loseGoTo}|${combat.destinations.loseGoTo}]]\n`
+                            : ''
+                    )
+                    : formatCombat(combat);
+
+            const result = input.replace(
+                combatRegex,
+                `<div class="fightarea">${areacontent}</div>\n${combat.lastParagragh}\n`
+            );
+
+            console.log('Combat transform:');
+            console.log(result);
+
+            return result
+        });
+    }
+
+    /**
+     * 
+     * @param {IPassage} passage 
+     * @returns 
+     */
+    scan(passage) {
+        const passageBody = passage.body;
+
+        const combatMatch = passageBody.match(combatRegex);
+        if (combatMatch) {
+            /** @type {Combat} */
+            const combat = {
+                foe: combatMatch[1].trim(),
+                foeVigour: parseInt(combatMatch[2]),
+                numberOfDice: combatMatch[3],
+                rules: [],
+                destinations: { fleeTo: '', loseGoTo: '', winGoTo: '' },
+                lastParagragh: ''
+            };
+
+            let ruleMatch;
+            while ((ruleMatch = combatRuleRegex.exec(combatMatch[4])) !== null) {
+                combat.rules.push({
+                    rangeLow: parseInt(ruleMatch[1]),
+                    rangeHigh: parseInt(ruleMatch[2]),
+                    action: ruleMatch[3].toLowerCase(),
+                    turnAmount: parseInt(ruleMatch[4])
+                });
+            }
+
+            // If no rules could be parsed, no combat at all
+            if (combat.rules.length === 0) {
+                this.#diceboard.hide('combat');
+                return false
+            }
+
+            // If there is a paragraph after the rules table
+            if (combatMatch[5]) {
+                combat.lastParagragh = combatMatch[5];
+
+                let destMatch;
+                while ((destMatch = destRegex.exec(combatMatch[5])) !== null) {
+                    if (destMatch[1] === 'FLEE') {
+                        combat.destinations.fleeTo = destMatch[2];
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0], '');
+                    } else if (destMatch[1] === 'lose') {
+                        combat.destinations.loseGoTo = destMatch[2];
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0], '');
+                    } else if (destMatch[1] === 'win') {
+                        combat.destinations.winGoTo = destMatch[2];
+                        combat.lastParagragh = combat.lastParagragh.replace(destMatch[0], '');
+                    }
+                }
+            }
+
+            // If that paragraph could not be parsed, put it into
+            // the combat object for restoring during transform.
+            if (!combat.destinations.fleeTo
+                && !combat.destinations.winGoTo
+                && !combat.destinations.loseGoTo
+            ) {
+                combat.lastParagragh = combatMatch[5];
+            }
+
+            this.#combat = combat;
+
+            // First, check if there is old state
+            const state = this.getCurrentState();
+            if (state?.defeated) {
+                // Player had won earlier
+                this.#won = true;
+                this.#lost = false;
+                return true
+            } else if (state?.playerdefeated) {
+                // Player had lost earlier
+                this.#won = false;
+                this.#lost = true;
+                this.player.preventNavigation();
+                return true
+            }
+
+            // Player has neither won nor lost. Time to fight.
+            this.#won = false;
+            this.#lost = false;
+
+            this.#diceboard.setDice(combat.numberOfDice);
+            this.#diceboard.show('combat');
+            this.player.preventNavigation();
+
+            console.log('Combat detected:');
+            console.dir(combat);
+            console.dir(combatMatch);
+
+            return true
+        }
+
+        this.#diceboard.hide('combat');
+        // No allowNavigation() here: this scanner's job is only to
+        // manage blocking for *its own* concern (active/lost combat).
+        // Unconditionally allowing here would override a legitimate
+        // block set by another plugin (e.g. the player being dead from
+        // something other than combat) on every single render of a
+        // non-combat passage. Player-level per-render reset already
+        // handles the "nothing is blocking" default case.
+        return false
+    }
+}
+
+const combatTemplate = '<div class="combattable"><div><div><table><caption>Rules</caption><tbody>{rules}</tbody></table><div>{flee}</div></div><div>{foe}</div><div>VIGOUR: <span class="foeVigour">{foeVigour}</span></div></div><div class="rollstatus"></div></div>{wingoto}{losegoto}';
+
+/**
+ * 
+ * @param {Combat} combat 
+ * @returns {string}
+ */
+const formatCombat = (combat) => {
+    let result = combatTemplate
+        .replace('{foe}', `You face ${combat.foe} in combat.`)
+        .replace('{foeVigour}', String(combat.foeVigour))
+        .replace(
+            '{rules}',
+            combat.rules.reduce(
+                (accum, rule) => accum + `<tr><td>${rule.rangeLow} to ${rule.rangeHigh}</td><td>${rule.action === 'lose' ? ': you lose' : ': they lose'} ${rule.turnAmount}</td></tr>`,
+                '')
+        )
+        .replace('{flee}', combat.destinations.fleeTo ? `[[${combat.destinations.fleeTo}<-Flee]]` : '')
+        .replace('{wingoto}', combat.destinations.winGoTo ? `<p class="combatwon hidden">[[${combat.destinations.winGoTo}<-Go to ${combat.destinations.winGoTo}]]</p>` : '')
+        .replace('{losegoto}', combat.destinations.loseGoTo ? `<p class="combatlost hidden">[[${combat.destinations.loseGoTo}<-Go to ${combat.destinations.loseGoTo}]]</p>` : '');
+
+    return result
+};
+
+/**
+ * @implements {IView}
+ */
+class DefaultView {
+    /** @type {HTMLElement} */
+    #contentelement
+
+    constructor() {
+        this.#contentelement = document.querySelector('section.content');
+        if (!this.#contentelement) {
+            throw new Error('could not initialize default view')
+        }
+    }
+
+    /** @type {string} */
+    get title () {
+        const titleElement = document.getElementById('storyTitle');
+        if (!titleElement) {
+            return ''
+        }
+
+        return titleElement.textContent
+    }
+
+    /**
+     * @param {string} value 
+     */
+    set title (value) {
+        const titleElement = document.getElementById('storyTitle');
+        if (titleElement) {
+            titleElement.textContent = value;
+            titleElement.setAttribute('title', value);
+        }
+    }
+
+    /** @type {HTMLElement} */
+    get content () {
+        return this.#contentelement
+    }
+
+    /**
+     * 
+     * @param {HTMLElement} element 
+     */
+    hide (element) {
+        element.classList.add('hidden');
+    }
+
+    /**
+     * 
+     * @param {HTMLElement} element 
+     */
+    show (element) {
+        element.classList.remove('hidden');
+    }
+
+    /**
+     * 
+     * @param {HTMLElement} element 
+     */
+    enable (element) {
+        element.removeAttribute('disabled');
+    }
+
+    /**
+     * 
+     * @param {HTMLElement} element 
+     */
+    disable (element) {
+        element.setAttribute('disabled', 'true');
+    }
+
+    /**
+     * Hides all elements that match the selector under
+     * the content element
+     * @param {string} selector 
+     */
+    hideSelectedContent (selector) {
+        this.#contentelement.querySelectorAll(selector)
+            .forEach((item) => {
+                this.hide(/** @type {HTMLElement} */(item));
+            });
+    }
+
+    /**
+     * @type {HTMLButtonElement}
+     */
+    get backButton () {
+        return /** @type {HTMLButtonElement}  */(document.getElementById('backButton'))
+    }
+
+    /**
+     * @type {HTMLButtonElement}
+     */
+    get forwardButton () {
+        return /** @type {HTMLButtonElement}  */(document.getElementById('forwardButton'))
+    }
+
+    /**
+     * @type {HTMLButtonElement}
+     */
+    get restartButton () {
+        return /** @type {HTMLButtonElement}  */(document.getElementById('restartButton'))
+    }
+
+    /**
+     * @type {HTMLButtonElement}
+     */
+    get saveLoadButton () {
+        return /** @type {HTMLButtonElement} */(document.getElementById('saveLoadButton'))
+    }
+
+    /**
+     * Blocks navigation for all blockable links in the content area
+     */
+    disableNavLinks () {
+        this.#contentelement.querySelectorAll('a.link')
+            .forEach((element) => {
+                element.classList.add('navblocked');
+            });
+    }
+
+    /**
+     * Removes navigation block for all blockable links in the content area
+     */
+    enableNavLinks () {
+        this.#contentelement.querySelectorAll('a.link')
+            .forEach((element) => {
+                element.classList.remove('navblocked');
+            });
+    }
+
+    /**
+     * Attaches a click handler to all Brass Basilisk links in the content area 
+     * @param {EventFunc} handler A click handler function
+     * @param {boolean} blockLinks Whether blockable links should be set to blocked
+     */
+    attachNavLinksHandler (handler, blockLinks) {
+        const contentElement = this.#contentelement;
+
+        // Regular links can be navigation-blocked
+        contentElement.querySelectorAll('a[class="link"]')
+            .forEach((element) => {
+                element.addEventListener('click', handler);
+                if (blockLinks) {
+                    element.classList.add('navblocked');
+                }
+            });
+
+        // Some links are unblockable
+        contentElement.querySelectorAll('a[class="stronglink"]')
+            .forEach((element) => {
+                element.addEventListener('click', handler);
+            });
+    }
+
+    /**
+     * Transforms Twine links
+     * 
+     *   [[Text->Target]], [[Text|Target]], [[Target]] to regular links,
+     *   [[Target<-Text]] to unblockable links
+     * 
+     * @param {string} input 
+     * @returns {string}
+     */
+    transformLinks (input) {
+        return input
+            .replaceAll(/\[\[([^\]]*?)(?:-(?:>|&gt;))([^\]]*?)\]\]/g, '<a class="link" data-destination="$2">$1</a>')
+            .replaceAll(/\[\[([^\]]*?)\|([^\]]*?)\]\]/g, '<a class="link" data-destination="$2">$1</a>')
+            .replaceAll(/\[\[([^\]]*?)(?:(?:<|&lt;)-)([^\]]*?)\]\]/g, '<a class="stronglink" data-destination="$1">$2</a>')
+            .replaceAll(/\[\[([^\]]*?)\]\]/g, '<a class="link" data-destination="$1">$1</a>')
+    }
+
+    /**
+     * Transforms newlines in input to <p> tags.
+     * @param {string} input 
+     */
+    transformParagraphs (input) {
+        return input
+            .split(/\r?\n|\r|\n/g)
+            .map((row) => `<p>${row}</p>`)
+            .join('');
+    }
+
+    /**
+     * Gets a container for a "tools" UI element.
+     * 
+     * In the default implementation, this looks for a div with the 
+     * specified classname under section.sidebar-1
+     * @param {string} panelName 
+     * @returns {HTMLDivElement}
+     */
+    getToolPanel (panelName) {
+        return document.querySelector(`section.sidebar-1 div.${panelName}`)
+    }
+
+    /**
+     * Gets a dialog UI element.
+     * 
+     * In the default implementation, this looks for a dialog with
+     * the specified id.
+     * 
+     * @param {string} dialogId
+     * @returns {HTMLDialogElement}
+     */
+    getDialog (dialogId) {
+        return /** @type {HTMLDialogElement}*/(document.getElementById(dialogId))
+    }
+}
+
+/**
+ * @implements {IStory}
+ */
+class DefaultStory {
+    /** @type {HTMLElement} */
+    #storyelement
+    /** @type {string} */
+    #storyname
+    /** @type {string} */
+    #startnodepid
+    /** @type {string} */
+    #ifid
+
+    constructor() {
+        /** @type {HTMLElement}  */
+        const storyelement = document.querySelector('tw-storydata');
+        if (!storyelement) {
+            throw new Error('could not find story')
+        }
+
+        this.#storyelement = storyelement;
+        this.#storyname = storyelement.getAttribute('name');
+        this.#startnodepid = storyelement.getAttribute('startnode');
+        // Twine always writes this onto a published story: a GUID
+        // generated once when the story is created, and stable across
+        // renames and re-exports (unlike name). Not present on
+        // hand-rolled tw-storydata such as our own test fixtures.
+        this.#ifid = storyelement.getAttribute('ifid') || undefined;
+    }
+
+    /**
+     * @type {string}
+     */
+    get name() {
+        return this.#storyname
+    }
+
+    /**
+     * @type {string|undefined}
+     */
+    get ifid() {
+        return this.#ifid
+    }
+
+    /**
+     * 
+     * @param {string} name 
+     * @returns {Passage|null}
+     */
+    getPassageByName(name) {
+        /** @type {HTMLElement} */
+        const passageElement = this.#storyelement?.querySelector(`tw-passagedata[name="${name}"]`);
+        if (!passageElement) {
+            return
+        }
+
+        return fromElement(passageElement)
+    }
+
+    /**
+     * 
+     * @returns {IPassage|null}
+     */
+    getStartPassage() {
+        /** @type {HTMLElement} */
+        const passageElement = this.#storyelement?.querySelector(`tw-passagedata[pid="${this.#startnodepid}"]`);
+        if (!passageElement) {
+            return null
+        }
+
+        return fromElement(passageElement)
+    }
+
+}
+
+/**
+ * 
+ * @param {HTMLElement|null} passageElement 
+ * @returns {Passage}
+ */
+const fromElement = (passageElement) => {
+    const pid = passageElement.getAttribute('pid');
+    const name = passageElement.getAttribute('name');
+    let body = passageElement.innerHTML;
+
+    // Ours is a text and paragraph based DSL.
+    // The body should end in a paragraph break.
+    if (!body.endsWith('\n')) {
+        body = body + '\n';
+    }
+
+    return new Passage(pid, name, body)
+};
+
+class Player {
+    /** @type {(scannerfunc: ScannerFunc) => void} */
+    #addscanner
+    /** @type {(trasformerFunc: TransformerFunc) => void} */
+    #addtransformer
+
+    /** @type {Boolean} */
+    #blocklinks = false
+    /** @type {() => void} */
+    #preventnavigation
+    /** @type {() => void} */
+    #allownavigation
+
+    /** @type {(key: string, value: any) => void} */
+    #stateset
+    /** @type {(key: string) => any} */
+    #stateget
+    /** @type {(key: string, value: any) => void} */
+    #statesetglobal
+    /** @type {(key: string) => any} */
+    #stategetglobal
+    /** @type {(plugin: IPlugin) => void} */
+    #addplugin
+    /** @type {(pluginname: string) => IPlugin} */
+    #getplugin
+    /** @type {(slot: number) => boolean} */
+    #savegame
+    /** @type {(slot: number) => boolean} */
+    #loadgame
+    /** @type {(slot: number) => boolean} */
+    #deletegame
+    /** @type {() => SaveSlotInfo[]} */
+    #getsaveslots
+    /** @type {() => boolean} */
+    #issaveavailable
+
+    /** @type {() => void} */
+    #start
+
+    /**
+     * 
+     * @param {IStory} story 
+     * @param {IView} view 
+     */
+    constructor(story, view) {
+        if (!story) {
+            throw new Error('please provide a story reader to the player')
+        }
+
+        if (!view) {
+            throw new Error('please provide a view to the player')
+        }
+
+        const contentElement = view.content;
+
+        // Scan management
+        // A scanner is a function which takes a passage object and returns
+        // nothing. It is called when a new passage is about to be rendered
+        // after successful navigation. Scanners are called in the order of
+        // registration. They are implemented by BBScannerPlugins.
+
+        /** @type {ScannerFunc[]} */
+        const scanners = [];
+
+        const scanPassage = (/** @type {IPassage} */passage) => {
+            for (let i = 0; i < scanners.length; i++) {
+                if (typeof scanners[i] === 'function') {
+                    scanners[i](passage);
+                }
+            }
+        };
+
+        this.#addscanner = (scannerFunc) => {
+            scanners.push(scannerFunc);
+        };
+
+        // Transformation
+        // A transformer is a function which takes a string and returns a
+        // string. The assumption is that it will translate something in 
+        // the input into unencoded HTML. There are a few in-built ones,
+        // and more can be registered. Just as a passage is about to be
+        // rendered, the passage body is piped through all transformers.
+        // After the last one, a final sanitisation is done (TODO:), and 
+        // the results are rendered.
+
+        /** @type {TransformerFunc[]} */
+        const transformers = [];
+
+        const transformPassageBody =
+            /**
+             * 
+             * @param {string} body 
+             * @returns {string}
+             */
+            (body) => {
+                let bodystr = body;
+
+                // Run all registered transformers. In all
+                // of them, the result should contain text
+                // and unencoded HTML.
+
+                // DEBUG: console.log('Transformation starts with:')
+                // DEBUG: console.log(bodystr)
+
+                for (let i = 0; i < transformers.length; i++) {
+                    if (typeof transformers[i] === 'function') {
+                        bodystr = transformers[i](bodystr);
+                        // DEBUG: console.log('Transformed:')
+                        // DEBUG: console.log(bodystr)
+                    }
+                }
+
+                // Run the view-provided link transformer
+                bodystr = view.transformLinks(bodystr);
+                // DEBUG: console.log('Transformed:')
+                // DEBUG: console.log(bodystr)
+
+                // Run the view-provided paragraph transformer
+                bodystr = view.transformParagraphs(bodystr);
+                // DEBUG: console.log('Transformed:')
+                // DEBUG: console.log(bodystr)
+
+                return bodystr
+            };
+
+        this.#addtransformer = (transformerFunc) => {
+            transformers.push(transformerFunc);
+        };
+
+        /// These methods can be called from plugins to prevent
+        /// or allow navigation from a passage. Only navigation
+        /// to new passages is prevented.
+        this.#preventnavigation = () => {
+            this.#blocklinks = true;
+
+            view.disableNavLinks();
+        };
+
+        this.#allownavigation = () => {
+            this.#blocklinks = false;
+
+            view.enableNavLinks();
+        };
+
+        // This is where a passage is rendered. This is the final action
+        // of any navigation step. The actions are as follows:
+        // First, all registered scanners are called. They cannot change
+        // the passage in any way. 
+        // Next, the passage body text is piped through all registered 
+        // transformers, in the process becoming unencoded HTML. As part
+        // of this process, hyperlinks are also generated.
+        // Finally, hyperlinks are connected to navigation. 
+        const renderPassage =
+            /**
+             * 
+             * @param {IPassage} passage 
+             */
+            (passage) => {
+                // Default to "allowed" for every render. Scanners are the
+                // only thing that can then block navigation again, based
+                // on current state. This makes blocking a positive, always
+                // re-derived fact about where the player currently is,
+                // rather than something a plugin has to remember to undo --
+                // which is what previously let a "player is dead" block
+                // silently disappear on reload/back-forward/a loaded save,
+                // once the plugin that first set it had already recorded
+                // that it had "acted" and so didn't run that logic again.
+                this.#allownavigation();
+
+                scanPassage(passage);
+
+                const passageBodyHTML = transformPassageBody(passage.body);
+                const passageNameHTML = `<p class="passagename">${passage.name}</p>`;
+
+                contentElement.innerHTML = `${passageNameHTML}${passageBodyHTML}`;
+
+                view.attachNavLinksHandler(linkClickedToNavigate, this.#blocklinks);
+            };
+
+        // This connects the navigation, defined below, to passage rendering.
+        // As the final task of any navigation step, this function is called.
+        const navigateToPassage =
+            /**
+             * 
+             * @param {string} name 
+             */
+            (name) => {
+                const passage = story.getPassageByName(name);
+                if (passage) {
+                    renderPassage(passage);
+                }
+            };
+
+        // Navigation
+        /** @type {any[]} */
+        const navStack = [];
+        let stackPosition = -1;
+
+        const clearAfterCurrent = () => {
+            if (stackPosition < (navStack.length - 1)) {
+                navStack.splice(stackPosition + 1);
+            }
+        };
+
+        /// Navigation UI
+        const backButton = view.backButton;
+        const forwardButton = view.forwardButton;
+        const restartButton = view.restartButton;
+
+        const manageNavigationButtons = () => {
+            // Back button
+            if (stackPosition > 0) {
+                view.enable(backButton);
+            } else {
+                view.disable(backButton);
+            }
+            // Forward button
+            if (stackPosition === (navStack.length - 1)) {
+                view.disable(forwardButton);
+            } else {
+                view.enable(forwardButton);
+            }
+        };
+
+        /// Navigation state management
+
+        /** @type {Record<string,any>} */
+        let currentState = {};
+        /** @type {Record<string,any>} */
+        let globalState = {};
+
+        this.#stateset = (key, value) => {
+            currentState[key] = value;
+            navStack[stackPosition].state[key] = value;
+
+            // Setting current state invalidates any navigation
+            // after the current position
+            clearAfterCurrent();
+            manageNavigationButtons();
+        };
+
+        this.#stateget = (key) => {
+            // Navigation has already set the current state
+            return currentState[key]
+        };
+
+        this.#statesetglobal = (key, value) => {
+            // A global state set is always destructive. The old state goes,
+            // and the new one should not be linked with anything
+            globalState[key] = structuredClone(value);
+
+            console.log(`Global state set key:${key} to value: ${JSON.stringify(value)}`);
+
+            // Setting global state invalidates any navigation
+            // after the current position
+            clearAfterCurrent();
+            manageNavigationButtons();
+        };
+
+        this.#stategetglobal = (key) => {
+            return globalState[key]
+        };
+
+        /// At the end of the three kinds of navigation defined below
+        /// , this is called. Here, we manage the navigation buttons
+        /// based on our current location, and restore the current 
+        /// state from the navigation stack.
+        const finishNavigation = () => {
+            manageNavigationButtons();
+
+            const stackFrame = navStack[stackPosition];
+            console.log(`You have come to ${stackFrame.passageName}. The state is ${JSON.stringify(stackFrame)}`);
+            console.log(`The whole stack is ${JSON.stringify(navStack)}`);
+            console.log(`The global state is ${JSON.stringify(globalState)}`);
+            currentState = stackFrame.state;
+            navigateToPassage(stackFrame.passageName);
+        };
+
+        /// This is what gets called when a player clicks a link, and
+        /// boldly goes where she has never gone before.
+        const navigateNew = (/** @type {string} */ passageName) => {
+            // Moving to a "new" passage means, any navigation  after
+            // the current position is no longer required. 
+            clearAfterCurrent();
+
+            // This is the only operation that can push state on  the
+            // navigation stack. All others restore from it.
+            // Note: this is a shallow copy, not a deep clone. 
+            // Callers of setCurrentState are expected to treat the 
+            // values they store as immutable (clone before mutating 
+            // in place) so that old stack frames can safely keep 
+            // sharing references to them.
+            navStack.push({
+                passageName,
+                //state: structuredClone(currentState)
+                state: { ...currentState }
+            });
+            stackPosition = navStack.length - 1;
+
+            finishNavigation();
+        };
+
+        /// This gets called when the "back" button is clicked in the
+        /// UI. It goes back one step in the navigation stack, if not
+        /// already at the beginning, and restores the current state
+        /// from what was saved on the stack. 
+        const navigateBack = () => {
+            if (stackPosition > 0) {
+                stackPosition--;
+            }
+
+            finishNavigation();
+        };
+
+        /// This gets called when the "forward" button is clicked in 
+        /// the UI. It goes forward one step provided there has been
+        /// backward movement earlier.  It will never navigate  to a
+        /// new position. It restores the current state from the 
+        /// stack. 
+        const navigateForward = () => {
+            if (stackPosition < (navStack.length - 1)) {
+                stackPosition++;
+            }
+
+            finishNavigation();
+        };
+
+        const restartNavigation = () => {
+            navStack.splice(0);
+            stackPosition = -1;
+            currentState = {};
+            globalState = {};
+
+            const passage = story.getStartPassage();
+            if (!passage) {
+                throw new Error('start passage not set')
+            }
+
+            navigateNew(passage.name);
+        };
+
+        /// This can be attached to link click events
+        function linkClickedToNavigate(/** @type {Event} */ e) {
+            const linkElement = /** @type {HTMLElement} */ (e.target);
+            const destPassageName = linkElement.getAttribute('data-destination');
+            if (destPassageName) {
+                navigateNew(destPassageName);
+            }
+        }
+
+        /// Save / restore
+        ///
+        /// Everything that defines "where the player is" lives in
+        /// navStack, stackPosition and globalState -- all plain,
+        /// JSON-serialisable data (see the contract noted above navStack
+        /// .push). Saving is just snapshotting those three things;
+        /// loading is just replacing them and re-running the same
+        /// finishNavigation() step that back/forward/restart already
+        /// use to redraw the current passage and let plugins rebuild
+        /// their UI from state.
+        // Bumped from 1 to 2 with the addition of storyIfid below --
+        // a deliberate clean cutover rather than a migration, since
+        // the feature is brand new. Any v1 saves are simply refused.
+        const SAVE_SCHEMA_VERSION = 2;
+        const SAVE_SLOT_COUNT = 3;
+        const SAVE_KEY_PREFIX = 'bb-save';
+
+        // Prefer the story's ifid for identity: it's a GUID Twine
+        // assigns once when a story is created and never changes, so
+        // saves survive the story being renamed or re-exported. Only
+        // falls back to name for hand-authored/non-Twine tw-storydata
+        // that has no ifid at all.
+        const storyIdentityFragment = story.ifid ?? story.name ?? 'untitled';
+
+        // Turns the story identity into something safe to use in a
+        // localStorage key, so two different stories hosted under the
+        // same origin never collide.
+        const storyKeyFragment = storyIdentityFragment
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-+|-+$)/g, '') || 'untitled';
+
+        const saveStorageKey = (/** @type {number} */slot) => `${SAVE_KEY_PREFIX}:${storyKeyFragment}:${slot}`;
+
+        // localStorage can throw (privacy mode, sandboxed iframes, some
+        // file:// setups) even just on access, not only when full. This
+        // checks once whether it's safe to use at all.
+        const storageIsAvailable = () => {
+            const testKey = '__bb_storage_test__';
+            try {
+                window.localStorage.setItem(testKey, '1');
+                window.localStorage.removeItem(testKey);
+                return true
+            } catch (e) {
+                return false
+            }
+        };
+
+        this.#issaveavailable = () => storageIsAvailable();
+
+        this.#savegame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            const data = {
+                schemaVersion: SAVE_SCHEMA_VERSION,
+                storyName: story.name,
+                storyIfid: story.ifid,
+                savedAt: new Date().toISOString(),
+                passageName: navStack[stackPosition]?.passageName,
+                stackPosition,
+                navStack,
+                globalState
+            };
+
+            try {
+                window.localStorage.setItem(saveStorageKey(slot), JSON.stringify(data));
+                return true
+            } catch (e) {
+                console.log(`Could not save to slot ${slot}: ${e}`);
+                return false
+            }
+        };
+
+        this.#loadgame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            let raw;
+            try {
+                raw = window.localStorage.getItem(saveStorageKey(slot));
+            } catch (e) {
+                console.log(`Could not read slot ${slot}: ${e}`);
+                return false
+            }
+
+            if (!raw) {
+                return false
+            }
+
+            let data;
+            try {
+                data = JSON.parse(raw);
+            } catch (e) {
+                console.log(`Save in slot ${slot} is corrupt and could not be read: ${e}`);
+                return false
+            }
+
+            // A save only makes sense against the story it was made
+            // from. A mismatch here (different story, or a save made
+            // by a future/older version of this format) is refused
+            // rather than partially applied. Prefer comparing ifid
+            // when both sides have one -- it's stable across renames,
+            // where name isn't -- and fall back to name otherwise.
+            if (data.schemaVersion !== SAVE_SCHEMA_VERSION) {
+                console.log(`Save in slot ${slot} was made by an incompatible version and was not loaded`);
+                return false
+            }
+
+            const identityMatches = story.ifid && data.storyIfid
+                ? data.storyIfid === story.ifid
+                : data.storyName === story.name;
+
+            if (!identityMatches) {
+                console.log(`Save in slot ${slot} does not match this story and was not loaded`);
+                return false
+            }
+
+            const restoredFrame = data.navStack?.[data.stackPosition];
+            if (!restoredFrame || !story.getPassageByName(restoredFrame.passageName)) {
+                console.log(`Save in slot ${slot} points at a passage that no longer exists and was not loaded`);
+                return false
+            }
+
+            navStack.splice(0, navStack.length, ...data.navStack);
+            stackPosition = data.stackPosition;
+            globalState = data.globalState ?? {};
+
+            // A save always resumes as a normal, navigable passage. If
+            // navigation had been blocked (e.g. a defeat screen) at the
+            // moment of saving, that's re-derived from state as usual
+            // when finishNavigation() re-scans the passage below.
+            this.#allownavigation();
+
+            finishNavigation();
+            return true
+        };
+
+        this.#deletegame = (slot) => {
+            if (slot < 0 || slot >= SAVE_SLOT_COUNT) {
+                return false
+            }
+
+            try {
+                window.localStorage.removeItem(saveStorageKey(slot));
+            } catch (e) {
+                console.log(`Could not delete slot ${slot}: ${e}`);
+                return false
+            }
+
+            return true
+        };
+
+        this.#getsaveslots = () => {
+            const slots = [];
+
+            for (let slot = 0; slot < SAVE_SLOT_COUNT; slot++) {
+                let raw;
+                try {
+                    raw = window.localStorage.getItem(saveStorageKey(slot));
+                } catch (e) {
+                    slots.push({ slot, empty: true });
+                    continue
+                }
+
+                if (!raw) {
+                    slots.push({ slot, empty: true });
+                    continue
+                }
+
+                try {
+                    const data = JSON.parse(raw);
+                    slots.push({
+                        slot,
+                        empty: false,
+                        passageName: data.passageName,
+                        savedAt: data.savedAt
+                    });
+                } catch (e) {
+                    slots.push({ slot, empty: true });
+                }
+            }
+
+            return slots
+        };
+
+        // Plugin Management
+
+        /** @type {Record<string,IPlugin>} */
+        const plugins = {};
+
+        this.#getplugin = (pluginname) => {
+            return plugins[pluginname]
+        };
+
+        this.#addplugin = (plugin) => {
+            // Check for validity of plugin
+            if (!(plugin instanceof BBPlugin)) {
+                throw new Error(`${plugin.name ?? "That"} is not a valid plugin`)
+            }
+
+            const pluginname = plugin.name;
+            if (typeof plugins[pluginname] === 'object') {
+                throw new Error(`a plugin called ${pluginname} already exists`)
+            }
+
+            plugins[pluginname] = plugin;
+
+            // Pass a player "proxy" to plugin
+            plugin.init({
+                addScanner: this.#addscanner,
+                addTransformer: this.#addtransformer,
+                addPlugin: this.#addplugin,
+                getPlugin: this.#getplugin,
+                setCurrentState: this.#stateset,
+                getCurrentState: this.#stateget,
+                setGlobalState: this.#statesetglobal,
+                getGlobalState: this.#stategetglobal,
+                preventNavigation: this.#preventnavigation,
+                allowNavigation: this.#allownavigation,
+                saveGame: this.#savegame,
+                loadGame: this.#loadgame,
+                deleteGame: this.#deletegame,
+                getSaveSlots: this.#getsaveslots,
+                isSaveAvailable: this.#issaveavailable,
+                view: view
+            });
+        };
+
+        // Start playing
+        this.#start = function () {
+            // Set up story styles
+            // NOTE: We are no longer processing story styles or javascript in Brass Basilisk.
+            //       If and when we do, it will be the responsibility of an IStory to extract
+            //       the styles, and an IView to render/use them. The following code is kept
+            //       commented here to remind us how it used to be done.
+            //
+            // const storyStyleElement = storyElement.querySelector('style')?.cloneNode(true)
+            // storyStyleElement.removeAttribute('role')
+            // storyStyleElement.removeAttribute('type')
+            // if (storyStyleElement) {
+            //     const styleElement = document.querySelector('head style')
+            //     if (styleElement) {
+            //         styleElement.insertAdjacentElement('afterend', storyStyleElement)
+            //     }
+            // }
+
+            // Show the title
+            view.title = story.name;
+
+            // Hook up forward, backward and restart buttons
+            backButton?.addEventListener('click', navigateBack);
+            forwardButton?.addEventListener('click', navigateForward);
+            restartButton?.addEventListener('click', restartNavigation);
+
+            // Navigate to first passage
+            restartNavigation();
+        };
+    }
+
+    /**
+     * Add a plugin to the player. The order of adding is important.
+     * @param {BBPlugin} plugin 
+     */
+    addPlugin(plugin) {
+        this.#addplugin(plugin);
+    }
+
+    /**
+     * Start playing the story.
+     */
+    start() {
+        this.#start();
+    }
+
+    /**
+     * Save the current game into the given slot (0-based). Overwrites
+     * whatever was previously in that slot.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the save succeeded
+     */
+    saveGame(slot) {
+        return this.#savegame(slot)
+    }
+
+    /**
+     * Load a game previously saved into the given slot (0-based). If
+     * the slot is empty, corrupt, or doesn't match the current story,
+     * this does nothing and returns false; the current game continues
+     * unaffected.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the load succeeded
+     */
+    loadGame(slot) {
+        return this.#loadgame(slot)
+    }
+
+    /**
+     * Delete a game previously saved into the given slot (0-based). If
+     * the slot is empty, this does nothing and returns false.
+     *
+     * @param {Number} slot
+     * @returns {Boolean} true if the delete succeeded
+     */
+    deleteGame(slot) {
+        return this.#deletegame(slot)
+    }
+
+    /**
+     * @returns {SaveSlotInfo[]} one entry per save slot, in order
+     */
+    getSaveSlots() {
+        return this.#getsaveslots()
+    }
+
+    /**
+     * @returns {Boolean} whether save/load can be used at all in this
+     * browser environment
+     */
+    isSaveAvailable() {
+        return this.#issaveavailable()
+    }
+}
+
+class TurnToLinksPlugin extends BBPlugin {
+
+    constructor() {
+        super('turntolinks');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+
+        /**
+         * 
+         * @param {string} text 
+         */
+        const transformTurnTo = (text) => {
+            return text.replaceAll(/(turn to )(\d{1,3})/ig, '[[$1 $2-&gt;$2]]')
+        };
+
+        player.addTransformer(transformTurnTo);
+    }
+}
+
+// This matches a sentence by itself in a paragraph.
+const deadPhraseRegex = /\nYou are dead.\n/g;
+// This matches a sentence that ends a paragraph.
+const phraseRegex = /Your (VIGOUR|AGILITY|PSI) (?:(is restored)\.|(increases by|decreases by|reduces by) (\d{1,2})\.)\n/g;
+
+class AttributePhrasePlugin extends BBScannerPlugin {
+    /** @type {CharacterSheetPlugin} */
+    #charactersheet
+
+    constructor() {
+        super('actionphrase');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#charactersheet = /** @type {CharacterSheetPlugin} */ (player.getPlugin('charactersheet'));
+        if (!this.#charactersheet) {
+            throw new Error('Attribute Phrase plugin requires Character Sheet plugin')
+        }
+
+        this.player.addTransformer((input) => {
+            if (!this.active) {
+                return input
+            }
+
+            let result = input;
+            if (result.match(deadPhraseRegex)) {
+                result = result.replace(deadPhraseRegex, `<p><span class="attrphrase dead">You are dead.<span></p>`);
+            }
+
+            const phraseMatch = result.match(phraseRegex);
+            if (phraseMatch) {
+                result = result.replace(phraseRegex, (match, attr, restored, verb, amount) =>
+                    `<span class="attrphrase">Your ${attr} ${restored || verb + ' ' + amount}.</span>`
+                );
+            }
+
+            return result
+        }
+        );
+    }
+
+    /**
+     * 
+     * @param {Passage} passage 
+     */
+    scan(passage) {
+        const currentState = this.getCurrentState();
+        if (currentState && currentState.acted) {
+            return true
+        }
+
+        const passageBody = passage.body;
+        let result = false;
+
+        // First check for death. All else is secondary.
+        // If death happens, nothing else needs to be
+        // done.
+        if (passageBody.match(deadPhraseRegex)) {
+            this.#charactersheet.psi = 0;
+            this.#charactersheet.agility = 0;
+            this.#charactersheet.vigour = 0;
+
+            this.setCurrentState({ acted: true });
+            return true
+        }
+
+        let phraseMatch;
+        while ((phraseMatch = phraseRegex.exec(passageBody)) !== null) {
+            const attribute = phraseMatch[1].toLowerCase();
+            // const action = phraseMatch[2].toLowerCase()
+            const action = (phraseMatch[2] || phraseMatch[3]).toLowerCase();
+            const amount = action === 'is restored'
+                ? 1000
+                : parseInt(phraseMatch[4]) * (action === 'decreases by' || action === 'reduces by' ? -1 : 1);
+
+            this.#charactersheet[/** @type {"vigour" | "agility" | "psi"} */ (attribute)] += amount;
+
+            result = true;
+        }
+
+        if (result) {
+            this.setCurrentState({ acted: true });
+        }
+
+        return result
+    }
+}
+
+const stackCheckRegex = /(?:Roll|Throw) (1|2|one|two) di(?:c)?e,? and try to (?:roll|score) (equal to or less than|less than or equal to|less than) your(?: current)? (AGILITY|PSI). If you succeed, turn to (\d{1,3}). If you fail, turn to (\d{1,3})./;
+
+class StatCheckRollPlugin extends BBScannerPlugin {
+    /** @type {CharacterSheetPlugin} */
+    #charactersheet
+
+    /** @type {DiceBoardPlugin} */
+    #diceboard
+
+    /** @type {StatCheckRoll} */
+    #statcheckroll
+
+    constructor() {
+        super('statcheckrollplugin');
+    }
+
+    /**
+     * 
+     * @param {PlayerProxy} player 
+     */
+    init(player) {
+        super.init(player);
+
+        this.#charactersheet = /** @type {CharacterSheetPlugin} */ (player.getPlugin('charactersheet'));
+        if (!this.#charactersheet) {
+            throw new Error('Stat Check Roll plugin requires Character Sheet plugin. Please add it first')
+        }
+
+        this.#diceboard = /** @type {DiceBoardPlugin} */ (player.getPlugin('diceboard'));
+        if (!this.#diceboard) {
+            throw new Error('Stat Check Roll plugin requires the Dice Board plugin. Please add it first')
+        }
+
+        this.#diceboard.addEventListener('roll', (evt) => {
+            const e = /** @type {CustomEvent<DiceRollEventDetail>} */ (evt);
+
+            if (!this.active) {
+                return
+            }
+
+            const statcheckroll = this.#statcheckroll;
+            if (!statcheckroll || !statcheckroll.numDice || !statcheckroll.operator) {
+                return
+            }
+
+            this.setCurrentState(e.detail);
+
+            const rollResult = e.detail.total;
+
+            const diceString = statcheckroll.numDice == '1' || statcheckroll.numDice === 'one'
+                ? `one die`
+                : `${statcheckroll.numDice} dice`;
+            const introStatement = `You rolled ${diceString} for a result of ${rollResult}`;
+            const succeeded = statcheckroll.operator === '<='
+                ? rollResult <= this.#charactersheet[statcheckroll.stat]
+                : rollResult < this.#charactersheet[statcheckroll.stat];
+
+            const view = this.player.view;
+            const introPara = view.content.querySelector('.statcheckarollarea p.intro');
+            const successPara = /** @type {HTMLElement} */ (view.content.querySelector('.statcheckarollarea p.success'));
+            const failPara = /** @type {HTMLElement} */ (view.content.querySelector('.statcheckarollarea p.fail'));
+
+            introPara.textContent = introStatement;
+            if (succeeded) {
+                view.hide(failPara);
+                view.show(successPara);
+            } else {
+                view.hide(successPara);
+                view.show(failPara);
+            }
+        });
+
+        this.player.addTransformer((input) => {
+            if (!this.active) {
+                return input
+            }
+
+            const statcheckroll = this.#statcheckroll;
+            if (!statcheckroll || !statcheckroll.numDice) {
+                return input
+            }
+
+            const diceString = statcheckroll.numDice == '1' || statcheckroll.numDice === 'one'
+                ? `one die`
+                : `${statcheckroll.numDice} dice`;
+
+            const currentState = this.getCurrentState();
+            const rollMade = currentState && currentState.total;
+            const rollResult = rollMade ? parseInt(currentState.total) : 0;
+            const introStatement = rollMade
+                ? `You had rolled ${diceString} for a result of ${rollResult}`
+                : `Roll ${diceString}`;
+            const intro = `${statcheckroll.stat.toUpperCase()} check: ${introStatement}`;
+            const succeeded = rollMade
+                ? statcheckroll.operator === '<='
+                    ? rollResult <= this.#charactersheet[statcheckroll.stat]
+                    : rollResult < this.#charactersheet[statcheckroll.stat]
+                : null;
+            console.info(currentState, rollMade, rollResult, succeeded);
+
+            let result = `<div class="statcheckarollarea"><p class="intro">${intro}</p>`;
+            result += `<p class="success ${succeeded === true ? '' : 'hidden'}">[[Go to ${statcheckroll.successGoTo}|${statcheckroll.successGoTo}]].</p>`;
+            result += `<p class="fail ${succeeded === false ? '' : 'hidden'}">[[Go to ${statcheckroll.failGoTo}|${statcheckroll.failGoTo}]].</p>`;
+
+            result += '</div>';
+
+            return input.replace(stackCheckRegex, result)
+        }
+        );
+    }
+
+    /**
+     * 
+     * @param {Passage} passage 
+     * @returns {boolean}
+     */
+    scan(passage) {
+        const passageBody = passage.body;
+
+        const match = passageBody.match(stackCheckRegex);
+
+        if (!match) {
+            this.#diceboard.hide('statcheckroll');
+            return false
+        }
+
+        const numdice = match[1].trim().toLowerCase();
+        if (!this.#diceboard.validateDice(numdice)) {
+            this.#diceboard.hide('statcheckroll');
+            return false
+        }
+
+        const statcheckroll = {
+            numDice: numdice,
+            operator: match[2] === 'less than' ? '<' : '<=',
+            stat: /** @type {"agility"|"psi"} */ (match[3].toLowerCase()),
+            successGoTo: match[4],
+            failGoTo: match[5]
+        };
+
+        console.dir(statcheckroll);
+        this.#statcheckroll = statcheckroll;
+
+        this.#diceboard.setDice(numdice);
+        this.#diceboard.show('statcheckroll');
+
+        const currentState = this.getCurrentState();
+        if (currentState && Array.isArray(currentState.rolls)) {
+            this.#diceboard.setResults(currentState.rolls);
+        }
+
+        return true
+    }
+}
+
+try {
+    const player = new Player(new DefaultStory, new DefaultView);
+
+    player.addPlugin(new SaveLoadPlugin);
+    
+    player.addPlugin(new CharacterSheetPlugin);
+
+    player.addPlugin(new DiceBoardPlugin);
+    
+    player.addPlugin(new CombatPlugin);
+
+    player.addPlugin(new ChanceRollPlugin);
+
+    player.addPlugin(new AttributePhrasePlugin);
+
+    player.addPlugin(new StatCheckRollPlugin);
+
+    player.addPlugin(new TurnToLinksPlugin);
+
+    player.start();
+} catch (e) {
+    document.body.innerHTML = '';
+
+    const errorScreen = document.createElement('div');
+    errorScreen.style.display = 'flex';
+    errorScreen.style.flexDirection = 'row';
+    errorScreen.style.width = '100vw';
+    errorScreen.style.height = '100vh';
+    errorScreen.style.backgroundColor = 'blue';
+    errorScreen.style.color = 'white';
+    errorScreen.style.flexWrap = 'wrap';
+    errorScreen.style.alignContent = 'center';
+
+    const errorText = document.createElement('div');
+    errorText.style.width = '100%';
+    errorText.style.textAlign = 'center';
+    errorText.textContent = String(e);
+
+    errorScreen.appendChild(errorText);
+    document.body.appendChild(errorScreen);
+
+    throw e
+}</script></body></html>

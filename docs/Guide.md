@@ -68,25 +68,27 @@ Chance rolls handle non-combat moments that hinge entirely on luck—like search
 #### The Pattern
 ```text
 Roll N dice: If you score a NUM, You win: turn to NNN. If you score LOW to HIGH, turn to NNN.
-
 ```
 
 * **The Trigger:** Must start with `Roll` or `Throw`, followed by a recognized number (`1`, `2`, `one`, or `two`), followed by `die` or `dice`, followed immediately by a period or colon (**no space before the punctuation**).
-* **The Outcomes:** Each outcome must be its own sentence starting with a capital **I** (`If you...`).
+* **The Outcomes:** Each outcome must be its own sentence starting with "If" with a capital **I** (`If you...`).
 * You can use `roll` or `score`.
 * Articles are flexible: `roll 7`, `roll a 7`, or `roll an 8` are all acceptable.
 * For ranges, use `to` (inclusive range) or `or` (discrete numbers). *Example:* `2 to 6` checks for 2, 3, 4, 5, and 6. `2 or 6` checks *only* for an exact 2 or an exact 6.
-* The sentence must end immediately with `turn to <number>.` with no trailing punctuation inside the link phrase.
+* The article must be immediately followed by a comma (no spaces before), and then a sentence. The sentence must end with `turn to <number>.` It may contain anything except a period.
+* You may have multiple outcomes, as long as the articles do not overlap. But all outcomes must appear in the same paragraph.
 
 #### Example
 
 > Somewhere ahead, water drips in a slow, patient rhythm. The left-hand floor looks recently disturbed.
 >
-> Roll two dice: If you score 2 to 5, you press on too quickly and turn to 3. If you score 6 to 12, you notice the loose flagstone in time and turn to 4.
+> **Roll two dice: If you score 2 to 5, you press on too quickly: turn to 3. If you score 6 to 12, you notice the loose flagstone in time: turn to 4.**
+
+(Chance roll shown in bold)
 
 ### 2. Stat Check Rolls
 
-Stat check rolls handle moments where the hero's survival hinges on their innate capabilities rather than pure luck or raw combat—such as balancing across a crumbling ledge using **AGILITY** or resisting a mental assault using **PSI**.
+Stat check rolls handle moments where the hero's survival hinges on their innate capabilities rather than pure luck or raw combat, such as balancing across a crumbling ledge using **AGILITY** or resisting a mental assault using **PSI**.
 
 #### Syntax Rules
 
@@ -97,7 +99,6 @@ Stat check rolls handle moments where the hero's survival hinges on their innate
 
 ```text
 Roll N dice, and try to score less than your AGILITY. If you succeed, turn to NNN. If you fail, turn to NNN.
-
 ```
 
 #### Details
@@ -119,9 +120,9 @@ Roll N dice, and try to score less than your AGILITY. If you succeed, turn to NN
 
 > The narrow stone bridge slick with moss stretches across the chasm. A strong gust of wind threatens to take you off your feet.
 >
-> Throw two dice, and try to roll equal to or less than your AGILITY. If you succeed, turn to 82. If you fail, turn to 104.
+> **Throw two dice, and try to roll equal to or less than your AGILITY. If you succeed, turn to 82. If you fail, turn to 104.**
 
----
+(Stat check roll shown in bold)
 
 ### 3. Stat Actions
 
@@ -137,7 +138,6 @@ Actions dynamically alter a player's statistics the moment they visit a passage.
 
 ```text
 Your STATISTIC VERB AMOUNT.
-
 ```
 
 * **STATISTIC** must be typed in all-caps: `VIGOUR`, `PSI`, or `AGILITY`.
@@ -147,14 +147,12 @@ Your STATISTIC VERB AMOUNT.
 * `reduces by <number>.`
 * `is restored.` *(Note: `is restored` must **never** be followed by a number).*
 
-
 #### Instant Death
 
 To instantly kill a player via narrative event, place this exact phrase on its own isolated paragraph:
 
 ```text
 You are dead.
-
 ```
 
 This instantly drops all statistics to 0 and permanently freezes navigation. If a standard `decreases by` action reduces a player's VIGOUR to 0 or less, it achieves this exact same effect.
@@ -162,11 +160,14 @@ This instantly drops all statistics to 0 and permanently freezes navigation. If 
 #### Examples
 
 > The troll goes down hard, and the chamber falls quiet but for your own breathing. Wedged behind where it fell, half-buried in old bones, is a small hoard.
-> Your VIGOUR increases by 3.
+>
+> **Your VIGOUR increases by 3.**
+>
 > You drink the vial's contents. It tastes of frost and copper, and the ache in your skull fades to nothing.
-> Your PSI is restored.
+>
+> **Your PSI is restored.**
 
----
+(Stat actions shown in bold)
 
 ### 4. Combat
 
@@ -191,7 +192,6 @@ score LOW to HIGH you lose N VIGOUR
 score LOW to HIGH description loses N VIGOUR
 
 If you win, turn to NNN. If you lose, turn to NNN. If you FLEE, turn to NNN.
-
 ```
 
 #### Details
@@ -219,14 +219,16 @@ Here is how a standard combat passage should look in your editor:
 
 > The thing at the far end of the chamber rises to its full height, and you realize it is not a shadow at all.
 >
-> CAVE TROLL VIGOUR 14
+> **CAVE TROLL VIGOUR 14**
 >
-> Roll two dice:
+> **Roll two dice:**
 >
-> score 2 to 6 you lose 2 VIGOUR  
-> score 7 to 12 the troll loses 3 VIGOUR
+> **score 2 to 6 you lose 2 VIGOUR**  
+> **score 7 to 12 the troll loses 3 VIGOUR**
 >
-> If you win, turn to 6. If you FLEE, turn to 7.
+> **If you win, turn to 6. If you FLEE, turn to 7.**
+
+(Combat block shown in bold)
 
 ## Wrapping Up
 
