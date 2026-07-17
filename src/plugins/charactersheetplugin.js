@@ -2,8 +2,12 @@
 
 import { BBGlobalStatePlugin } from "../core/plugin";
 import '../core/types'
+import { SaveLoadPlugin } from "./saveloadplugin";
 
 export class CharacterSheetPlugin extends BBGlobalStatePlugin {
+    /** @type {SaveLoadPlugin} */
+    #saveloadPlugin
+
     /** @type CharacterSheet */
     #currentSheet
 
@@ -36,6 +40,11 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
      */
     init(player) {
         super.init(player)
+
+        this.#saveloadPlugin = /** @type {SaveLoadPlugin} */ (player.getPlugin('saveload'))
+        if (!this.#saveloadPlugin) {
+            throw new Error('Character Sheet plugin requires the Save/Load plugin')
+        }
 
         const element = player.view.getToolPanel('charactersheet')
 
@@ -98,6 +107,12 @@ export class CharacterSheetPlugin extends BBGlobalStatePlugin {
             })
 
             this.#refreshdisplay()
+        })
+
+        const loadButton = dialog.querySelector('#csLoad')
+        loadButton.addEventListener('click', (e) => {
+            dialog.close()
+            this.#saveloadPlugin.showDialog()
         })
 
         this.#dialog = dialog

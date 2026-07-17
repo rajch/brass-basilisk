@@ -16,11 +16,12 @@ import { StatCheckRollPlugin } from "./plugins/statcheckrollplugin"
 try {
     const player = new Player(new DefaultStory, new DefaultView)
 
-
-    player.addPlugin(new DiceBoardPlugin)
-
+    player.addPlugin(new SaveLoadPlugin)
+    
     player.addPlugin(new CharacterSheetPlugin)
 
+    player.addPlugin(new DiceBoardPlugin)
+    
     player.addPlugin(new CombatPlugin)
 
     player.addPlugin(new ChanceRollPlugin)
@@ -30,8 +31,6 @@ try {
     player.addPlugin(new StatCheckRollPlugin)
 
     player.addPlugin(new TurnToLinksPlugin)
-
-    player.addPlugin(new SaveLoadPlugin)
 
     player.start()
 } catch (e) {

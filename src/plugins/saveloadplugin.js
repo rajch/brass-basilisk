@@ -43,9 +43,13 @@ export class SaveLoadPlugin extends BBPlugin {
         closeButton?.addEventListener('click', () => dialog.close())
 
         openButton?.addEventListener('click', () => {
-            this.#refresh()
-            dialog.showModal()
+            this.showDialog()
         })
+    }
+
+    showDialog() {
+        this.#refresh()
+        this.#dialog?.showModal()
     }
 
     /**
