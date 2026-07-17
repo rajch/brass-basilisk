@@ -1,5 +1,5 @@
 const getPassageReferences = (text) => {
-    const turnToRegex = /(?:[^\d\w]|^)[Tt]urn to (\d{1,3})(?:[^\d\w]|$)/g
+    const turnToRegex = /(?:[^\d\w]|^)turn to (\d{1,3})(?:[^\d\w]|$)/ig
     return Array.from(text.matchAll(turnToRegex), (match) => match[1])
         .filter(
             (value, index, array) => array.indexOf(value) === index
