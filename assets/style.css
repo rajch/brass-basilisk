@@ -80,6 +80,35 @@
 
     /* -- Stat check rolls -- */
     --stat-check-roll-color: var(--chanceroll-color);
+
+    /* -- Decorative accents -- */
+    --rivet-highlight-color: #e6c667;
+    --rivet-size: 8px;
+
+    /* -- Recessed / inset surfaces (stat displays, panels, rows) -- */
+    --stat-value-background-color: rgba(43, 29, 20, 0.08);
+    --stat-label-background-color: rgba(0, 0, 0, 0.25);
+    --saveslot-background-color: rgba(0, 0, 0, 0.08);
+    --diceboard-recess-color: rgba(0, 0, 0, 0.15);
+    --table-stripe-color: rgba(43, 29, 20, 0.06);
+    --dice-face-inset-shadow-color: rgba(0, 0, 0, 0.3);
+
+    /* -- Stat-flash pulse glow (see @keyframes statFlash) -- */
+    --pulse-glow-color: rgba(184, 134, 11, 0.9);
+    --pulse-glow-color-transparent: rgba(184, 134, 11, 0);
+
+    /* -- Shared radii -- */
+    --radius-small: 2px;
+    --radius-medium: 5px;
+    --radius-large: 6px;
+
+    /* -- Shared border widths -- */
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+    --border-width-thick: 4px;
+
+    /* -- Misc sizes -- */
+    --dice-label-font-size: 12px;
 }
 
 * {
@@ -97,13 +126,13 @@
 button {
     margin: 0.25rem;
     padding: 0.5rem;
-    border-radius: 2px;
+    border-radius: var(--radius-small);
     cursor: pointer;
     font-family: var(--font-body);
     font-weight: bold;
     background: var(--button-background-color);
     color: var(--button-color);
-    border: 1px solid var(--button-border-color);
+    border: var(--border-width-thin) solid var(--button-border-color);
     box-shadow: var(--emboss-shadow);
 }
 
@@ -136,7 +165,7 @@ section.sidebar-1 {
     flex-direction: column;
     background-color: var(--sidebar-background-color);
     color: var(--sidebar-color);
-    border-right: 4px double var(--sidebar-accent-color);
+    border-right: var(--border-width-thick) double var(--sidebar-accent-color);
 }
 
 /* Brass "rivets" at the panel corners -- pure CSS, no image asset */
@@ -144,11 +173,11 @@ section.sidebar-1::before,
 section.sidebar-1::after {
     content: '';
     position: absolute;
-    width: 8px;
-    height: 8px;
+    width: var(--rivet-size);
+    height: var(--rivet-size);
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #e6c667, var(--sidebar-accent-color) 70%);
-    box-shadow: 0 0 0 1px var(--sidebar-border-color);
+    background: radial-gradient(circle at 35% 35%, var(--rivet-highlight-color), var(--sidebar-accent-color) 70%);
+    box-shadow: 0 0 0 var(--border-width-thin) var(--sidebar-border-color);
 }
 
 section.sidebar-1::before {
@@ -230,6 +259,7 @@ h1.storyTitle {
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    text-align: center;
 }
 
 
@@ -250,13 +280,13 @@ h1.storyTitle {
 
 .side {
     position: absolute;
-    border: 2px solid var(--sidebar-accent-color);
-    border-radius: 5px;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    border: var(--border-width-medium) solid var(--sidebar-accent-color);
+    border-radius: var(--radius-medium);
+    box-shadow: inset 0 0 5px var(--dice-face-inset-shadow-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: var(--dice-label-font-size);
     font-weight: bold;
     background: var(--dice-background-color);
     color: var(--dice-color);
@@ -331,9 +361,9 @@ h1.storyTitle {
     flex-direction: column;
     align-items: center;
     padding: 0.75rem;
-    border: 1px solid var(--sidebar-border-color);
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.15);
+    border: var(--border-width-thin) solid var(--sidebar-border-color);
+    border-radius: var(--radius-large);
+    background: var(--diceboard-recess-color);
 }
 
 .diceboard .buttonsarea {
@@ -386,9 +416,9 @@ h1.storyTitle {
     text-align: center;
     color: var(--sidebar-accent-color);
     font-variant-numeric: tabular-nums;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid var(--sidebar-border-color);
-    border-radius: 2px;
+    background: var(--stat-label-background-color);
+    border: var(--border-width-thin) solid var(--sidebar-border-color);
+    border-radius: var(--radius-small);
     padding: 0.1rem 0.4rem;
 }
 
@@ -398,12 +428,12 @@ h1.storyTitle {
 @keyframes statFlash {
     0% {
         transform: scale(1.2);
-        box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.9);
+        box-shadow: 0 0 0 0 var(--pulse-glow-color);
     }
 
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0.5rem rgba(184, 134, 11, 0);
+        box-shadow: 0 0 0 0.5rem var(--pulse-glow-color-transparent);
     }
 }
 
@@ -414,7 +444,7 @@ h1.storyTitle {
 dialog.charactersheet {
     margin: auto;
     padding: 1rem;
-    border: 4px double var(--character-sheet-border-color);
+    border: var(--border-width-thick) double var(--character-sheet-border-color);
     max-width: 60%;
     background-color: var(--content-background-color);
     background-image: var(--page-texture);
@@ -463,9 +493,9 @@ dialog.charactersheet div input {
     font-size: large;
     text-align: center;
     color: var(--link-color);
-    background: rgba(43, 29, 20, 0.08);
-    border: 1px solid var(--character-sheet-border-color);
-    border-radius: 2px;
+    background: var(--stat-value-background-color);
+    border: var(--border-width-thin) solid var(--character-sheet-border-color);
+    border-radius: var(--radius-small);
 }
 
 dialog.charactersheet .buttonrow {
@@ -493,9 +523,9 @@ dialog.saveload .saveslot {
     justify-content: space-between;
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
-    background: rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--character-sheet-border-color);
-    border-radius: 2px;
+    background: var(--saveslot-background-color);
+    border: var(--border-width-thin) solid var(--character-sheet-border-color);
+    border-radius: var(--radius-small);
 }
 
 dialog.saveload .saveslotlabel {
@@ -532,7 +562,7 @@ dialog.saveload .saveloaderror {
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    border: 4px double var(--sidebar-accent-color);
+    border: var(--border-width-thick) double var(--sidebar-accent-color);
 
     animation: flyin 1.2s ease forwards;
     opacity: 0;
@@ -553,7 +583,7 @@ dialog.saveload .saveloaderror {
 
 .combattable table td {
     padding: 0.3rem 0.6rem;
-    border-bottom: 1px solid var(--sidebar-accent-color);
+    border-bottom: var(--border-width-thin) solid var(--sidebar-accent-color);
 }
 
 .combattable table tbody tr:last-child td {
@@ -561,7 +591,7 @@ dialog.saveload .saveloaderror {
 }
 
 .combattable table tbody tr:nth-child(even) {
-    background: rgba(43, 29, 20, 0.06);
+    background: var(--table-stripe-color);
 }
 
 div.combattable>div:first-child {
@@ -574,7 +604,7 @@ div.combattable>div:first-child {
 
 div.combattable>div:first-child>div:not(:last-child) {
     padding-right: 0.75rem;
-    border-right: 1px solid var(--sidebar-accent-color);
+    border-right: var(--border-width-thin) solid var(--sidebar-accent-color);
 }
 
 /* The foe's name -- a plain, unclassed <div> in the combat template */
@@ -593,9 +623,9 @@ div.combattable>div:first-child>div:nth-child(2) {
     font-size: large;
     color: var(--link-color);
     font-variant-numeric: tabular-nums;
-    background: rgba(43, 29, 20, 0.08);
-    border: 1px solid var(--sidebar-accent-color);
-    border-radius: 2px;
+    background: var(--stat-value-background-color);
+    border: var(--border-width-thin) solid var(--sidebar-accent-color);
+    border-radius: var(--radius-small);
     padding: 0.1rem 0.4rem;
     width: 2.5rem;
 }
@@ -675,7 +705,7 @@ div.rollstatus {
 .fightarea .combatresult {
     display: inline-block;
     padding: 1rem;
-    border: var(--sidebar-accent-color) 4px solid;
+    border: var(--sidebar-accent-color) var(--border-width-thick) solid;
     font-weight: bold;
     font-style: italic;
 }
@@ -751,6 +781,7 @@ div.rollstatus {
 
     .sidebar-1 h1 {
         width: 100%;
+        text-align: center;
     }
 
     .sidebar-1 .charactersheet {
