@@ -1,0 +1,82 @@
+:: StoryTitle
+The Stones of Anndon Weir
+
+
+:: StoryData
+{
+  "ifid": "F92A08D8-AD34-4EE7-A904-308903E0B44F",
+  "format": "Brass Basilisk",
+  "format-version": "0.1.3",
+  "start": "BACKGROUND",
+  "zoom": 1
+}
+
+
+:: 1 {"position":"150,25","size":"100,100"}
+The passage is narrow and it smells of wet iron. Twenty feet in, it opens into a junction, and the light of your torch is swallowed by two ways forward.
+
+There seems to be a strange, electric feeling in the air - and a feeling like there is a contanst buzzing sound, even though nothing is actually audible. It makes it hard to concentrate.
+
+Your PSI decreases by 2.
+
+Turn to 2.
+
+
+:: 2 {"position":"275,25","size":"100,100"}
+Somewhere ahead, water drips in a slow, patient rhythm. The left-hand floor looks recently disturbed.
+
+Roll two dice: If you score 2 to 5, you press on too quickly: turn to 3. If you score 6 to 12, you notice the loose flagstone in time: turn to 4.
+
+
+:: 3 {"position":"225,250","size":"100,100"}
+The flagstone tips beneath your boot. Below it there is no floor at all, only a black drop and, faintly, the glint of old spikes.
+
+You are dead.
+
+Anndon Weir will tell stories about the stranger who went down into the stones and never came up.
+
+
+:: 4 {"position":"450,25","size":"100,100"}
+You step wide of the flagstone and hear it clatter uselessly into the pit behind you. Ahead, the passage widens into a low chamber, and something large shifts in the dark at the far end of it.
+
+Turn to 5.
+
+
+:: 5 {"position":"625,50","size":"100,100"}
+The thing at the far end of the chamber rises to its full height, and you realize it is not a shadow at all.
+
+CAVE TROLL VIGOUR 14
+
+Roll two dice:
+score 2 to 6 you lose 2 VIGOUR
+score 7 to 12 the troll loses 3 VIGOUR
+
+If you win, turn to 6. If you FLEE, turn to 7.
+
+
+:: 6 {"position":"675,275","size":"100,100"}
+The troll goes down hard, and the chamber falls quiet but for your own breathing. Wedged behind where it fell, half-buried in old bones, is a small hoard: a few coins gone green with age, and a stoppered vial that still catches the torchlight.
+
+Your VIGOUR increases by 3.
+
+You drink the vial's contents. It tastes of frost and copper, and the ache in your skull fades to nothing.
+
+Your PSI is restored.
+
+Turn to 8.
+
+
+:: 7 {"position":"950,50","size":"100,100"}
+You back away fast, torch guttering, and don't stop moving until the junction is well behind you and the troll's roar has faded into the general dark of the tunnels. Whatever was in that chamber, it can keep its secrets.
+
+You climb back out into the grey daylight over Anndon Weir, shaken, empty-handed, and glad of it.
+
+
+:: 8 {"position":"950,375","size":"100,100"}
+You climb back out into the grey daylight over Anndon Weir with the vial's coins in your pocket and a story the fisherfolk will not quite believe. Stonework this old, they say, means a grave more often than gold — but not, this time, for you.
+
+
+:: BACKGROUND {"position":"25,25","size":"100,100"}
+Weeks of hard rain have scoured a curved shoulder of standing stone from the peat above Anndon Weir. Stonework this old, the fisherfolk say, means gold, or glory, or a grave, and likely all three. You take your torch, your rope, and your nerve, and climb down into the dark beneath the moor.
+
+Turn to 1.

@@ -29,13 +29,13 @@ There were also random dice rolls, and a rudimentary inventory (yes, i know), al
 
 The aim of this story format is to recreate that experience as faithfully and easily as possible. Passage authors should be able to just put in text, with ideally no markup whatsover. As long as the text is written according to a small set of rules, the story format will figure out and execute what needs to happen, from rendering the text with appropriate decorations to providing dice rolls and combat.
 
+For more details, and some samples, read the [documentation](https://rajch.github.io/brass-basilisk/).
+
 ## Status
 
-This story format has now been released. Import it into twine from:
+This story format has now been released. The current version is v0.1.3. Import it into Twine from:
 
 ```
 https://github.com/rajch/brass-basilisk/releases/latest/download/format.js
 ```
-
-Documentation and sample story coming soon.
 
